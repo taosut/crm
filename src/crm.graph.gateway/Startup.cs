@@ -1,5 +1,4 @@
 using crm.graph.gateway.Options;
-using crm.shared.Services;
 using CRM.Graph.Gateway.Query;
 using GraphQL;
 using GraphQL.Server;
@@ -13,6 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using CRM.Shared;
+using CRM.Shared.Jaeger;
+using OpenTracing.Contrib.Grpc.Interceptors;
+using CRM.Shared.Services;
 
 namespace CRM.Graph.Gateway
 {
@@ -23,12 +25,14 @@ namespace CRM.Graph.Gateway
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-        }        
-        
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddJaeger();
+
             GraphQLRegister(services);
 
             GrpcRegister(services);
@@ -65,25 +69,27 @@ namespace CRM.Graph.Gateway
 
             services.AddGraphQL(o =>
             {
-                // o.EnableMetrics = true;
+                o.EnableMetrics = true;
                 o.ExposeExceptions = true;
             });
         }
 
         private void GrpcRegister(IServiceCollection services)
         {
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             services.Scan(scan => scan
                             .FromCallingAssembly()
                             .AddClasses(x => x.AssignableTo(typeof(ServiceBase)))
                             .AsImplementedInterfaces()
                             .WithScopedLifetime());
-
+            
+            services.AddTransient<ClientTracingInterceptor>();
             var serviceOptions = Configuration.GetOptions<ServiceOptions>("Services");
-
             services.AddGrpcClient<Lead.LeadClient>(o =>
             {
                 o.BaseAddress = new Uri(serviceOptions.LeadService.Url);
-            });
+            })
+            .AddInterceptor<ClientTracingInterceptor>();
         }
     }
 }

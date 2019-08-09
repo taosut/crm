@@ -1,6 +1,12 @@
+using CRM.DataContract.IntegrationEvents.Lead;
+using CRM.Lead.Api.IntegrationEvents.Handling;
 using CRM.Lead.Api.Services;
 using CRM.Lead.Model;
+using CRM.Shared;
+using CRM.Shared.EventBus;
+using CRM.Shared.EventBus.Nats;
 using CRM.Shared.Interceptors;
+using CRM.Shared.Jaeger;
 using CRM.Shared.Repository;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Npgsql;
+using OpenTracing.Contrib.Grpc.Interceptors;
 
 namespace CRM.Lead.Api
 {
@@ -28,22 +35,11 @@ namespace CRM.Lead.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGrpc(options =>
-            {
-                options.Interceptors.Add<ExceptionInterceptor>();
-                options.EnableDetailedErrors = true;
-            });
-
-            services.AddSingleton(new MaxConcurrentCallsInterceptor(200));
-
-            // services.AddAuthorization();
-            // services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //     .AddJwtBearer((options) =>
-            //     {
-            //         options.Authority = "http://localhost:8080/auth/realms/master";
-            //         options.RequireHttpsMetadata = false;
-            //         options.Audience = "account";
-            //     });
+            services.Configure<NatsOptions>(Configuration.GetSection("NATS"));            
+            services.AddJaeger();
+                        
+            RegisterGrpc(services);
+            // RegisterAuth(services);
 
             services.Scan(scan => scan
                 .FromCallingAssembly()
@@ -51,10 +47,9 @@ namespace CRM.Lead.Api
                 .AsImplementedInterfaces()
                 .WithTransientLifetime());
 
-            services.AddScoped<IUnitOfWork>(sp => {
-                return new UnitOfWork(() => new NpgsqlConnection(Configuration.GetConnectionString("default")));
-            });
-            services.AddTransient<ILeadRepository, LeadRepository>();
+            RegisterRepository(services);
+
+            RegisterServiceBus(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,6 +70,50 @@ namespace CRM.Lead.Api
                 // To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909
                 endpoints.MapGrpcService<LeadService>();
             });
+
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            var appOptions = Configuration.GetOptions<AppOptions>("App");
+            eventBus.Subscribe<LeadCreatedEvent, LeadCreatedEventHandler>(appOptions.Name);
+        }
+                
+        private void RegisterRepository(IServiceCollection services)
+        {
+            services.AddScoped<IUnitOfWork>(sp =>
+            {
+                return new UnitOfWork(() => new NpgsqlConnection(Configuration.GetConnectionString("default")));
+            });
+            services.AddTransient<ILeadRepository, LeadRepository>();
+        }
+
+        private static void RegisterGrpc(IServiceCollection services)
+        {
+            services.AddGrpc(options =>
+            {
+                options.Interceptors.Add<ExceptionInterceptor>();
+                options.Interceptors.Add<ServerTracingInterceptor>();
+                options.EnableDetailedErrors = true;
+            });
+        }
+
+        private static void RegisterServiceBus(IServiceCollection services)
+        {
+            services.AddSingleton<INatsConnection, DefaultNatsConnection>();
+            services.AddSingleton<IEventBus, EventBusNats>();
+            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+
+            services.AddTransient<LeadCreatedEventHandler>();
+        }
+
+        private static void RegisterAuth(IServiceCollection services)
+        {
+            services.AddAuthorization();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer((options) =>
+                {
+                    options.Authority = "http://localhost:8080/auth/realms/master";
+                    options.RequireHttpsMetadata = false;
+                    options.Audience = "account";
+                });
         }
     }
 }

@@ -1,11 +1,25 @@
 version: '3.7'
 
 services:
-  vault:
+  vault:    
     ports: 
       - 8200:8200
     environment: 
       - VAULT_DEV_ROOT_TOKEN_ID=secret
+
+  seq:
+    ports: 
+      - "5341:5341"
+
+  jaeger:
+    ports:
+      - 5775:5775/udp
+      - 5778:5778
+      - 6831:6831/udp
+      - 6832:6832/udp
+      - 9411:9411
+      - 14268:14268
+      - 16686:16686
 
   postgres.data:
     ports:
@@ -27,8 +41,29 @@ services:
       - PROXY_ADDRESS_FORWARDING=true
       - DB_VENDOR=postgres
       - DB_DATABASE=keycloak
-
-  crmportal.web:
+  
+  nats:
+    ports: 
+      - 4222:4222
+      - 6222:6222
+      - 8222:8222
+      
+  lead-api:
     ports:
-      - 5000:80
+      - 5001:80
+    environment: 
+      - NATS__Url=http://nats:4222
+      - ConnectionStrings__default=Server=postgres.data;Port=5432;Database=crm-lead;User Id=lab;Password=P@ssw0rd;
 
+  communication-api:
+    ports:
+      - 5002:80
+    environment: 
+      - NATS__Url=http://nats:4222
+
+  graph-gateway:
+    ports:
+      - 5100:80
+    environment: 
+      - Jaeger__UdpHost=jaeger
+      - Services__LeadService__Url=http://lead-api

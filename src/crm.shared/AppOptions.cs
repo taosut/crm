@@ -1,4 +1,4 @@
-namespace crm.shared
+namespace CRM.Shared
 {
     public class AppOptions
     {

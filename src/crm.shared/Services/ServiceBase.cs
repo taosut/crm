@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace crm.shared.Services
+namespace CRM.Shared.Services
 {
     public abstract class ServiceBase
     {

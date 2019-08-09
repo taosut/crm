@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>CRM.DataContract</AssemblyName>
   </PropertyGroup>
 
- <ItemGroup>
+  <ItemGroup>
     <Protobuf Include="..\proto\lead.proto" Link="protos\lead.proto" />
   </ItemGroup>
   <ItemGroup>
@@ -15,5 +15,10 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Grpc.Core" Version="1.22.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CRM.Shared\CRM.Shared.csproj">
+      <GlobalPropertiesToRemove/>
+    </ProjectReference>
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace crm.graph.gateway.Services
+namespace CRM.Graph.Gateway.Services
 {
     public interface ILeadService
     {

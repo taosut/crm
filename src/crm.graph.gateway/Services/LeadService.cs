@@ -1,10 +1,12 @@
-using crm.shared.Services;
+using System;
+using CRM.Shared.Services;
 using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
 using Grpc.Net.ClientFactory;
 using LeadApi;
 using Microsoft.Extensions.Logging;
 
-namespace crm.graph.gateway.Services
+namespace CRM.Graph.Gateway.Services
 {
     public class LeadService : ServiceBase, ILeadService
     {
@@ -17,9 +19,9 @@ namespace crm.graph.gateway.Services
             _logger = loggerFactory.CreateLogger<LeadService>();
         }
         public LeadsResponse GetLeads()
-        {     
-            _logger.LogInformation("ssss");       
-            var result = _leadClient.getLeads(new Empty());
+        {
+            var metaData = new Metadata();            
+            var result = _leadClient.getLeads(new Empty(), metaData);
 
             return result;
         }
