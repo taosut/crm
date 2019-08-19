@@ -53,6 +53,7 @@ services:
       - 5001:80
     environment: 
       - NATS__Url=http://nats:4222
+      - Jaeger__UdpHost=jaeger
       - ConnectionStrings__default=Server=postgres.data;Port=5432;Database=crm-lead;User Id=lab;Password=P@ssw0rd;
 
   communication-api:
@@ -60,6 +61,7 @@ services:
       - 5002:80
     environment: 
       - NATS__Url=http://nats:4222
+      - Jaeger__UdpHost=jaeger
 
   graph-gateway:
     ports:

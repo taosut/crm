@@ -1,0 +1,41 @@
+version: "3.7"
+
+services:
+
+  nats:
+    image: nats
+
+  postgres.data:
+    image: postgres:11-alpine
+
+  communication-api-test:
+    image: crmnow/communication-api-test:latest
+    build: 
+      context: .
+      dockerfile: src/Communication/CRM.Communication.Api/Dockerfile
+      target: functionaltest
+      args:
+        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
+    depends_on:
+      - nats
+    volumes: 
+      - azp-data:/azp 
+
+  # lead-api-test:
+  #   image: ${REGISTRY:-crmnow}/lead-api-test:${TAG:-latest}
+  #   build: 
+  #     context: .
+  #     dockerfile: src/Lead/CRM.Lead.Api/Dockerfile
+  #     target: functionaltest
+  #     args:
+  #       - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
+  #   depends_on:
+  #     - nats
+  #     - postgres.data
+  #   volumes: 
+  #     - azp-data:/azp
+
+volumes:
+  azp-data:
+    name: azp-data
+    external: true

@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+
+  communication-api-test:
+    environment: 
+      - NATS__Url=http://nats:4222
+    entrypoint:      
+      - dotnet
+      - test
+      - --logger 
+      - trx;LogFileName=${COMMON_TESTRESULTSDIRECTORY}/communication-api-test/test-results.trx 
+      - /p:CollectCoverage=true 
+      - /p:CoverletOutputFormat=opencover 
+      - /p:CoverletOutput=${COMMON_TESTRESULTSDIRECTORY}/communication-api-test/coverage/
+      # - --no-restore
+
+  # lead-api-test:
+  #   environment: 
+  #     - NATS__Url=http://nats:4222
+  #   entrypoint:      
+  #     - dotnet
+  #     - test
+  #     - --logger 
+  #     - trx;LogFileName=${COMMON_TESTRESULTSDIRECTORY}/lead-api-test/test-results.trx 
+  #     - /p:CollectCoverage=true 
+  #     - /p:CoverletOutputFormat=opencover 
+  #     - /p:CoverletOutput=${COMMON_TESTRESULTSDIRECTORY}/lead-api-test/coverage/
+  #     - --no-restore
+      

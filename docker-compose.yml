@@ -47,10 +47,12 @@ services:
       - crm
 
   lead-api:
-    image: ${REGISTRY:-crm}/lead-api:${TAG:-latest}
+    image: ${REGISTRY:-crmnow}/lead-api:${TAG:-latest}
     build: 
       context: .
-      dockerfile: src/CRM.Lead.Api/Dockerfile
+      dockerfile: src/Lead/CRM.Lead.Api/Dockerfile
+      args:
+        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
     networks: 
       - crm
     depends_on: 
@@ -58,20 +60,24 @@ services:
       - postgres.data
 
   communication-api:
-    image: ${REGISTRY:-crm}/communication-api:${TAG:-latest}
+    image: ${REGISTRY:-crmnow}/communication-api:${TAG:-latest}
     build: 
       context: .
-      dockerfile: src/CRM.Communication.Api/Dockerfile
+      dockerfile: src/Communication/CRM.Communication.Api/Dockerfile
+      args:
+        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
     networks: 
       - crm
     depends_on: 
       - nats
 
   graph-gateway:
-    image: ${REGISTRY:-crm}/graph-gateway:${TAG:-latest}
+    image: ${REGISTRY:-crmnow}/graph-gateway:${TAG:-latest}
     build: 
       context: .
-      dockerfile: src/CRM.Graph.Gateway/Dockerfile
+      dockerfile: src/Gateways/CRM.Graph.Gateway/Dockerfile
+      args:
+        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
     networks: 
       - crm
     depends_on: 
