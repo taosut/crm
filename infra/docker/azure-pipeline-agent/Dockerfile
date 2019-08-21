@@ -23,6 +23,7 @@ RUN apt-get update \
         iputils-ping \
         libcurl4 \
         libltdl7 \
+        unzip \
     && rm -rf /var/lib/apt/lists/*
 
 # Install .NET Core SDK
