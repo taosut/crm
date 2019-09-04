@@ -332,3 +332,4 @@ ASALocalRun/
 .vscode/
 dist/
 crm.console.research
+setup-secret.sh

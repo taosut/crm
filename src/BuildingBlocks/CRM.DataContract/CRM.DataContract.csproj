@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Protobuf Include="..\..\proto\lead.proto" Link="protos\lead.proto" />
+    <Protobuf Include="..\..\proto\contact.proto" Link="protos\contact.proto" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.9.0-rc1" />

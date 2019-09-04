@@ -47,7 +47,21 @@ services:
       - 4222:4222
       - 6222:6222
       - 8222:8222
-      
+
+  contact-api:
+    ports:
+      - 5000:80
+    environment: 
+      - ConnectionStrings__default=Server=postgres.data;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
+  
+  contact-api-migration:
+    environment: 
+      - ConnectionStrings__contact=Server=postgres.data;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
+    entrypoint:      
+      - dotnet
+      - run
+      - contact
+
   lead-api:
     ports:
       - 5001:80

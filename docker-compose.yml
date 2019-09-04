@@ -46,6 +46,31 @@ services:
     networks:
       - crm
 
+  contact-api:
+    image: ${REGISTRY:-crmnow}/contact-api:${TAG:-latest}
+    build: 
+      context: .
+      dockerfile: src/Contact/CRM.Contact.Api/Dockerfile
+      args:
+        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
+    networks: 
+      - crm
+    depends_on: 
+      - postgres.data
+
+  contact-api-migration:
+    image: ${REGISTRY:-crmnow}/contact-api:${TAG:-latest}
+    build: 
+      context: .
+      dockerfile: src/Contact/CRM.Contact.Api/Dockerfile
+      target: migration
+      args:
+        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
+    networks: 
+      - crm
+    depends_on: 
+      - postgres.data
+
   lead-api:
     image: ${REGISTRY:-crmnow}/lead-api:${TAG:-latest}
     build: 

@@ -1,5 +1,0 @@
-steps:  
-  - bash: |
-      echo "Building crm.contact.api"    
-    displayName: Build CRM Customer API
-    condition: and(succeeded(), eq(variables.updated, 'true'))
