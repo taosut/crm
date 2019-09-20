@@ -21,7 +21,7 @@ services:
       - 14268:14268
       - 16686:16686
 
-  postgres.data:
+  postgresql:
     ports:
       - "5432:5432"
     environment:
@@ -35,7 +35,7 @@ services:
     environment:
       - KEYCLOAK_USER=lab
       - KEYCLOAK_PASSWORD=P@ssw0rd
-      - DB_ADDR=postgres.data
+      - DB_ADDR=postgresql
       - DB_USER=lab
       - DB_PASSWORD=P@ssw0rd
       - PROXY_ADDRESS_FORWARDING=true
@@ -62,13 +62,23 @@ services:
       - run
       - contact
 
+      
+  lead-migration:
+    environment:
+      - ConnectionStrings__lead=Server=postgresql;Port=5432;Database=crm-lead;User Id=lab;Password=P@ssw0rd;
+    entrypoint:
+      - dotnet
+      - CRM.Migration.dll
+      - lead
+
+
   lead-api:
     ports:
       - 5001:80
     environment: 
       - NATS__Url=http://nats:4222
       - Jaeger__UdpHost=jaeger
-      - ConnectionStrings__default=Server=postgres.data;Port=5432;Database=crm-lead;User Id=lab;Password=P@ssw0rd;
+      - ConnectionStrings__default=Server=postgresql;Port=5432;Database=crm-lead;User Id=lab;Password=P@ssw0rd;
 
   communication-api:
     ports:

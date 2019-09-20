@@ -25,7 +25,7 @@ services:
     networks: 
       - crm
     
-  postgres.data:
+  postgresql:
     image: postgres:11-alpine
     volumes:
       - postgres-data:/var/lib/postgresql/data
@@ -38,13 +38,25 @@ services:
     networks:
       - crm
     depends_on:
-      - postgres.data
+      - postgresql
 
   nats:
     image: nats
     container_name: nats
     networks:
       - crm
+  
+  lead-migration:
+    image: ${REGISTRY:-crmnow}/lead-migration:${TAG:-latest}
+    build: 
+      context: .
+      dockerfile: src/BuildingBlocks/CRM.Migration/Dockerfile
+      args:
+        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
+    networks: 
+      - crm
+    depends_on:
+      - postgresql
 
   contact-api:
     image: ${REGISTRY:-crmnow}/contact-api:${TAG:-latest}
@@ -82,7 +94,9 @@ services:
       - crm
     depends_on: 
       - nats
-      - postgres.data
+      - postgresql
+      - lead-migration
+      - jaeger
 
   communication-api:
     image: ${REGISTRY:-crmnow}/communication-api:${TAG:-latest}

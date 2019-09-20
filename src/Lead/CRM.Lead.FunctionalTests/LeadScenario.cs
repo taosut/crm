@@ -21,5 +21,18 @@ namespace CRM.Lead.FunctionalTests
             Assert.NotNull(result);
             Assert.Equal("Pong", result.Message);
         }
+
+        [Fact]
+        public async Task Call_ping_and_return_pong1()
+        {
+            using var host = CreateTestHost();
+            await host.StartAsync();
+
+            var grpcClient = GrpcClient.Create<LeadClient>(host.GetTestClient());
+            var result = await grpcClient.PingAsync(new Empty());
+
+            Assert.NotNull(result);
+            Assert.NotEqual("Pong", result.Message);
+        }
     }
 }

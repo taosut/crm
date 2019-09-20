@@ -1,0 +1,44 @@
+---
+- hosts: localhost
+  gather_facts: true
+  vars:
+    ansible_connection: local
+    ansible_python_interpreter: "{{ansible_playbook_python}}"
+  tasks:
+    - include_role: 
+        name: common-infra
+        tasks_from: main.yml
+      vars:
+        subnet_name: "vm-subnet"
+        subnet_address_prefix: "172.10.2.0/24"
+      tags:
+        - network
+    
+    - include_role: 
+        name: virtual-machine
+        tasks_from: main.yml
+      vars:
+        vm_name: "workshop-vm-{{ item }}"
+        subnet_name: "vm-subnet"
+        vm_size: "Standard_B1s"
+        admin:
+          username: workshop
+      tags:
+        - vm
+      with_sequence: start=1 end={{ total_vm }}
+
+- hosts: workshop_hosts
+  gather_facts: true
+  become: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+    - import_role:
+        name: common
+      tags: 
+        - docker  
+    - import_role:
+        name: docker
+        tasks_from: main.yml
+      tags: 
+        - docker

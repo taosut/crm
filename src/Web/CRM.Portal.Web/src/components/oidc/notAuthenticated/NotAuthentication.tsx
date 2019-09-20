@@ -1,7 +1,5 @@
 import React from "react";
 
 export default () => {
-    return (
-        <div>Not authenticated !!!</div>
-    );
-}
+  return <div>Not authenticated !!!</div>;
+};

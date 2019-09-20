@@ -20,9 +20,9 @@ namespace CRM.Graph.Gateway.Services
         }
         public LeadsResponse GetLeads()
         {
-            var metaData = new Metadata();            
+            var metaData = new Metadata();
             var result = _leadClient.getLeads(new Empty(), metaData);
-
+            _logger.LogInformation(result.Leads.ToString());
             return result;
         }
     }

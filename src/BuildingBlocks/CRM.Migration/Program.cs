@@ -52,6 +52,8 @@ namespace crm.migration
         {
             var connString = _configuration.GetConnectionString(dBName.ToString());
             var scriptFolderPath = $"./Scripts/{dBName.ToString()}";
+            
+            EnsureDatabase.For.PostgresqlDatabase(connString);
 
             EnsureDatabase.For.PostgresqlDatabase(connString);
             

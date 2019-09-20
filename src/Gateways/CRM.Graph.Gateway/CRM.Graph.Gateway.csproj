@@ -5,11 +5,11 @@
     <RootNamespace>CRM.Graph.Gateway</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GraphQL" Version="2.4.0"/>
-    <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="3.4.0"/>
-    <PackageReference Include="GraphQL.Server.Ui.Playground" Version="3.4.0"/>
-    <PackageReference Include="Scrutor" Version="3.0.2"/>
-    <PackageReference Include="Grpc.Net.ClientFactory" Version="0.1.22-pre3"/>
+    <PackageReference Include="Scrutor" Version="3.1.0"/>
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="0.2.23-pre2"/>
+    <PackageReference Include="HotChocolate" Version="10.1.0"/>
+    <PackageReference Include="HotChocolate.AspNetCore" Version="10.1.0"/>
+    <PackageReference Include="HotChocolate.AspNetCore.Playground" Version="10.1.0"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\CRM.DataContract\CRM.DataContract.csproj"/>

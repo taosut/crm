@@ -7,13 +7,13 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\CRM.Shared\CRM.Shared.csproj">
-      <GlobalPropertiesToRemove/>
+      <GlobalPropertiesToRemove />
     </ProjectReference>
     <ProjectReference Include="..\..\BuildingBlocks\CRM.DataContract\CRM.DataContract.csproj">
-      <GlobalPropertiesToRemove/>
+      <GlobalPropertiesToRemove />
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="2.2.0"/>
+    <PackageReference Include="MailKit" Version="2.3.1.6" />
   </ItemGroup>
 </Project>

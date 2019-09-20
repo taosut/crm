@@ -5,7 +5,7 @@ services:
   nats:
     image: nats
 
-  postgres.data:
+  postgresql:
     image: postgres:11-alpine
 
   communication-api-test:
@@ -21,19 +21,19 @@ services:
     volumes: 
       - azp-data:/azp 
 
-  # lead-api-test:
-  #   image: ${REGISTRY:-crmnow}/lead-api-test:${TAG:-latest}
-  #   build: 
-  #     context: .
-  #     dockerfile: src/Lead/CRM.Lead.Api/Dockerfile
-  #     target: functionaltest
-  #     args:
-  #       - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
-  #   depends_on:
-  #     - nats
-  #     - postgres.data
-  #   volumes: 
-  #     - azp-data:/azp
+  lead-api-test:
+    image: crmnow/lead-api-test:latest
+    build: 
+      context: .
+      dockerfile: src/Lead/CRM.Lead.Api/Dockerfile
+      target: functionaltest
+      args:
+        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
+    depends_on:
+      - nats
+      - postgresql
+    volumes: 
+      - azp-data:/azp
 
 volumes:
   azp-data:

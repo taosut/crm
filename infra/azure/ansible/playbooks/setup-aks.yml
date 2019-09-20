@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  gather_facts: true
+  vars:
+    ansible_connection: local
+    ansible_python_interpreter: "{{ansible_playbook_python}}"
+  tasks:
+    - include_role: 
+        name: common-infra
+        tasks_from: main.yml
+      vars:
+        subnet_name: "aks-subnet"
+        subnet_address_prefix: "172.10.8.0/22"
+      tags:
+        - network

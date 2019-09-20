@@ -1,0 +1,30 @@
+{
+  "resouceGroup": {
+    "name": "lab01",
+    "parameters": {
+      "location": "East Asia"
+    }
+  },
+  "aks": {
+    "name": "aks-lab01",
+    "parameters": {
+      "enableRBAC": true,
+      "location": "East Asia",
+      "kubernetesVersion": "1.12.8",
+      "dnsPrefix": "aks-lab01-dns",
+      "agentPoolProfiles": [
+        {
+          "count": 1,
+          "name": "agentpool",
+          "maxPods": 250,
+          "osType": "Linux",
+          "vmSize": "Standard_B4ms"
+        }
+      ],
+      "servicePrincipalProfile": {
+          "clientId": "8e907373-72b6-4e30-a565-8e88a3dc2fce",
+          "secret": "5akCBELJKjU@/+B32H7G:HKj4rNM1d*["
+      }
+    }
+  }
+}

@@ -1,4 +1,3 @@
-
 CREATE TABLE Lead (
 	leadid varchar NOT NULL,
 	leadowner varchar NULL,

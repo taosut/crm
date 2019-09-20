@@ -1,0 +1,27 @@
+---
+- name: Install aptitude using apt
+  apt:
+    name: aptitude
+    state: latest
+    update_cache: yes
+    force_apt_get: yes
+
+- name: Download setup 12.x script
+  get_url:
+    url: https://deb.nodesource.com/setup_12.x
+    dest: /tmp
+    mode: 755
+
+- name: Add NodeJs Repository
+  command: /tmp/setup_12.x
+
+- name: Install common packages using apt
+  apt:
+    state: latest
+    update_cache: yes
+    force_apt_get: yes
+    pkg:
+      - python3-pip
+      - python3-setuptools
+      - virtualenv
+      - nodejs

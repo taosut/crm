@@ -1,0 +1,5 @@
+fullnameOverride: postgresql
+
+postgresqlUsername: lab
+postgresqlPassword: P@ssw0rd
+postgresqlDatabase: postgres 

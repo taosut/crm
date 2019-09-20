@@ -1,0 +1,22 @@
+{
+  "name": "crm-infra-setup",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "tungphuongld@gmail.com",
+  "license": "MIT",
+  "scripts": {
+    "start": "DEBUG=crm-* ts-node --pretty app.ts"
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.5",
+    "@types/node": "^12.7.2",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "@azure/arm-containerservice": "^9.0.0",
+    "@azure/arm-resources": "^1.1.0",
+    "@azure/ms-rest-nodeauth": "^3.0.0",
+    "debug": "^4.1.1"
+  }
+}

@@ -1,9 +1,4 @@
 using crm.graph.gateway.Options;
-using CRM.Graph.Gateway.Query;
-using GraphQL;
-using GraphQL.Server;
-using GraphQL.Server.Ui.Playground;
-using GraphQL.Types;
 using LeadApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +10,10 @@ using CRM.Shared;
 using CRM.Shared.Jaeger;
 using OpenTracing.Contrib.Grpc.Interceptors;
 using CRM.Shared.Services;
+using HotChocolate;
+using HotChocolate.AspNetCore;
+using HotChocolate.AspNetCore.Playground;
+using CRM.Graph.Gateway.Types;
 
 namespace CRM.Graph.Gateway
 {
@@ -47,31 +46,20 @@ namespace CRM.Graph.Gateway
             }
 
             app.UseRouting();
-
-            app.UseGraphQL<ISchema>("/graphql");
-            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()
-            {
-                Path = "/ui/playground"
-            });
+            app.UseGraphQL()
+                .UsePlayground(new PlaygroundOptions()
+                {
+                    Path = "/ui/playground"
+                });
         }
 
-        // ReSharper disable once InconsistentNaming
         private void GraphQLRegister(IServiceCollection services)
         {
-            services.Scan(scan => scan.FromCallingAssembly()
-                .AddClasses(x => x.AssignableTo(typeof(ObjectGraphType<>)))
-                .AsSelf()
-                .WithScopedLifetime());
-
-            services.AddScoped<CrmQuery>();
-            services.AddScoped<ISchema, CrmSchema>();
-            services.AddScoped<IDependencyResolver>(c => new FuncDependencyResolver(c.GetRequiredService));
-
-            services.AddGraphQL(o =>
+            services.AddGraphQL(sp => Schema.Create(c =>
             {
-                o.EnableMetrics = true;
-                o.ExposeExceptions = true;
-            });
+                c.RegisterServiceProvider(sp);
+                c.RegisterQueryType<QueryType>();
+            }));
         }
 
         private void GrpcRegister(IServiceCollection services)
@@ -82,12 +70,12 @@ namespace CRM.Graph.Gateway
                             .AddClasses(x => x.AssignableTo(typeof(ServiceBase)))
                             .AsImplementedInterfaces()
                             .WithScopedLifetime());
-            
+
             services.AddTransient<ClientTracingInterceptor>();
             var serviceOptions = Configuration.GetOptions<ServiceOptions>("Services");
             services.AddGrpcClient<Lead.LeadClient>(o =>
             {
-                o.BaseAddress = new Uri(serviceOptions.LeadService.Url);
+                o.Address = new Uri(serviceOptions.LeadService.Url);
             })
             .AddInterceptor<ClientTracingInterceptor>();
         }

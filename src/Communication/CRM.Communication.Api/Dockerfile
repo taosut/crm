@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100-preview8-bionic AS builder
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100-rc1-bionic AS builder
 
 ARG feed='--source "https://api.nuget.org/v3/index.json"'
 
@@ -21,7 +21,7 @@ RUN dotnet publish src/Communication/CRM.Communication.Api/ -c Release -o /app -
 FROM builder AS functionaltest
 WORKDIR /src/src/Communication/CRM.Communication.FunctionalTests
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.0-preview8-bionic
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.0-rc1-bionic
 WORKDIR /app
 
 ENV ASPNETCORE_URLS http://*:80
