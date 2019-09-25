@@ -22,7 +22,7 @@ namespace CRM.Shared.Jaeger
             {
                 return services;
             }
-            
+
             _initialized = true;
 
             var options = GetJaegerOptions(services);
@@ -33,7 +33,7 @@ namespace CRM.Shared.Jaeger
                     .WithReporter(new NoopReporter())
                     .WithSampler(new ConstSampler(false))
                     .Build();
-                services.AddSingleton(defaultTracer);
+                services.AddSingleton<ITracer>(defaultTracer);
                 return services;
             }
 

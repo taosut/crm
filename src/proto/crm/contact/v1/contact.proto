@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package crm.contact.v1;
+
+option csharp_namespace = "CRM.Contact.V1";
+
+import "google/protobuf/wrappers.proto";
+
+message PongReply {
+  string message = 1;
+}
+
+message Address {
+  google.protobuf.StringValue street = 1;
+  google.protobuf.StringValue city = 2;
+  google.protobuf.StringValue state = 3;
+  google.protobuf.StringValue zipcode = 4;
+  google.protobuf.StringValue country = 5;
+}
+
+message ContactInformation {
+  google.protobuf.StringValue email = 1;
+  google.protobuf.StringValue mobile = 2;
+  google.protobuf.StringValue workPhone = 3;
+  google.protobuf.StringValue homePhone = 4;
+}
+
+message Contact {
+  string id =1;
+  google.protobuf.StringValue firstName = 2;
+  string lastName = 3;
+  google.protobuf.StringValue company = 4;
+  google.protobuf.StringValue title = 5;
+  google.protobuf.StringValue description = 6;
+  Address address = 7;
+  ContactInformation contactInfo =8;
+}
+
+enum Title {
+  Mr = 0;
+  Mrs = 1;
+  Ms = 2;
+}
+
+enum Gender {
+  male=0;
+  female=1;
+}

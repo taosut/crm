@@ -6,25 +6,25 @@ services:
     container_name: vault
     networks:
       - crm
-    cap_add: 
+    cap_add:
       - IPC_LOCK
 
   seq:
     image: datalust/seq
     container_name: seq
-    environment: 
+    environment:
       - ACCEPT_EULA=Y
-    networks: 
+    networks:
       - crm
-    volumes: 
+    volumes:
       - seq-data:/data
 
   jaeger:
     image: jaegertracing/all-in-one
     container_name: jaeger
-    networks: 
+    networks:
       - crm
-    
+
   postgresql:
     image: postgres:11-alpine
     volumes:
@@ -58,69 +58,58 @@ services:
     depends_on:
       - postgresql
 
+  contact-migration:
+    image: ${REGISTRY:-crmnow}/contact-migration:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/BuildingBlocks/CRM.Migration/Dockerfile
+      args:
+        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
+    volumes:
+      - ./src/BuildingBlocks/CRM.Migration/Scripts/:/app/Scripts:ro
+    networks:
+      - crm
+    depends_on:
+      - postgresql
+
   contact-api:
     image: ${REGISTRY:-crmnow}/contact-api:${TAG:-latest}
-    build: 
+    build:
       context: .
-      dockerfile: src/Contact/CRM.Contact.Api/Dockerfile
+      dockerfile: src/Contact/CRM.Contact/Dockerfile
       args:
         - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
-    networks: 
+    networks:
       - crm
-    depends_on: 
-      - postgres.data
-
-  contact-api-migration:
-    image: ${REGISTRY:-crmnow}/contact-api:${TAG:-latest}
-    build: 
-      context: .
-      dockerfile: src/Contact/CRM.Contact.Api/Dockerfile
-      target: migration
-      args:
-        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
-    networks: 
-      - crm
-    depends_on: 
-      - postgres.data
-
-  lead-api:
-    image: ${REGISTRY:-crmnow}/lead-api:${TAG:-latest}
-    build: 
-      context: .
-      dockerfile: src/Lead/CRM.Lead.Api/Dockerfile
-      args:
-        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
-    networks: 
-      - crm
-    depends_on: 
-      - nats
+    depends_on:
       - postgresql
-      - lead-migration
+      - nats
       - jaeger
 
   communication-api:
     image: ${REGISTRY:-crmnow}/communication-api:${TAG:-latest}
-    build: 
+    build:
       context: .
-      dockerfile: src/Communication/CRM.Communication.Api/Dockerfile
+      dockerfile: src/Communication/CRM.Communication/Dockerfile
       args:
         - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
-    networks: 
+    networks:
       - crm
-    depends_on: 
+    depends_on:
       - nats
 
   graph-gateway:
     image: ${REGISTRY:-crmnow}/graph-gateway:${TAG:-latest}
-    build: 
+    build:
       context: .
       dockerfile: src/Gateways/CRM.Graph.Gateway/Dockerfile
       args:
         - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
-    networks: 
+    networks:
       - crm
-    depends_on: 
-      - lead-api
+    depends_on:
+      - contact-api
+      - communication-api
 
 volumes:
   postgres-data:

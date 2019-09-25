@@ -3,29 +3,28 @@ version: "3.7"
 services:
 
   communication-api-test:
-    environment: 
+    environment:
       - NATS__Url=http://nats:4222
-    entrypoint:      
+    entrypoint:
       - dotnet
       - test
-      - --logger 
-      - trx;LogFileName=${COMMON_TESTRESULTSDIRECTORY}/communication-api-test/test-results.trx 
-      - /p:CollectCoverage=true 
-      - /p:CoverletOutputFormat=opencover 
+      - --logger
+      - trx;LogFileName=${COMMON_TESTRESULTSDIRECTORY}/communication-api-test/test-results.trx
+      - /p:CollectCoverage=true
+      - /p:CoverletOutputFormat=opencover
       - /p:CoverletOutput=${COMMON_TESTRESULTSDIRECTORY}/communication-api-test/coverage/
       # - --no-restore
 
-  lead-api-test:
-    environment: 
+  contact-api-test:
+    environment:
       - NATS__Url=http://nats:4222
-      - ConnectionStrings__default=Server=postgresql;Port=5432;Database=crm-lead;User Id=lab;Password=P@ssw0rd;
-    entrypoint:      
+      - ConnectionStrings__default=Server=postgresql;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
+    entrypoint:
       - dotnet
       - test
-      - --logger 
-      - trx;LogFileName=${COMMON_TESTRESULTSDIRECTORY}/lead-api-test/test-results.trx 
-      - /p:CollectCoverage=true 
-      - /p:CoverletOutputFormat=opencover 
+      - --logger
+      - trx;LogFileName=${COMMON_TESTRESULTSDIRECTORY}/lead-api-test/test-results.trx
+      - /p:CollectCoverage=true
+      - /p:CoverletOutputFormat=opencover
       - /p:CoverletOutput=${COMMON_TESTRESULTSDIRECTORY}/lead-api-test/coverage/
       # - --no-restore
-      

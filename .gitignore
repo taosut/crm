@@ -329,7 +329,6 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder
 .mfractor/
 
-.vscode/
 dist/
 crm.console.research
 setup-secret.sh

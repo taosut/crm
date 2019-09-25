@@ -7,7 +7,8 @@ namespace CRM.Graph.Gateway.Types
     {
         protected override void Configure(IObjectTypeDescriptor descriptor)
         {
-            descriptor.Field<LeadResolver>(t => t.GetLeads()).Type<ListType<LeadType>>();
+            descriptor.Field<ContactResolver>(t => t.ListContacts())
+                .Type<ListType<ContactType>>();
         }
     }
 }

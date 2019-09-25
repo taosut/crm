@@ -12,8 +12,7 @@ namespace crm.migration
 
         private enum DBName
         {
-            Lead = 0,
-            Contact = 1
+            Contact = 0
         }
 
         static void Main(string[] args)
@@ -32,17 +31,14 @@ namespace crm.migration
             var lastArg = 0;
             for (; lastArg < args.Length; lastArg++)
             {
-                if (IsArg(args[lastArg], "lead"))
-                {
-                    Log.Information("Run migration - Lead Db");
-                    Run(DBName.Lead);
-                }
                 if (IsArg(args[lastArg], "contact"))
                 {
                     Log.Information("Run migration - Contact Db");
                     Run(DBName.Contact);
+                    continue;
                 }
-                else {
+                else
+                {
                     throw new ArgumentOutOfRangeException($"{args[lastArg]} not found.");
                 }
             }
@@ -56,7 +52,9 @@ namespace crm.migration
             EnsureDatabase.For.PostgresqlDatabase(connString);
 
             EnsureDatabase.For.PostgresqlDatabase(connString);
-            
+
+            EnsureDatabase.For.PostgresqlDatabase(connString);
+
             var upgrader = DeployChanges.To
                 .PostgresqlDatabase(connString)
                 .WithScriptsFromFileSystem(scriptFolderPath, new SqlScriptOptions

@@ -1,8 +1,8 @@
-namespace crm.graph.gateway.Options
+namespace CRM.Graph.Gateway.Options
 {
     public class ServiceOptions
     {
-        public ServiceConfig LeadService { get; set; }
+        public ServiceConfig ContactService { get; set; }
     }
 
     public class ServiceConfig

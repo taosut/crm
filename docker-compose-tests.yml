@@ -10,29 +10,29 @@ services:
 
   communication-api-test:
     image: crmnow/communication-api-test:latest
-    build: 
+    build:
       context: .
-      dockerfile: src/Communication/CRM.Communication.Api/Dockerfile
+      dockerfile: src/Communication/CRM.Communication/Dockerfile
       target: functionaltest
       args:
         - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
     depends_on:
       - nats
-    volumes: 
-      - azp-data:/azp 
+    volumes:
+      - azp-data:/azp
 
-  lead-api-test:
-    image: crmnow/lead-api-test:latest
-    build: 
+  contact-api-test:
+    image: crmnow/contact-api-test:latest
+    build:
       context: .
-      dockerfile: src/Lead/CRM.Lead.Api/Dockerfile
+      dockerfile: src/Contact/CRM.Contact/Dockerfile
       target: functionaltest
       args:
         - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
     depends_on:
       - nats
       - postgresql
-    volumes: 
+    volumes:
       - azp-data:/azp
 
 volumes:

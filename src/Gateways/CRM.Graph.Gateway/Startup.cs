@@ -1,5 +1,4 @@
-using crm.graph.gateway.Options;
-using LeadApi;
+using CRM.Graph.Gateway.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +13,8 @@ using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.AspNetCore.Playground;
 using CRM.Graph.Gateway.Types;
+using static CRM.Contact.V1.ContactApi;
+using static CRM.Contact.V1.LeadApi;
 
 namespace CRM.Graph.Gateway
 {
@@ -59,6 +60,7 @@ namespace CRM.Graph.Gateway
             {
                 c.RegisterServiceProvider(sp);
                 c.RegisterQueryType<QueryType>();
+                c.RegisterType<AddressType>();
             }));
         }
 
@@ -73,11 +75,17 @@ namespace CRM.Graph.Gateway
 
             services.AddTransient<ClientTracingInterceptor>();
             var serviceOptions = Configuration.GetOptions<ServiceOptions>("Services");
-            services.AddGrpcClient<Lead.LeadClient>(o =>
+
+            services.AddGrpcClient<ContactApiClient>(o =>
             {
-                o.Address = new Uri(serviceOptions.LeadService.Url);
+                o.Address = new Uri(serviceOptions.ContactService.Url);
             })
             .AddInterceptor<ClientTracingInterceptor>();
+
+            services.AddGrpcClient<LeadApiClient>(o =>
+            {
+                o.Address = new Uri(serviceOptions.ContactService.Url);
+            });
         }
     }
 }
