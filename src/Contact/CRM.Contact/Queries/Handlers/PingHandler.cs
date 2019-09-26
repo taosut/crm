@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using CRM.Contact.V1;
+using CRM.Protobuf.Contact.V1;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

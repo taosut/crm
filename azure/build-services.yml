@@ -6,10 +6,10 @@ jobs:
     displayName: Build services
     dependsOn: Prepare_environment
     variables:
-      shortcommit: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.shortcommit']]
+      dockerImageTag: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.dockerImageTag']]
     pool:
       name: default
-    steps:            
+    steps:
       - task: DockerCompose@0
         displayName: Compose build ${{ parameters.services }}
         inputs:
@@ -19,4 +19,4 @@ jobs:
           qualifyImageNames: true
           projectName: ''
           dockerComposeFileArgs: |
-            TAG=$(shortcommit)
+            TAG=$(dockerImageTag)

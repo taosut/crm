@@ -2,6 +2,12 @@ version: "3.7"
 
 services:
 
+  nats:
+    ports:
+      - 4222:4222
+      - 6222:6222
+      - 8222:8222
+
   communication-api-test:
     environment:
       - NATS__Url=http://nats:4222
@@ -13,7 +19,7 @@ services:
       - /p:CollectCoverage=true
       - /p:CoverletOutputFormat=opencover
       - /p:CoverletOutput=${COMMON_TESTRESULTSDIRECTORY}/communication-api-test/coverage/
-      # - --no-restore
+      - --no-restore
 
   contact-api-test:
     environment:
@@ -23,8 +29,8 @@ services:
       - dotnet
       - test
       - --logger
-      - trx;LogFileName=${COMMON_TESTRESULTSDIRECTORY}/lead-api-test/test-results.trx
+      - trx;LogFileName=${COMMON_TESTRESULTSDIRECTORY}/contact-api-test/test-results.trx
       - /p:CollectCoverage=true
       - /p:CoverletOutputFormat=opencover
-      - /p:CoverletOutput=${COMMON_TESTRESULTSDIRECTORY}/lead-api-test/coverage/
-      # - --no-restore
+      - /p:CoverletOutput=${COMMON_TESTRESULTSDIRECTORY}/contact-api-test/coverage/
+      - --no-restore

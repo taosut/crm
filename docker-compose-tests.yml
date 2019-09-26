@@ -4,9 +4,13 @@ services:
 
   nats:
     image: nats
+    networks:
+      - crm
 
   postgresql:
     image: postgres:11-alpine
+    networks:
+      - crm
 
   communication-api-test:
     image: crmnow/communication-api-test:latest
@@ -16,6 +20,8 @@ services:
       target: functionaltest
       args:
         - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
+    networks:
+      - crm
     depends_on:
       - nats
     volumes:
@@ -29,6 +35,8 @@ services:
       target: functionaltest
       args:
         - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
+    networks:
+      - crm
     depends_on:
       - nats
       - postgresql
@@ -39,3 +47,7 @@ volumes:
   azp-data:
     name: azp-data
     external: true
+
+networks:
+  crm:
+    name: crm-network-test

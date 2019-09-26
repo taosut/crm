@@ -1,0 +1,51 @@
+parameters:
+  service: ''
+  kubernetesNamespace: ''
+  azureSubscriptionEndpoint: ''
+  azureResourceGroup: ''
+  kubernetesCluster: ''
+
+jobs:
+  - deployment: Install_Helm_Chart
+    displayName: Install helm chart
+    variables:
+      dockerImageTag: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.dockerImageTag']]
+      # helmVersion: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.helmVersion']]
+      # kubectlVersion: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.kubectlVersion']]
+    dependsOn:
+    - Prepare_environment
+    pool:
+      name: default
+    environment: ${{ parameters.kubernetesNamespace }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            # - task: HelmInstaller@0
+            #   displayName: Helm installer
+            #   inputs:
+            #     helmVersion: $(helmVersion)
+            #     kubectlVersion: $(kubectlVersion)
+            #     checkLatestKubectl: false
+
+            - task: HelmDeploy@0
+              displayName: Helm version
+              inputs:
+                azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+                azureResourceGroup: $(azureResourceGroup)
+                kubernetesCluster: $(kubernetesCluster)
+                command: version
+
+            - task: HelmDeploy@0
+              displayName: Helm install
+              inputs:
+                azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+                azureResourceGroup: $(azureResourceGroup)
+                kubernetesCluster: $(kubernetesCluster)
+                namespace: ${{ parameters.kubernetesNamespace }}
+                releaseName: ${{ parameters.service }}-${{ parameters.kubernetesNamespace }}
+                command: upgrade
+                chartType: FilePath
+                chartPath: $(Pipeline.Workspace)/helm/${{ parameters.service }}-$(Build.BuildNumber).tgz
+                install: true
+                overrideValues: image.tag=$(dockerImageTag)

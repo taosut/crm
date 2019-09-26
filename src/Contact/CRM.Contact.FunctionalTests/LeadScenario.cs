@@ -5,6 +5,7 @@ using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using CRM.Protobuf.Contact.V1;
 
 namespace CRM.Contact.FunctionalTests
 {
@@ -22,6 +23,7 @@ namespace CRM.Contact.FunctionalTests
                 builder.ConfigureAppConfiguration((SourceContext, config) =>
                 {
                     config.AddJsonFile(configPath);
+                    config.AddEnvironmentVariables();
                 });
             });
         }
@@ -34,7 +36,7 @@ namespace CRM.Contact.FunctionalTests
                 HttpClient = _factory.CreateClient()
             };
             var channel = GrpcChannel.ForAddress("http://localhost", options);
-            var client = new CRM.Contact.V1.LeadApi.LeadApiClient(channel);
+            var client = new LeadApi.LeadApiClient(channel);
 
             var result = await client.PingAsync(new Empty());
 

@@ -4,6 +4,5 @@ namespace CRM.IntegrationEvents
 {
     public class LeadCreatedEvent : IntegrationEvent
     {
-
     }
 }

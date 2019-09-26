@@ -2,4 +2,7 @@ fullnameOverride: postgresql
 
 postgresqlUsername: lab
 postgresqlPassword: P@ssw0rd
-postgresqlDatabase: postgres 
+postgresqlDatabase: postgres
+
+persistence:
+  enabled: false

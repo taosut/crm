@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 using CRM.Contact.Queries;
-using CRM.Contact.V1;
+using CRM.Protobuf.Contact.V1;
 using Google.Protobuf.WellKnownTypes;
 using MediatR;
 
 namespace CRM.Contact.Services
 {
-    public class ContactService : CRM.Contact.V1.ContactApi.ContactApiBase
+    public class ContactService : ContactApi.ContactApiBase
     {
         private readonly IMediator _mediator;
 

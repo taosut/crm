@@ -2,7 +2,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CRM.Contact.Domain;
-using CRM.Contact.V1;
+using CRM.Protobuf.Contact.V1;
 using MediatR;
 
 namespace CRM.Contact.Queries.Handlers
@@ -20,7 +20,7 @@ namespace CRM.Contact.Queries.Handlers
             var contacts = await _contactRepo.ListContactsAsync();
 
             var response = new ListContactsResponse();
-            response.Contacts.AddRange(contacts.Select(c => new V1.Contact
+            response.Contacts.AddRange(contacts.Select(c => new Protobuf.Contact.V1.Contact
             {
                 Id = c.ContactId.ToString(),
                 FirstName = c.FirstName,
@@ -28,7 +28,7 @@ namespace CRM.Contact.Queries.Handlers
                 Company = c.Company,
                 Description = c.Description,
                 Title = c.Title,
-                Address = new V1.Address
+                Address = new Protobuf.Contact.V1.Address
                 {
                     City = c.Address.MailingCity,
                     Country = c.Address.MailingCountry,
@@ -36,7 +36,7 @@ namespace CRM.Contact.Queries.Handlers
                     Street = c.Address.MailingStreet,
                     Zipcode = c.Address.MailingZipCode
                 },
-                ContactInfo = new V1.ContactInformation
+                ContactInfo = new Protobuf.Contact.V1.ContactInformation
                 {
                     Email = c.ContactInfo.Email,
                     HomePhone = c.ContactInfo.HomePhone,

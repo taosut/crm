@@ -1,0 +1,55 @@
+parameters:
+  service: ''
+  azureSubscriptionEndpoint: ''
+  azureResourceGroup: ''
+  kubernetesCluster: ''
+
+jobs:
+  - job: Publish_Helm_Chart
+    displayName: Publish helm chart
+    # variables:
+    #   helmVersion: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.helmVersion']]
+    #   kubectlVersion: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.kubectlVersion']]
+    dependsOn:
+    - Prepare_environment
+    pool:
+      name: default
+    steps:
+      # - task: HelmInstaller@0
+      #   displayName: Helm installer
+      #   inputs:
+      #     helmVersion: $(helmVersion)
+      #     kubectlVersion: $(kubectlVersion)
+      #     checkLatestKubectl: false
+
+      - task: HelmDeploy@0
+        displayName: Helm version
+        inputs:
+          azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+          azureResourceGroup: $(azureResourceGroup)
+          kubernetesCluster: $(kubernetesCluster)
+          command: version
+
+      - task: HelmDeploy@0
+        displayName: Helm package
+        inputs:
+          azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+          azureResourceGroup: $(azureResourceGroup)
+          kubernetesCluster: $(kubernetesCluster)
+          command: package
+          chartPath: k8s/charts/${{ parameters.service }}
+          destination: $(Build.ArtifactStagingDirectory)
+          save: false
+          arguments: --app-version $(Build.BuildNumber) --version $(Build.BuildNumber)
+
+      # - task: Bash@3
+      #   displayName: Helm package
+      #   inputs:
+      #     targetType: inline
+      #     script: |
+      #       helm package --destination $(Build.ArtifactStagingDirectory) --app-version $(Build.BuildNumber) --version $(Build.BuildNumber) k8s/charts/${{ parameters.service }}
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          pathtoPublish: $(Build.ArtifactStagingDirectory)/${{ parameters.service }}-$(Build.BuildNumber).tgz
+          artifactName: helm

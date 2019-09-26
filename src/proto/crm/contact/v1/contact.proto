@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package crm.contact.v1;
 
-option csharp_namespace = "CRM.Contact.V1";
+option csharp_namespace = "CRM.Protobuf.Contact.V1";
 
 import "google/protobuf/wrappers.proto";
 

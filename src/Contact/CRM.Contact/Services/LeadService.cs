@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using CRM.Contact.Queries;
-using CRM.Contact.V1;
+using CRM.Protobuf.Contact.V1;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using MediatR;
@@ -8,7 +8,7 @@ using MediatR;
 
 namespace CRM.Contact.Services
 {
-    public class LeadService : CRM.Contact.V1.LeadApi.LeadApiBase
+    public class LeadService : LeadApi.LeadApiBase
     {
         private readonly IMediator _mediator;
 

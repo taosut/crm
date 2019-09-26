@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "lead-api.fullname" . }}
+  name: {{ include "contact-api.fullname" . }}
   labels:
-{{ include "lead-api.labels" . | indent 4 }}
+{{ include "contact-api.labels" . | indent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,5 +12,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "lead-api.name" . }}
+    app.kubernetes.io/name: {{ include "contact-api.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

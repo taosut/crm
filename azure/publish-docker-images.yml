@@ -1,13 +1,13 @@
 parameters:
   services: ''
-  registryendpoint: ''
+  registryEndpoint: ''
 
 jobs:
   - job: Publish_Docker_Images
     displayName: Publish images
     variables:
-      shortcommit: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.shortcommit']]
-    dependsOn: 
+      dockerImageTag: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.dockerImageTag']]
+    dependsOn:
     - Prepare_environment
     pool:
       name: default
@@ -17,9 +17,9 @@ jobs:
         inputs:
           dockerComposeCommand: 'push ${{ parameters.services }}'
           containerregistrytype: Container Registry
-          dockerRegistryEndpoint: ${{ parameters.registryendpoint }}
+          dockerRegistryEndpoint: ${{ parameters.registryEndpoint }}
           dockerComposeFile: docker-compose.yml
           qualifyImageNames: true
           projectName: ""
           dockerComposeFileArgs: |
-            TAG=$(shortcommit)
+            TAG=$(dockerImageTag)

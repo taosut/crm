@@ -1,0 +1,18 @@
+jobs:
+  - job: Prepare_environment
+    displayName: Prepare environment
+    pool:
+      name: default
+    steps:
+      - task: Bash@3
+        inputs:
+          targetType: filePath
+          filePath: azure/scripts/prepare-variable-env.sh
+        name: setGlobalVarStep
+
+      - task: Bash@3
+        displayName: Print environment variables
+        inputs:
+          targetType: inline
+          script: |
+            echo $(setGlobalVarStep.shortcommit)

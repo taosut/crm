@@ -1,9 +1,9 @@
 variables:
     disable.coverage.autogenerate: 'true'
-    azuresubscription: AKS-lab-01
-    azureresourcegroup: lab
-    kubernetescluster: aks-lab-01
-    registryendpoint: crm-registry
+    azureSubscriptionEndpoint: azuresubscription-endpoint
+    azureResourceGroup: lab01
+    kubernetesCluster: aks-lab01
+    registryEndpoint: dockerhub-connection
 
 trigger:
   branches:
@@ -14,9 +14,9 @@ trigger:
       - ref/tags/*
   paths:
     include:
-      - src/Lead/CRM.Lead.Api
-      - src/Lead/CRM.Lead.FunctionalTestss
-      - src/BuildingBlocks/CRM.DataContract
+      - src/Contact/CRM.Contact.Api
+      - src/Contact/CRM.Contact
+      - src/Contact/CRM.Contact.FunctionalTests
       - src/BuildingBlocks/CRM.Shared
 
 stages:
@@ -31,14 +31,14 @@ stages:
   dependsOn: Pre_Build
   jobs:
     - template: ../prepare-env.yml
-    
+
     - template: ../build-services.yml
       parameters:
-        services: lead-api
+        services: contact-api
 
     - template: ../run-integration-test.yml
       parameters:
-        testService: lead-api-test
+        testService: contact-api-test
 
 - stage: Publish_Docker_Images
   displayName: Docker images
@@ -49,8 +49,8 @@ stages:
 
     - template: ../publish-docker-images.yml
       parameters:
-        services: lead-api
-        registryendpoint: $(registryendpoint)
+        services: contact-api
+        registryEndpoint: $(registryEndpoint)
 
 - stage: Publish_Helm_Chart
   displayName: Publish helm chart
@@ -61,10 +61,10 @@ stages:
 
     - template: ../publish-helm-chart.yml
       parameters:
-        service: lead-api
-        azuresubscription: $(azuresubscription)
-        azureresourcegroup: $(azureresourcegroup)
-        kubernetescluster: $(kubernetescluster)
+        service: contact-api
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureResourceGroup: $(azureResourceGroup)
+        kubernetesCluster: $(kubernetesCluster)
 
 - stage: Deploy_Dev_Environment
   displayName: Deploy on Dev environment
@@ -74,8 +74,8 @@ stages:
 
     - template: ../install-helm-chart.yml
       parameters:
-        service: lead-api
-        kubernetesnamespace: dev
-        azuresubscription: $(azuresubscription)
-        azureresourcegroup: $(azureresourcegroup)
-        kubernetescluster: $(kubernetescluster)
+        service: contact-api
+        kubernetesNamespace: develop
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureResourceGroup: $(azureResourceGroup)
+        kubernetesCluster: $(kubernetesCluster)

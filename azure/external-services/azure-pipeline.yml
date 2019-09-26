@@ -1,0 +1,54 @@
+variables:
+    azureSubscriptionEndpoint: azuresubscription-endpoint
+    azureResourceGroup: lab01
+    kubernetesCluster: aks-lab01
+    kubernetesNamespace: develop
+
+stages:
+
+- stage: Deploy_Dev_Env
+  displayName: Deploy external services for dev env
+  jobs:
+
+    - template: ../prepare-env.yml
+
+    - job: setup_helm_repo
+      displayName: Setup Helm repo
+      pool:
+        name: default
+      steps:
+        - task: HelmDeploy@0
+          displayName: Helm version
+          inputs:
+            azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+            azureResourceGroup: $(azureResourceGroup)
+            kubernetesCluster: $(kubernetesCluster)
+            command: version
+
+        - task: Bash@3
+          inputs:
+            targetType: inline
+            script: |
+              helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+
+    - template: ../install-helm-chart-by-name.yml
+      parameters:
+        name: Install_Nats
+        chartname: stable/nats
+        releasename: nats
+        kubernetesNamespace: $(kubernetesNamespace)
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureResourceGroup: $(azureResourceGroup)
+        kubernetesCluster: $(kubernetesCluster)
+        valueFile: $(Build.SourcesDirectory)/k8s/charts/nats/values.dev.yaml
+
+    - template: ../install-helm-chart-by-name.yml
+      parameters:
+        name: Install_Postgresql
+        chartname: stable/postgresql
+        releasename: postgresql
+        kubernetesNamespace: $(kubernetesNamespace)
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureResourceGroup: $(azureResourceGroup)
+        kubernetesCluster: $(kubernetesCluster)
+        valueFile: $(Build.SourcesDirectory)/k8s/charts/postgresql/values.dev.yaml

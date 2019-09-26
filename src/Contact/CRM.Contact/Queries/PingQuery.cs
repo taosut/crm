@@ -1,4 +1,4 @@
-using CRM.Contact.V1;
+using CRM.Protobuf.Contact.V1;
 using MediatR;
 
 namespace CRM.Contact.Queries

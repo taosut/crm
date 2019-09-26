@@ -12,10 +12,17 @@ jobs:
       - task: DockerCompose@0
         displayName: Run integration test for communication-api
         inputs:
-          dockerComposeCommand: 'up ${{ parameters.testservice }}'
+          dockerComposeCommand: 'up --abort-on-container-exit --build ${{ parameters.testservice }}'
           dockerComposeFile: docker-compose-tests.yml
           projectName: crm
           additionalDockerComposeFiles: docker-compose-tests.override.yml
+
+      - task: Bash@3
+        displayName: Adjust test result
+        inputs:
+          targetType: inline
+          script: |
+            sed -i 's/\/src\/src/..\/s\/src/g' $(Common.TestResultsDirectory)/${{ parameters.testservice }}/coverage/coverage.opencover.xml
 
       - task: PublishTestResults@2
         displayName: Publish test results
@@ -32,7 +39,8 @@ jobs:
           targetdir: '$(Common.TestResultsDirectory)/${{ parameters.testservice }}/coverage'
           reporttypes: 'HtmlInline_AzurePipelines;Cobertura;Badges'
           assemblyfilters: '+CRM.*'
-          
+          classfilters: '-CRM.Protobuf.*'
+
       - task: PublishCodeCoverageResults@1
         inputs:
           codeCoverageTool: Cobertura

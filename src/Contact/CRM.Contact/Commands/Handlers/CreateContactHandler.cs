@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using CRM.Shared.ValidationModel;
-using CRM.Contact.V1;
+using CRM.Protobuf.Contact.V1;
 
 namespace CRM.Contact.Commands.Handlers
 {

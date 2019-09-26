@@ -1,0 +1,45 @@
+parameters:
+  name: 'Install_Helm_Chart'
+  chartName: ''
+  releaseName: ''
+  kubernetesNamespace: ''
+  azureSubscriptionEndpoint: ''
+  azureResourceGroup: ''
+  kubernetesCluster: ''
+  valueFile: ''
+
+jobs:
+  - deployment: ${{ parameters.name }}
+    displayName: Install helm chart - ${{ parameters.releaseName }}
+    # variables:
+    #   helmVersion: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.helmVersion']]
+    #   kubectlVersion: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.kubectlVersion']]
+    dependsOn:
+    - Prepare_environment
+    pool:
+      name: default
+    environment: ${{ parameters.kubernetesNamespace }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            # - task: HelmInstaller@0
+            #   displayName: Helm installer
+            #   inputs:
+            #     helmVersion: $(helmVersion)
+            #     kubectlVersion: $(kubectlVersion)
+            #     checkLatestKubectl: false
+
+            - task: HelmDeploy@0
+              displayName: Helm install
+              inputs:
+                azureSubscriptionEndpoint: ${{ parameters.azureSubscriptionEndpoint }}
+                azureResourceGroup: ${{ parameters.azureResourceGroup }}
+                kubernetesCluster: ${{ parameters.kubernetesCluster }}
+                namespace: ${{ parameters.kubernetesnamespace }}
+                releaseName: ${{ parameters.releasename }}
+                command: upgrade
+                chartName: ${{ parameters.chartName }}
+                valueFile: ${{ parameters.valueFile }}
+                chartType: Name
+                install: true
