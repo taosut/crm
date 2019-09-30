@@ -1,5 +1,6 @@
 using CRM.Graph.Gateway.Resolvers;
 using HotChocolate.Types;
+using HotChocolate.Types.Relay;
 
 namespace CRM.Graph.Gateway.Types
 {
@@ -7,8 +8,10 @@ namespace CRM.Graph.Gateway.Types
     {
         protected override void Configure(IObjectTypeDescriptor descriptor)
         {
-            descriptor.Field<ContactResolver>(t => t.ListContacts())
-                .Type<ListType<ContactType>>();
+            // descriptor.Authorize();
+            descriptor.Field<ContactResolver>(t => t.ListContacts(default))
+                .UsePaging<ContactType>();
+                //.Type<ListType<ContactType>>();
         }
     }
 }

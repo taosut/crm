@@ -1,11 +1,11 @@
-using CRM.Contact.V1;
+using CRM.Protobuf.Contact.V1;
 using CRM.Shared.Services;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Grpc.Net.ClientFactory;
 using Microsoft.Extensions.Logging;
-using static CRM.Contact.V1.ContactApi;
-using static CRM.Contact.V1.LeadApi;
+using static CRM.Protobuf.Contact.V1.ContactApi;
+using static CRM.Protobuf.Contact.V1.LeadApi;
 
 namespace CRM.Graph.Gateway.Services
 {

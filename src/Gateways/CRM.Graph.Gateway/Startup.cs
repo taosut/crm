@@ -13,8 +13,9 @@ using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.AspNetCore.Playground;
 using CRM.Graph.Gateway.Types;
-using static CRM.Contact.V1.ContactApi;
-using static CRM.Contact.V1.LeadApi;
+using static CRM.Protobuf.Contact.V1.ContactApi;
+using static CRM.Protobuf.Contact.V1.LeadApi;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace CRM.Graph.Gateway
 {
@@ -31,6 +32,15 @@ namespace CRM.Graph.Gateway
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
+            RegisterAuth(services);
+
             services.AddJaeger();
 
             GraphQLRegister(services);
@@ -46,10 +56,15 @@ namespace CRM.Graph.Gateway
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
+
+            app.UseCors("MyPolicy");
+
             app.UseRouting();
-            app.UseGraphQL()
+            app.UseGraphQL("/graphql")
                 .UsePlayground(new PlaygroundOptions()
                 {
+                    QueryPath = "/graphql",
                     Path = "/ui/playground"
                 });
         }
@@ -60,6 +75,7 @@ namespace CRM.Graph.Gateway
             {
                 c.RegisterServiceProvider(sp);
                 c.RegisterQueryType<QueryType>();
+                c.RegisterAuthorizeDirectiveType();
                 c.RegisterType<AddressType>();
             }));
         }
@@ -86,6 +102,19 @@ namespace CRM.Graph.Gateway
             {
                 o.Address = new Uri(serviceOptions.ContactService.Url);
             });
+        }
+
+        private void RegisterAuth(IServiceCollection services)
+        {
+            var identityUrl = Configuration.GetValue<string>("IdentityUrl");
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer((options) =>
+                {
+                    options.Authority = identityUrl;
+                    options.RequireHttpsMetadata = false;
+                    options.Audience = "account";
+                });
         }
     }
 }

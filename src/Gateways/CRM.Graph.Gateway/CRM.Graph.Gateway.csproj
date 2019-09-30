@@ -5,19 +5,20 @@
     <RootNamespace>CRM.Graph.Gateway</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Scrutor" Version="3.1.0"/>
-    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.23.2"/>
-    <PackageReference Include="HotChocolate" Version="10.1.0"/>
-    <PackageReference Include="HotChocolate.AspNetCore" Version="10.1.0"/>
-    <PackageReference Include="HotChocolate.AspNetCore.Playground" Version="10.1.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
+    <PackageReference Include="Scrutor" Version="3.1.0" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.23.2" />
+    <PackageReference Include="HotChocolate" Version="10.1.0" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="10.1.0" />
+    <PackageReference Include="HotChocolate.AspNetCore.Playground" Version="10.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BuildingBlocks\CRM.Shared\CRM.Shared.csproj"/>
+    <ProjectReference Include="..\..\BuildingBlocks\CRM.Shared\CRM.Shared.csproj" />
   </ItemGroup>
    <ItemGroup>
-    <ProjectReference Include="..\..\Contact\CRM.Contact.Api\CRM.Contact.Api.csproj"/>
+    <ProjectReference Include="..\..\Contact\CRM.Contact.Api\CRM.Contact.Api.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Services"/>
+    <Folder Include="Services" />
   </ItemGroup>
 </Project>

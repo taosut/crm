@@ -8,4 +8,12 @@ module.exports = function(app) {
       '^/authority': ''
     }
   }));
+
+  app.use(proxy('/graphqlAPI', {
+    target: 'http://localhost:58134/graphql',
+    changeOrigin: true,
+    pathRewrite: {
+      '^/graphqlAPI': ''
+    }
+  }));
 };

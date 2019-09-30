@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CRM.Contact.Domain;
@@ -31,15 +32,22 @@ namespace CRM.Contact.DataAccess
 
                 tracingScope.Span.Log("Processing method: 'GetLeadsAsync'");
                 tracingScope.Span.SetTag(Tags.DbStatement, sql);
-
-                var contacts = await _uow.Connection.QueryAsync<Domain.Contact, ContactInformation, Address, Domain.Contact>(sql, (contact, contactInfo, address) =>
+                try
                 {
-                    contact.ContactInfo = contactInfo;
-                    contact.Address = address;
-                    return contact;
-                }, splitOn: "contactInfoId, addressid");
+                    var contacts = await _uow.Connection.QueryAsync<Domain.Contact, ContactInformation, Address, Domain.Contact>(sql, (contact, contactInfo, address) =>
+                    {
+                        contact.ContactInfo = contactInfo;
+                        contact.Address = address;
+                        return contact;
+                    }, splitOn: "contactInfoId, addressid");
 
-                return contacts.AsList();
+                    return contacts.AsList();
+                }
+                catch (Exception ex)
+                {
+
+                }
+                return null;
             }
         }
     }

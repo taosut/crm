@@ -10,9 +10,9 @@ export default () => {
       <div className="container-fluid page-body-wrapper">
         <Sidebar />
         <div className="main-panel">
-          <div className="content-wrapper" />
-          <Route />
-          <Footer />
+          <div className="content-wrapper" >
+            <Route />
+          </div>
         </div>
       </div>
     </div>
