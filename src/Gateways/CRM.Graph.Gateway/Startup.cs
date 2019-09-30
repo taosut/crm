@@ -13,8 +13,8 @@ using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.AspNetCore.Playground;
 using CRM.Graph.Gateway.Types;
-using static CRM.Contact.V1.ContactApi;
-using static CRM.Contact.V1.LeadApi;
+using static CRM.Protobuf.Contact.V1.ContactApi;
+using static CRM.Protobuf.Contact.V1.LeadApi;
 
 namespace CRM.Graph.Gateway
 {

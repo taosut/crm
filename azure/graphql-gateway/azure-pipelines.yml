@@ -14,9 +14,7 @@ trigger:
       - ref/tags/*
   paths:
     include:
-      - src/Communication/CRM.Communication.Api
-      - src/Communication/CRM.Communication
-      - src/Communication/CRM.Communication.FunctionalTests
+      - src/Gateways/CRM.Graph.Gateway
       - src/BuildingBlocks/CRM.Shared
 
 stages:
@@ -34,11 +32,7 @@ stages:
 
     - template: ../build-services.yml
       parameters:
-        services: ["communication-api"]
-
-    - template: ../run-integration-test.yml
-      parameters:
-        testService: communication-api-test
+        services: ["graph-gateway"]
 
 - stage: Publish_Docker_Images
   displayName: Docker images
@@ -49,7 +43,7 @@ stages:
 
     - template: ../publish-docker-images.yml
       parameters:
-        services: ["communication-api"]
+        services: ["graph-gateway"]
         registryEndpoint: $(registryEndpoint)
 
 - stage: Publish_Helm_Chart
@@ -61,7 +55,7 @@ stages:
 
     - template: ../publish-helm-chart.yml
       parameters:
-        service: communication-api
+        service: graph-gateway
         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         azureResourceGroup: $(azureResourceGroup)
         kubernetesCluster: $(kubernetesCluster)
@@ -74,7 +68,7 @@ stages:
 
     - template: ../install-helm-chart.yml
       parameters:
-        service: communication-api
+        service: graph-gateway
         kubernetesNamespace: develop
         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         azureResourceGroup: $(azureResourceGroup)

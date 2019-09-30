@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using CRM.Graph.Gateway.Services;
 
 namespace CRM.Graph.Gateway.Resolvers
@@ -13,7 +12,7 @@ namespace CRM.Graph.Gateway.Resolvers
             _contactService = contactService;
         }
 
-        public IList<CRM.Contact.V1.Contact> ListContacts()
+        public IList<CRM.Protobuf.Contact.V1.Contact> ListContacts()
         {
             var contacts = _contactService.ListContacts().Contacts;
             return contacts;

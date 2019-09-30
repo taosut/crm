@@ -2,9 +2,9 @@ using HotChocolate.Types;
 
 namespace CRM.Graph.Gateway.Types
 {
-    public class ContactType : ObjectType<CRM.Contact.V1.Contact>
+    public class ContactType : ObjectType<CRM.Protobuf.Contact.V1.Contact>
     {
-        protected override void Configure(IObjectTypeDescriptor<Contact.V1.Contact> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<Protobuf.Contact.V1.Contact> descriptor)
         {
             descriptor.Field(t => t.CalculateSize()).Ignore();
             descriptor.Field(t => t.Clone()).Ignore();
