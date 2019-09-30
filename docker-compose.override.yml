@@ -53,7 +53,7 @@ services:
       - 5001:80
     environment:
       - NATS__Url=http://nats:4222
-      - Jaeger__Enabled=false
+      - Jaeger__Enabled=true
       - Jaeger__UdpHost=jaeger
       - ConnectionStrings__default=Server=postgresql;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
 

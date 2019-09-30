@@ -1,5 +1,5 @@
 parameters:
-  services: ''
+  services: []
 
 jobs:
   - job: Build_service
@@ -10,13 +10,14 @@ jobs:
     pool:
       name: default
     steps:
-      - task: DockerCompose@0
-        displayName: Compose build ${{ parameters.services }}
-        inputs:
-          dockerComposeCommand: 'build ${{ parameters.services }}'
-          containerregistrytype: Container Registry
-          dockerComposeFile: docker-compose.yml
-          qualifyImageNames: true
-          projectName: ''
-          dockerComposeFileArgs: |
-            TAG=$(dockerImageTag)
+      - ${{ each service in parameters.services }}:
+        - task: DockerCompose@0
+          displayName: Compose build ${{ service }}
+          inputs:
+            dockerComposeCommand: 'build ${{ service }}'
+            containerregistrytype: Container Registry
+            dockerComposeFile: docker-compose.yml
+            qualifyImageNames: true
+            projectName: ''
+            dockerComposeFileArgs: |
+              TAG=$(dockerImageTag)

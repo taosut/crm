@@ -1,0 +1,58 @@
+variables:
+    disable.coverage.autogenerate: 'true'
+    registryEndpoint: dockerhub-connection
+
+trigger:
+  branches:
+    include:
+      - master
+      - feature/*
+    exclude:
+      - ref/tags/*
+  paths:
+    include:
+      - src/BuildingBlocks/CRM.Migration
+
+stages:
+
+- stage: Publish_Docker_Images
+  displayName: Docker images
+  jobs:
+    - job: Publish_Docker_Images
+      displayName: Build and Publish images
+      pool:
+        name: default
+      steps:
+        - task: Docker@2
+          displayName: Login to Docker Hub
+          inputs:
+            command: login
+            containerRegistry: dockerhub-connection
+
+        - task: Docker@2
+          displayName: Build
+          condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+          inputs:
+            command: build
+            repository: crmnow/db-migration
+            Dockerfile: src/BuildingBlocks/CRM.Migration/Dockerfile
+            buildContext: .
+            tags: |
+              latest
+
+        - task: Docker@2
+          displayName: Build and Push
+          condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+          inputs:
+            command: buildAndPush
+            repository: crmnow/db-migration
+            Dockerfile: src/BuildingBlocks/CRM.Migration/Dockerfile
+            buildContext: .
+            tags: |
+              latest
+
+        - task: Docker@2
+          displayName: Logout of ACR
+          inputs:
+            command: logout
+            containerRegistry: dockerhub-connection
