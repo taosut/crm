@@ -1,0 +1,48 @@
+@inject NotifyService Notifier
+
+<div class="panel panel-default">
+    <div class="panel-heading">@Title</div>
+    <div class="panel-body">@ChildContent</div>
+
+    <input id="useAttDict" @attributes="InputAttributes" />
+
+    <input type="checkbox" @bind="ItalicCheck" />
+
+    <p>@Year</p>
+
+    <button class="btn btn-primary" @onclick="OnClick">
+        Trigger a Parent component method
+    </button>
+
+    <button @onclick="Notify">Notify</button>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    [Parameter]
+    public bool ItalicCheck { get; set; } = true;
+
+    [Parameter]
+    public int Year { get; set; }
+
+    [Parameter]
+    public EventCallback<int> YearChanged { get; set; }
+
+    [Parameter]
+    public IDictionary<string, object> InputAttributes { get; set; } = new Dictionary<string, object>() {
+        {"maxLength", 10 }
+    };
+
+    public async Task Notify()
+    {
+        await Notifier.Update("ss", 100);
+    }
+}

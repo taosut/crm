@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <title>CRM.Web</title>
+    <base href="/" />
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="css/style.min.css">
+
+    <!-- Themify Icon -->
+    <link rel="stylesheet" href="fonts/themify-icons/themify-icons.css">
+
+    <link href="css/site.css" rel="stylesheet" />
+</head>
+<body>
+    <app>Loading...</app>
+
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="scripts/jquery.min.js"></script>
+    <script src="scripts/modernizr.min.js"></script>
+    <script src="plugin/bootstrap/js/bootstrap.min.js"></script>
+    <script src="plugin/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="plugin/nprogress/nprogress.js"></script>
+
+    <!--<script src="scripts/main.min.js"></script>-->
+    <script>
+        window.crm = {
+            hello: function () {
+                console.log($(".js__menu_mobile"));
+                $(".js__menu_mobile").on("click", function () {                    
+                    $("html").toggleClass("menu-active");
+                    $(window).trigger("resize");
+                });
+            }
+        }
+    </script>
+</body>
+</html>
