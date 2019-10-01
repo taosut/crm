@@ -41,7 +41,10 @@ services:
       - nats
       - postgresql
     volumes:
+      - ${COMMON_TESTRESULTSDIRECTORY:-/tmp}:${COMMON_TESTRESULTSDIRECTORY:-/tmp}
+    volumes:
       - azp-data:/azp
+
 
 volumes:
   azp-data:
