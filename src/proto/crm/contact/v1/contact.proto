@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package crm.contact.v1;
 
-option csharp_namespace = "CRM.Protobuf.Contact.V1";
+option csharp_namespace = "CRM.Protobuf.Contacts.V1";
 
 import "google/protobuf/wrappers.proto";
 
@@ -32,8 +32,13 @@ message Contact {
   google.protobuf.StringValue company = 4;
   google.protobuf.StringValue title = 5;
   google.protobuf.StringValue description = 6;
-  Address address = 7;
-  ContactInformation contactInfo =8;
+  google.protobuf.StringValue photo = 7;
+  Address address = 8;
+  ContactInformation contactInfo =9;
+}
+
+message BooleanResponse {
+  bool status = 1;
 }
 
 enum Title {

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace CRM.Contact.Queries
 {
-    public class PingQuery : IRequest<PongReply>
+    public class FindAllContactsQuery : IRequest<ListContactsResponse>
     {
 
     }

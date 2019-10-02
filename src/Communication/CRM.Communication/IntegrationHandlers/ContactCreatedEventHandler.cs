@@ -4,9 +4,9 @@ using CRM.IntegrationEvents;
 
 namespace CRM.Communication.IntegrationHandlers
 {
-    public class LeadCreatedEventHandler : IIntegrationEventHandler<LeadCreatedEvent>
+    public class ContactCreatedEventHandler : IIntegrationEventHandler<ContactCreatedEvent>
     {
-        public async Task Handle(LeadCreatedEvent @event)
+        public async Task Handle(ContactCreatedEvent @event)
         {
             await Task.Delay(10);
             await Task.FromResult(0);

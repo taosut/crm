@@ -45,18 +45,6 @@ services:
     container_name: nats
     networks:
       - crm
-  
-  lead-migration:
-    image: ${REGISTRY:-crmnow}/lead-migration:${TAG:-latest}
-    build: 
-      context: .
-      dockerfile: src/BuildingBlocks/CRM.Migration/Dockerfile
-      args:
-        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
-    networks: 
-      - crm
-    depends_on:
-      - postgresql
 
   contact-migration:
     image: ${REGISTRY:-crmnow}/contact-migration:${TAG:-latest}

@@ -5,15 +5,15 @@ using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.IO;
 using Microsoft.Extensions.Configuration;
-using CRM.Protobuf.Contact.V1;
+using CRM.Protobuf.Contacts.V1;
 
 namespace CRM.Contact.FunctionalTests
 {
-    public class LeadScenario : IClassFixture<WebApplicationFactory<CRM.Contact.Startup>>
+    public class ContactScenario : IClassFixture<WebApplicationFactory<CRM.Contact.Startup>>
     {
         protected readonly WebApplicationFactory<Startup> _factory;
 
-        public LeadScenario(WebApplicationFactory<Startup> factory)
+        public ContactScenario(WebApplicationFactory<Startup> factory)
         {
             var projectDir = Directory.GetCurrentDirectory();
             var configPath = Path.Combine(projectDir, "appsettings.json");

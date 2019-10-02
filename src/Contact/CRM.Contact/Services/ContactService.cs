@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
+using CRM.Contact.Commands;
 using CRM.Contact.Queries;
-using CRM.Protobuf.Contact.V1;
+using CRM.Protobuf.Contacts.V1;
 using Google.Protobuf.WellKnownTypes;
 using MediatR;
 
@@ -18,14 +19,20 @@ namespace CRM.Contact.Services
             connection.TryConnect();
         }
 
-        public override Task<CreateContactResponse> CreateContact(CreateContactRequest request, Grpc.Core.ServerCallContext context)
+        public override async Task<CreateContactResponse> CreateContact(CreateContactRequest contactRequest, Grpc.Core.ServerCallContext context)
         {
-            return null;
+            return await _mediator.Send(new CreateContactCommand(contactRequest));
+
         }
 
         public override async Task<ListContactsResponse> ListContacts(Empty request, Grpc.Core.ServerCallContext context)
         {
-            return await _mediator.Send(new FindAllLeadsQuery());
+            return await _mediator.Send(new FindAllContactsQuery());
+        }
+
+        public override async Task<CRM.Protobuf.Contacts.V1.Contact> GetContact(GetContactRequest request, Grpc.Core.ServerCallContext context)
+        {
+            return await _mediator.Send(new FindContactByIdQuery(new System.Guid(request.ContactId)));
         }
     }
 }
