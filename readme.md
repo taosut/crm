@@ -85,7 +85,3 @@ TBD
 
 # License
 Code is available under [the MIT license](https://github.com/tungphuong/crm/blob/feature/doc/LICENSE)
-
-
-
-
