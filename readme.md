@@ -69,6 +69,12 @@ With this **playgroud**, you can do query or mutation commands to services behin
 ## Distributed tracing
 ![](assets/images/jaeger-screenshot.PNG)
 
+# Testing
+TBD
+
+# CI & CD
+TBD
+
 # Deploy to AKS
 TBD
 
