@@ -22,12 +22,13 @@ This is a simplified contact management system made in a microservice architectu
 * [Docker compose](https://docs.docker.com/compose/)
 * CI & CD with [Azure pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/)
 * Orchestrating services using [Azure Kubernetes Service](https://azure.microsoft.com/en-us/services/kubernetes-service/)
+* Deploy services to AKS by [helm 3](https://v3.helm.sh/)
 
 # Demo
 * [GraphQL gateway](http://crmnow.tk/ui/playground/)
 
 # Architecture overview
-TBD
+![](assets/images/crm-high-level-architecture.png)
 
 # Getting Started
 ## Prerequisites
@@ -59,14 +60,17 @@ Once the containers are deployed, you can access any of the services in the foll
 # Explorer the application
 ## GraphQL gateway
 Open a browser and type [http://localhost:5100](http://localhost:5100/ui/playground/). You should see the UI like in the following screenshot:
-![](/assets/images/graphql-gateway-sreenshot.png)
+![](assets/images/graphql-gateway-sreenshot.PNG)
 With this **playgroud**, you can do query or mutation commands to services behind.
 
 ## Contact service with BloomRPC
-![](/assets/images/contact-service-with-bloomrpc-screenshot.png)
+![](assets/images/contact-service-with-bloomrpc-screenshot.PNG)
 
 ## Distributed tracing
-![](/assets/images/jaeger-screenshot.png)
+![](assets/images/jaeger-screenshot.PNG)
+
+# Deploy to AKS
+TBD
 
 # Contributing
 1. Fork it
