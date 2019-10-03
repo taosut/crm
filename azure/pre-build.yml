@@ -2,15 +2,20 @@ jobs:
   - job: Setup_Gitflow
     displayName: Setup Gitflow
     pool:
-      name: Azure Pipelines
-      vmImage: windows-latest
+      # name: Azure Pipelines
+      # vmImage: windows-latest
+      name: default
     steps:
-      - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
-        displayName: 'Chocolatey install'
-        inputs:
-          command: install
-          installPackageId: GitVersion.Portable
+      # - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
+      #   displayName: 'Chocolatey install'
+      #   inputs:
+      #     command: install
+      #     installPackageId: GitVersion.Portable
 
-      - powershell: |         
-          GitVersion.exe /output buildserver /nofetch          
-        displayName: 'PowerShell Script'
+      # - powershell: |
+      #     GitVersion.exe /output buildserver /nofetch
+      #   displayName: 'PowerShell Script'
+      - task: gittools.gitversion.gitversion-task.GitVersion@5
+        displayName: GitVersion
+        inputs:
+          configFilePath: GitVersion.yml
