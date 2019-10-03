@@ -10,6 +10,7 @@ services:
   seq:
     ports:
       - "5341:5341"
+      - 5340:80
 
   jaeger:
     ports:
@@ -55,7 +56,7 @@ services:
       - NATS__Url=http://nats:4222
       - Jaeger__Enabled=true
       - Jaeger__UdpHost=jaeger
-      - ConnectionStrings__default=Server=postgresql;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
+      - ConnectionStrings__contact=Server=postgresql;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
 
   contact-migration:
     environment:
