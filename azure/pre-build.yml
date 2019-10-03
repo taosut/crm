@@ -2,9 +2,8 @@ jobs:
   - job: Setup_Gitflow
     displayName: Setup Gitflow
     pool:
-      # name: Azure Pipelines
-      # vmImage: windows-latest
-      name: default
+      name: Azure Pipelines
+      vmImage: ubuntu-18.04
     steps:
       # - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
       #   displayName: 'Chocolatey install'
