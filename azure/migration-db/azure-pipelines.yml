@@ -31,7 +31,7 @@ stages:
 
         - task: Docker@2
           displayName: Build
-          condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+          # condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
           inputs:
             command: build
             repository: crmnow/db-migration
@@ -42,7 +42,7 @@ stages:
 
         - task: Docker@2
           displayName: Build and Push
-          condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+          # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
           inputs:
             command: buildAndPush
             repository: crmnow/db-migration
