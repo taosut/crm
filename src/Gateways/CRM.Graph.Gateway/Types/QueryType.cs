@@ -1,7 +1,7 @@
 using System;
 using CRM.Graph.Gateway.Types.Contacts;
-using CRM.Graph.Gateway.Types.Profiles;
-using CRM.Protobuf.Profile.V1;
+// using CRM.Graph.Gateway.Types.Profiles;
+// using CRM.Protobuf.Profile.V1;
 using HotChocolate.Types;
 
 namespace CRM.Graph.Gateway.Types
