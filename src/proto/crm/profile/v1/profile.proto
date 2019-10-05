@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package crm.company.v1;
+
+option csharp_namespace = "CRM.Protobuf.Profile.V1";
+
+import "google/protobuf/wrappers.proto";
+
+message Company {
+  string id =1;
+  google.protobuf.StringValue companyName = 2;
+}
