@@ -12,7 +12,7 @@ namespace CRM.Graph.Gateway.Types
         {
             RegisterContactResource(descriptor);
 
-            RegisterProfileResource(descriptor);
+            // RegisterProfileResource(descriptor);
         }
 
         private static void RegisterContactResource(IObjectTypeDescriptor descriptor)
@@ -27,15 +27,15 @@ namespace CRM.Graph.Gateway.Types
                 .Argument("contactId", a => a.Type<StringType>());
         }
 
-        private static void RegisterProfileResource(IObjectTypeDescriptor descriptor)
-        {
-            descriptor.Field("company")
-                .Type<CompanyType>()
-                .Resolver(() => new Company
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    CompanyName = "My Co"
-                });
-        }
+        // private static void RegisterProfileResource(IObjectTypeDescriptor descriptor)
+        // {
+        //     descriptor.Field("company")
+        //         .Type<CompanyType>()
+        //         .Resolver(() => new Company
+        //         {
+        //             Id = Guid.NewGuid().ToString(),
+        //             CompanyName = "My Co"
+        //         });
+        // }
     }
 }
