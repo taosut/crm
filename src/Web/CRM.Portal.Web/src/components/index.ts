@@ -4,6 +4,7 @@ import Sidebar from "./sidebar/Sidebar";
 import OidcCallback from "./oidc/callback/Callback";
 import OidcSilentCallback from "./oidc/callback/SilentCallback";
 import Dashboard from "./dashboard/Dashboard";
+import ContactList from "./contacts/ContactList";
 import NotAuthenticated from "./oidc/notAuthenticated/NotAuthentication";
 
-export { Sidebar, Header, Footer, OidcCallback, Dashboard, NotAuthenticated, OidcSilentCallback };
+export { Sidebar, Header, Footer, OidcCallback, Dashboard, ContactList, NotAuthenticated, OidcSilentCallback };

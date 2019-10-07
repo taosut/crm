@@ -26,7 +26,7 @@ export default () => {
           </NavLink>
         </NavItem>
         <NavItem>
-          <NavLink>
+          <NavLink tag={RRNavLink} exact to="/contacts">
             <span className="menu-title">Contacts</span>
           </NavLink>
         </NavItem>

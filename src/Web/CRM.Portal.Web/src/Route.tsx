@@ -1,7 +1,7 @@
 import React from "react";
 import { Route } from "react-router-dom";
 
-import { OidcCallback, Dashboard, NotAuthenticated, OidcSilentCallback } from "./components";
+import { OidcCallback, Dashboard, ContactList, NotAuthenticated, OidcSilentCallback } from "./components";
 import WithOidcSecure from "./hoc/WithOidcSecure";
 
 export default () => {
@@ -9,6 +9,7 @@ export default () => {
     <>
       <Route exact path="/" component={WithOidcSecure(Dashboard)} />
       <Route path="/leads" component={WithOidcSecure(Dashboard)} />
+      <Route path="/contacts" component={WithOidcSecure(ContactList)} />
       <Route path="/authentication/callback" component={OidcCallback} />
       <Route path="/authentication/silent_callback" component={OidcSilentCallback} />
       <Route path="/authentication/401" component={NotAuthenticated} />
