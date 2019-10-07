@@ -13,6 +13,8 @@ namespace CRM.Graph.Gateway.Types
 
         private static void RegisterContactResource(IObjectTypeDescriptor descriptor)
         {
+            descriptor.Authorize();
+
             descriptor.Field<ContactResolver>(t => t.ListContacts())
                 .Name("contacts")
                 .Type<ListType<ContactType>>();

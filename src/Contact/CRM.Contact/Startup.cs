@@ -86,7 +86,7 @@ namespace CRM.Contact
         {
             services.AddScoped<IUnitOfWork>(sp =>
             {
-                return new UnitOfWork(() => new NpgsqlConnection(Configuration.GetConnectionString("contact")));
+                return new UnitOfWork(() => new NpgsqlConnection(Configuration.GetConnectionString("default")));
             });
         }
 
