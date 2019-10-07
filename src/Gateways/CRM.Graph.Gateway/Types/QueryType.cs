@@ -1,17 +1,26 @@
-using CRM.Graph.Gateway.Resolvers;
+using System;
+using CRM.Graph.Gateway.Types.Contacts;
 using HotChocolate.Types;
-using HotChocolate.Types.Relay;
 
 namespace CRM.Graph.Gateway.Types
 {
-    public class QueryType : ObjectType
+    public sealed class QueryType : ObjectType
     {
         protected override void Configure(IObjectTypeDescriptor descriptor)
         {
-            // descriptor.Authorize();
-            descriptor.Field<ContactResolver>(t => t.ListContacts(default))
-                .UsePaging<ContactType>();
-                //.Type<ListType<ContactType>>();
+            RegisterContactResource(descriptor);
+        }
+
+        private static void RegisterContactResource(IObjectTypeDescriptor descriptor)
+        {
+            descriptor.Field<ContactResolver>(t => t.ListContacts())
+                .Name("contacts")
+                .Type<ListType<ContactType>>();
+
+            descriptor.Field<ContactResolver>(t => t.GetContactById(default))
+                .Name("contactById")
+                .Type<ContactType>()
+                .Argument("contactId", a => a.Type<StringType>());
         }
     }
 }

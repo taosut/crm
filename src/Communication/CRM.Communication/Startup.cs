@@ -43,7 +43,7 @@ namespace CRM.Communication
 
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             var appOptions = Configuration.GetOptions<AppOptions>("App");
-            eventBus.Subscribe<LeadCreatedEvent, LeadCreatedEventHandler>(appOptions.Name);
+            eventBus.Subscribe<ContactCreatedEvent, ContactCreatedEventHandler>(appOptions.Name);
         }
 
         private static void RegisterServiceBus(IServiceCollection services)
@@ -52,7 +52,7 @@ namespace CRM.Communication
             services.AddSingleton<IEventBus, EventBusNats>();
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
-            services.AddTransient<LeadCreatedEventHandler>();
+            services.AddTransient<ContactCreatedEventHandler>();
         }
     }
 }

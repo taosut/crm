@@ -2,10 +2,11 @@ syntax = "proto3";
 
 package crm.contact.v1;
 
-option csharp_namespace = "CRM.Protobuf.Contact.V1";
+option csharp_namespace = "CRM.Protobuf.Contacts.V1";
 
 import "contact.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
 
 service LeadApi {
   rpc Ping (google.protobuf.Empty) returns (PongReply);
@@ -13,8 +14,9 @@ service LeadApi {
 
 service ContactApi {
   rpc CreateContact(CreateContactRequest) returns (CreateContactResponse);
+  rpc UploadPhoto(UploadPhotoRequest) returns (BooleanResponse);
   rpc ListContacts(google.protobuf.Empty) returns (ListContactsResponse);
-  rpc GetContact(GetContactRequest) returns (GetContactResponse);
+  rpc GetContact(GetContactRequest) returns (Contact);
 }
 
 message GetContactRequest {
@@ -34,5 +36,14 @@ message CreateContactResponse {
 }
 
 message CreateContactRequest {
-  Contact contact = 1;
+  google.protobuf.StringValue firstName = 1;
+  string lastName = 2;
+  google.protobuf.StringValue company = 3;
+  google.protobuf.StringValue title = 4;
+  google.protobuf.StringValue description = 5;
+}
+
+message UploadPhotoRequest {
+  string id =1;
+  string photo = 2;
 }

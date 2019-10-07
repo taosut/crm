@@ -13,8 +13,8 @@ using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.AspNetCore.Playground;
 using CRM.Graph.Gateway.Types;
-using static CRM.Protobuf.Contact.V1.ContactApi;
-using static CRM.Protobuf.Contact.V1.LeadApi;
+using static CRM.Protobuf.Contacts.V1.ContactApi;
+using static CRM.Protobuf.Contacts.V1.LeadApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace CRM.Graph.Gateway
@@ -76,7 +76,7 @@ namespace CRM.Graph.Gateway
                 c.RegisterServiceProvider(sp);
                 c.RegisterQueryType<QueryType>();
                 c.RegisterAuthorizeDirectiveType();
-                c.RegisterType<AddressType>();
+                c.RegisterMutationType<MutationType>();
             }));
         }
 

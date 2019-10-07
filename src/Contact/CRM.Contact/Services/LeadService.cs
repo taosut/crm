@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using CRM.Contact.Queries;
-using CRM.Protobuf.Contact.V1;
+using CRM.Protobuf.Contacts.V1;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using MediatR;
@@ -25,19 +25,5 @@ namespace CRM.Contact.Services
             var result = await _mediator.Send(new PingQuery());
             return result;
         }
-
-        // [Authorize]
-        // public override async Task<LeadsResponse> getLeads(Empty request, ServerCallContext context)
-        // {
-        //     var response = await _mediator.Send(new FindAllLeadsQuery());
-
-        //     return response;
-        // }
-
-        // public override async Task<LeadInformation> createLead(CreateLeadRequest request, ServerCallContext context)
-        // {
-        //     var response = await _mediator.Send(new CreateLeadCommand());
-        //     return response;
-        // }
     }
 }

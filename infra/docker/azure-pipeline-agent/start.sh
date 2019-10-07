@@ -22,9 +22,10 @@ if [ -n "$AZP_WORK" ]; then
   mkdir -p "$AZP_WORK"
 fi
 
-rm -rf /azp/agent
-mkdir /azp/agent
-cd /azp/agent
+rm -rf /azp/agent/"${AZP_AGENT_NAME:-$(hostname)}"
+mkdir -p /azp/agent/"${AZP_AGENT_NAME:-$(hostname)}"
+cd /azp/agent/"${AZP_AGENT_NAME:-$(hostname)}"
+pwd
 
 export AGENT_ALLOW_RUNASROOT="1"
 

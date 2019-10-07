@@ -1,4 +1,3 @@
-using CRM.Contact.Domain;
 using CRM.Shared;
 using CRM.Shared.EventBus;
 using CRM.Shared.EventBus.Nats;
@@ -16,10 +15,10 @@ using Microsoft.IdentityModel.Logging;
 using Npgsql;
 using OpenTracing.Contrib.Grpc.Interceptors;
 using CRM.IntegrationEvents;
-using CRM.Contact.DataAccess;
 using MediatR;
 using CRM.Contact.IntegrationHandlers;
 using CRM.Contact.Services;
+using CRM.Contact.Extensions;
 
 namespace CRM.Contact
 {
@@ -29,6 +28,8 @@ namespace CRM.Contact
         {
             IdentityModelEventSource.ShowPII = true;
             Configuration = configuration;
+
+            SimpleCRUD.SetDialect(SimpleCRUD.Dialect.PostgreSQL);
         }
 
         private IConfiguration Configuration { get; }
@@ -78,16 +79,15 @@ namespace CRM.Contact
 
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             var appOptions = Configuration.GetOptions<AppOptions>("App");
-            eventBus.Subscribe<LeadCreatedEvent, LeadCreatedEventHandler>(appOptions.Name);
+            eventBus.Subscribe<ContactCreatedEvent, ContactCreatedEventHandler>(appOptions.Name);
         }
 
         private void RegisterRepository(IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork>(sp =>
             {
-                return new UnitOfWork(() => new NpgsqlConnection(Configuration.GetConnectionString("default")));
+                return new UnitOfWork(() => new NpgsqlConnection(Configuration.GetConnectionString("contact")));
             });
-            services.AddTransient<IContactRepository, ContactRepository>();
         }
 
         private static void RegisterGrpc(IServiceCollection services)
@@ -106,7 +106,7 @@ namespace CRM.Contact
             services.AddSingleton<IEventBus, EventBusNats>();
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
-            services.AddTransient<LeadCreatedEventHandler>();
+            services.AddTransient<ContactCreatedEventHandler>();
         }
 
         private static void RegisterAuth(IServiceCollection services)

@@ -11,7 +11,7 @@ image:
 
 imagePullSecrets: []
 nameOverride: ""
-fullnameOverride: ""
+fullnameOverride: "contact-api"
 
 service:
   type: ClusterIP
@@ -32,5 +32,7 @@ env:
   values:
     - name: NATS__Url
       value: http://nats-client:4222
-    - name: ConnectionStrings__default
-      value: Server=postgresql;Port=5432;Database=crm-lead;User Id=lab;Password=P@ssw0rd;
+    - name: ConnectionStrings__contact
+      value: Server=postgresql;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
+    - name: Jaeger__UdpHost
+      value: jaeger-agent.monitoring.svc.cluster.local

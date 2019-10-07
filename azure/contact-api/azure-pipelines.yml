@@ -34,7 +34,7 @@ stages:
 
     - template: ../build-services.yml
       parameters:
-        services: contact-api
+        services: ["contact-api"]
 
     - template: ../run-integration-test.yml
       parameters:
@@ -49,7 +49,7 @@ stages:
 
     - template: ../publish-docker-images.yml
       parameters:
-        services: contact-api
+        services: ["contact-api"]
         registryEndpoint: $(registryEndpoint)
 
 - stage: Publish_Helm_Chart

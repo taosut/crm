@@ -1,9 +1,9 @@
 variables:
     disable.coverage.autogenerate: 'true'
-    azuresubscription: AKS-lab-01
-    azureresourcegroup: lab
-    kubernetescluster: aks-lab-01
-    registryendpoint: crm-registry
+    azureSubscriptionEndpoint: azuresubscription-endpoint
+    azureResourceGroup: lab01
+    kubernetesCluster: aks-lab01
+    registryEndpoint: dockerhub-connection
 
 trigger:
   branches:
@@ -15,8 +15,8 @@ trigger:
   paths:
     include:
       - src/Communication/CRM.Communication.Api
+      - src/Communication/CRM.Communication
       - src/Communication/CRM.Communication.FunctionalTests
-      - src/BuildingBlocks/CRM.DataContract
       - src/BuildingBlocks/CRM.Shared
 
 stages:
@@ -31,10 +31,10 @@ stages:
   dependsOn: Pre_Build
   jobs:
     - template: ../prepare-env.yml
-    
+
     - template: ../build-services.yml
       parameters:
-        services: communication-api
+        services: ["communication-api"]
 
     - template: ../run-integration-test.yml
       parameters:
@@ -49,8 +49,8 @@ stages:
 
     - template: ../publish-docker-images.yml
       parameters:
-        services: communication-api
-        registryendpoint: $(registryendpoint)
+        services: ["communication-api"]
+        registryEndpoint: $(registryEndpoint)
 
 - stage: Publish_Helm_Chart
   displayName: Publish helm chart
@@ -62,9 +62,9 @@ stages:
     - template: ../publish-helm-chart.yml
       parameters:
         service: communication-api
-        azuresubscription: $(azuresubscription)
-        azureresourcegroup: $(azureresourcegroup)
-        kubernetescluster: $(kubernetescluster)
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureResourceGroup: $(azureResourceGroup)
+        kubernetesCluster: $(kubernetesCluster)
 
 - stage: Deploy_Dev_Environment
   displayName: Deploy on Dev environment
@@ -75,7 +75,7 @@ stages:
     - template: ../install-helm-chart.yml
       parameters:
         service: communication-api
-        kubernetesnamespace: dev
-        azuresubscription: $(azuresubscription)
-        azureresourcegroup: $(azureresourcegroup)
-        kubernetescluster: $(kubernetescluster)
+        kubernetesNamespace: develop
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureResourceGroup: $(azureResourceGroup)
+        kubernetesCluster: $(kubernetesCluster)
