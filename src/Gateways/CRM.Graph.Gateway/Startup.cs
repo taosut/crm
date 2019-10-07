@@ -32,7 +32,7 @@ namespace CRM.Graph.Gateway
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            services.AddCors(o => o.AddPolicy("AllowAllPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
                        .AllowAnyMethod()
@@ -58,7 +58,7 @@ namespace CRM.Graph.Gateway
 
             app.UseAuthentication();
 
-            app.UseCors("MyPolicy");
+            app.UseCors("AllowAllPolicy");
 
             app.UseRouting();
             app.UseGraphQL("/graphql")

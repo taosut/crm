@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>CRM.Graph.Gateway</AssemblyName>
     <RootNamespace>CRM.Graph.Gateway</RootNamespace>
+    <UserSecretsId>86816c30-6aab-493e-ad49-1df10fffd790</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />

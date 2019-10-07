@@ -3,19 +3,20 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>CRM.Contact</AssemblyName>
     <RootNamespace>CRM.Contact</RootNamespace>
+    <UserSecretsId>2abc4bbb-9946-4ebd-971d-80c5b12a9cfa</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0"/>
-    <PackageReference Include="Dapper" Version="2.0.4"/>
-    <PackageReference Include="FluentValidation" Version="8.4.0"/>
-    <PackageReference Include="Scrutor" Version="3.1.0"/>
-    <PackageReference Include="Npgsql" Version="4.0.10"/>
-    <PackageReference Include="Grpc.AspNetCore.Server" Version="2.23.2"/>
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
+    <PackageReference Include="Dapper" Version="2.0.4" />
+    <PackageReference Include="FluentValidation" Version="8.4.0" />
+    <PackageReference Include="Scrutor" Version="3.1.0" />
+    <PackageReference Include="Npgsql" Version="4.0.10" />
+    <PackageReference Include="Grpc.AspNetCore.Server" Version="2.23.2" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CRM.Contact.Api\CRM.Contact.Api.csproj">
-      <GlobalPropertiesToRemove/>
+      <GlobalPropertiesToRemove />
     </ProjectReference>
   </ItemGroup>
 </Project>
