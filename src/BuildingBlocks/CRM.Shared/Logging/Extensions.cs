@@ -1,10 +1,5 @@
-
-using System;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Configuration;
-using Serilog.Events;
-using Serilog.Enrichers;
 using CRM.Shared.Logging.Enrichers;
 
 namespace CRM.Shared.Logging
@@ -18,33 +13,28 @@ namespace CRM.Shared.Logging
                 var appOptions = context.Configuration.GetOptions<AppOptions>("App");
                 var loggingOptions = context.Configuration.GetOptions<LoggingOptions>("Logging");
 
-                if (!Enum.TryParse<LogEventLevel>(loggingOptions.Level, true, out var level))
-                {
-                    level = LogEventLevel.Information;
-                }
                 applicationName = string.IsNullOrWhiteSpace(applicationName) ? appOptions.Name : applicationName;
-                loggerConfiguration.Enrich.FromLogContext()
-                    .MinimumLevel.Is(level)
-                    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                    .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-                    .MinimumLevel.Override("System", LogEventLevel.Warning)
+
+                loggerConfiguration
+                    .ReadFrom.Configuration(context.Configuration, "Logging")
+                    .Enrich.FromLogContext()
                     .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
                     .Enrich.WithProperty("ApplicationName", applicationName)
                     .Enrich.With<OpenTracingContextLogEventEnricher>();
 
-                Configure(loggerConfiguration, level, loggingOptions);
+                Configure(loggerConfiguration, loggingOptions);
             });
 
             return hostBuilder;
         }
 
-        private static void Configure(LoggerConfiguration loggerConfiguration, LogEventLevel level, 
+        private static void Configure(LoggerConfiguration loggerConfiguration,
             LoggingOptions loggingOptions)
         {
             if (loggingOptions.ConsoleEnabled)
             {
-                loggerConfiguration
-                    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3} {Properties:j}] {Message:lj}{NewLine}{Exception}");
+                loggerConfiguration.WriteTo
+                    .Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3} {Properties:j}] {Message:lj}{NewLine}{Exception}");
             }
         }
     }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using CRM.Migration;
 using DbUp;
 using DbUp.Engine;
 using Microsoft.Extensions.Configuration;
@@ -12,10 +14,11 @@ namespace crm.migration
 
         private enum DBName
         {
-            Contact = 0
+            Contact = 0,
+            Identity = 1
         }
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
@@ -37,6 +40,13 @@ namespace crm.migration
                     Run(DBName.Contact);
                     continue;
                 }
+                if (IsArg(args[lastArg], "identity"))
+                {
+                    Log.Information("Run migration - Identity Db");
+                    Run(DBName.Identity);
+                    await IdentityConfig.SeedData(_configuration.GetConnectionString(DBName.Identity.ToString()));
+                    continue;
+                }
                 else
                 {
                     throw new ArgumentOutOfRangeException($"{args[lastArg]} not found.");
@@ -48,10 +58,6 @@ namespace crm.migration
         {
             var connString = _configuration.GetConnectionString(dBName.ToString());
             var scriptFolderPath = $"./Scripts/{dBName.ToString()}";
-            
-            EnsureDatabase.For.PostgresqlDatabase(connString);
-
-            EnsureDatabase.For.PostgresqlDatabase(connString);
 
             EnsureDatabase.For.PostgresqlDatabase(connString);
 

@@ -1,0 +1,91 @@
+@model LoginViewModel
+
+<div>
+    <div class="home-btn d-none d-sm-block">
+        <a href="index.html"><i class="fas fa-home h2 text-white"></i></a>
+    </div>
+
+    <div class="mt-5 mb-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5">
+                    <div class="text-center">
+                        <h1 class="text-white mt-2 mb-4">Customer Management</h1>
+                    </div>
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <h4 class="text-uppercase mt-0">Sign In</h4>
+                            </div>
+                            <form asp-action="Login">
+                                <input type="hidden" asp-for="ReturnUrl" />
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <fieldset>
+                                    <div class="form-group mb-3">
+                                        <label asp-for="Username"></label>
+                                        <input class="form-control" type="email" asp-for="Username" placeholder="Enter your email" />
+                                        <div class="invalid-feedback" style="display:block;">
+                                            <span asp-validation-for="Username"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label asp-for="Password"></label>
+                                        <input class="form-control" type="password" asp-for="Password" autocomplete="off" placeholder="Enter your password" />
+                                        <div class="invalid-feedback" style="display:block;">
+                                            <span asp-validation-for="Password"></span>
+                                        </div>
+                                    </div>
+                                    @if (Model.AllowRememberLogin)
+                                    {
+                                        <div class="form-group">
+                                            <label asp-for="RememberLogin">
+                                                <input asp-for="RememberLogin" />
+                                                <span>Remember my login</span>
+                                            </label>
+                                        </div>
+                                    }
+                                    <div class="form-group mb-3 text-center">
+                                        <button class="btn btn-primary btn-block" name="button" value="login">Login</button>
+                                    </div>
+                                    @if (Model.VisibleExternalProviders.Any())
+                                    {
+                                        <div class="form-group text-center">
+                                            @foreach (var provider in Model.VisibleExternalProviders)
+                                            {
+                                                @switch (provider.AuthenticationScheme)
+                                                {
+                                                    case "Google":
+                                                        <button type="button" class="btn btn-info" style="background-color:#dd4b39!important; color:#fff">
+                                                            <i class="fab fa-google-plus fa-2x"></i>
+                                                        </button>
+                                                        break;
+                                                    case "Facebook":
+                                                        <button type="button" class="btn btn-info" style="background-color:#3b5998!important; color:#fff">
+                                                            <i class="fab fa-facebook-square fa-2x"></i>
+                                                        </button>
+                                                        break;
+                                                }
+                                            }
+                                        </div>
+                                    }
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            <p>
+                                <a href="pages-recoverpw.html" class="text-white-50 ml-1">
+                                    <i class="fa fa-lock mr-1"></i>Forgot your password?
+                                </a>
+                            </p>
+                            <p class="text-white-50">Don't have an account? <a href="pages-register.html" class="text-white ml-1"><b>Sign Up</b></a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
