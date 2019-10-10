@@ -17,7 +17,7 @@ This is a simplified contact management system made in a microservice architectu
 * A modern web application with [React](https://reactjs.org/)
 * Logging with [Serilog](https://github.com/serilog/serilog), [Seq](https://datalust.co/seq)
 * Monitoring with [Jaeger](https://www.jaegertracing.io/), [Octant](https://github.com/vmware-tanzu/octant)
-* Identity and access management with [Keycloak](https://www.keycloak.org)
+* Identity and access management with [Identity server 4](http://docs.identityserver.io/en/latest/#)
 * Building [Docker](https://www.docker.com/) images, managing containers and [registry](https://cloud.docker.com/u/crmnow/repository/list)
 * [Docker compose](https://docs.docker.com/compose/)
 * CI & CD with [Azure pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/)
