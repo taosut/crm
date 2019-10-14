@@ -98,7 +98,7 @@ const addOidcEvents = (dispatch: Dispatch<any>) => {
   const oidcEvents = AuthService.UserManager.events;
 
   oidcEvents.addUserLoaded(onUserLoaded(dispatch));
-  oidcEvents.addUserUnloaded(onUserUnloaded(dispatch));
+  // oidcEvents.addUserUnloaded(onUserUnloaded(dispatch));
   oidcEvents.addAccessTokenExpired(onAccessTokenExpired(dispatch));
 };
 
@@ -106,7 +106,7 @@ const removeOidcEvents = (dispatch: Dispatch<any>) => {
   const oidcEvents = AuthService.UserManager.events;
 
   oidcEvents.removeUserLoaded(onUserLoaded(dispatch));
-  oidcEvents.removeUserUnloaded(onUserUnloaded(dispatch));
+  // oidcEvents.removeUserUnloaded(onUserUnloaded(dispatch));
   oidcEvents.removeAccessTokenExpired(onAccessTokenExpired(dispatch));
 };
 

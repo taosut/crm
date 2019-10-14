@@ -1,0 +1,32 @@
+@model DiagnosticsViewModel
+
+<h1>Authentication cookie</h1>
+
+<h3 class="text-primary">Claims</h3>
+<dl>
+    @foreach (var claim in Model.AuthenticateResult.Principal.Claims)
+    {
+        <dt class="text-white">@claim.Type</dt>
+        <dd class="text-white">@claim.Value</dd>
+    }
+</dl>
+
+<h3 class="text-primary">Properties</h3>
+<dl>
+    @foreach (var prop in Model.AuthenticateResult.Properties.Items)
+    {
+        <dt class="text-white">@prop.Key</dt>
+        <dd class="text-white">@prop.Value</dd>
+    }
+</dl>
+
+@if (Model.Clients.Any())
+{
+    <h3 class="text-primary">Clients</h3>
+    <ul>
+        @foreach (var client in Model.Clients)
+        {
+            <li class="text-white">@client</li>
+        }
+    </ul>
+}

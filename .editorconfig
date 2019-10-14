@@ -9,7 +9,7 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 
 # C# files
-[*.cs]
+[*.{cs, cshtml}]
 indent_size = 4
 # New line preferences
 csharp_new_line_before_open_brace = all
