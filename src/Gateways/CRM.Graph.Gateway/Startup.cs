@@ -16,6 +16,8 @@ using CRM.Graph.Gateway.Types;
 using static CRM.Protobuf.Contacts.V1.ContactApi;
 using static CRM.Protobuf.Contacts.V1.LeadApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 
 namespace CRM.Graph.Gateway
 {
@@ -32,9 +34,11 @@ namespace CRM.Graph.Gateway
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(o => o.AddPolicy("AllowAllPolicy", builder =>
+            var allowedHosts = Configuration.GetSection("AllowedHosts").Get<string[]>();
+
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
             {
-                builder.AllowAnyOrigin()
+                builder.WithOrigins(allowedHosts)
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
@@ -106,6 +110,7 @@ namespace CRM.Graph.Gateway
 
         private void RegisterAuth(IServiceCollection services)
         {
+            var authenticationAudience = Configuration.GetValue<string>("AuthenticationAudience");
             var identityUrl = Configuration.GetValue<string>("IdentityUrl");
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -113,7 +118,7 @@ namespace CRM.Graph.Gateway
                 {
                     options.Authority = identityUrl;
                     options.RequireHttpsMetadata = false;
-                    options.Audience = "account";
+                    options.Audience = authenticationAudience;
                 });
         }
     }

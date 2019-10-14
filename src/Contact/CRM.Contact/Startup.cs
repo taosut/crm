@@ -108,17 +108,5 @@ namespace CRM.Contact
 
             services.AddTransient<ContactCreatedEventHandler>();
         }
-
-        private static void RegisterAuth(IServiceCollection services)
-        {
-            services.AddAuthorization();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer((options) =>
-                {
-                    options.Authority = "http://localhost:8080/auth/realms/master";
-                    options.RequireHttpsMetadata = false;
-                    options.Audience = "account";
-                });
-        }
     }
 }
