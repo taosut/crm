@@ -1,19 +1,63 @@
-import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import React, { Suspense } from "react";
+import { BrowserRouter, Route } from "react-router-dom";
+import Loadable from "react-loadable";
 
-import "./App.css";
+// Themes
+import "./assets/scss/DefaultTheme.scss";
 
-import { DefaultLayout } from "./containers";
-import { AppCtxProvider } from "./contexts";
+import { routes } from "./Route";
+import withLayout from "hoc/withLayout";
+import { AppCtxProvider } from "contexts";
+
+// Lazy loading and code splitting -
+// Derieved idea from https://blog.logrocket.com/lazy-loading-components-in-react-16-6-6cea535c0b52
+const loading = () => <div></div>;
+const AuthLayout = Loadable({
+    loader: () => import("components/AuthLayout"),
+    render(loaded, props) {
+        let Component = loaded.default;
+        return <Component {...props} />;
+    },
+    loading
+});
+const NonAuthLayout = Loadable({
+    loader: () => import("components/NonAuthLayout"),
+    render(loaded, props) {
+        let Component = loaded.default;
+        return <Component {...props} />;
+    },
+    loading
+});
 
 export default () => {
-  return (
-    <>
-      <BrowserRouter>
-        <AppCtxProvider>
-          <DefaultLayout />
-        </AppCtxProvider>
-      </BrowserRouter>
-    </>
-  );
+    return (
+        <>
+            <BrowserRouter>
+                <AppCtxProvider>
+                    {routes.map((route, index) => {
+                        return (
+                            <Route
+                                key={index}
+                                path={route.path}
+                                exact={route.exact}
+                                component={withLayout(props => {
+                                    let Layout = route.useAuthLayout ? AuthLayout : NonAuthLayout;
+                                    return (
+                                        <Suspense fallback={loading()}>
+                                            <Layout
+                                                {...props}
+                                                // title={route.title ? route.title : ""}
+                                                >
+                                                <route.component {...props} />
+                                            </Layout>
+                                        </Suspense>
+                                    );
+                                })}
+                            />
+                        );
+                    })}
+                </AppCtxProvider>
+            </BrowserRouter>
+        </>
+    );
 };
