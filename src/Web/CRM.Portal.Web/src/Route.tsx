@@ -1,6 +1,5 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-// import WithOidcSecure from "./hoc/WithOidcSecure";
 
 const Dashboard = React.lazy(() => import("pages/Dashboard/Dashboard"));
 const OidcCallback = React.lazy(() => import("components/oidc/callback/Callback"));
@@ -8,7 +7,6 @@ const OidcSilentCallback = React.lazy(() => import("components/oidc/callback/Sil
 const NotAuthenticated = React.lazy(() =>
     import("components/oidc/notAuthenticated/NotAuthentication")
 );
-const Landing = React.lazy(() => import("pages/Landing/Landing"));
 
 const routes: Array<{
     path: string;
@@ -43,7 +41,7 @@ const routes: Array<{
     {
         path: "/company",
         name: "Company",
-        component: Landing,
+        component: Dashboard,
         title: "Landing",
         useAuthLayout: true
     },
