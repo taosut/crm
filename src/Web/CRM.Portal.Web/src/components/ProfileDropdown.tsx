@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from "reactstrap";
 
 import { AuthService } from "services";
-import { string } from "prop-types";
 
 interface ProfileDropdownProps {
     profilePic?: string;

@@ -13,7 +13,7 @@ const NavMenuContent = () => {
                     </Link>
                 </li>
                 <li className="has-submenu">
-                    <Link to="/dashboard" className="side-nav-link-ref">
+                    <Link to="/company" className="side-nav-link-ref">
                         <i className="mdi mdi-domain"></i>
                         Companies
                     </Link>

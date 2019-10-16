@@ -1,51 +1,54 @@
 import React, { Suspense, useContext, useEffect } from "react";
-import { RouteChildrenProps } from "react-router";
+import { RouteComponentProps } from "react-router";
 import { Container } from "reactstrap";
 
 import { AppCtx } from "contexts";
+import Loader from "components/Loader";
+import { AuthService } from "services";
 
-interface LayoutProps {
+interface LayoutProps extends RouteComponentProps {
     title: string;
-    // children: React.ReactNode;
-    // history: RouteChildrenProps;
 }
 
 const Topbar = React.lazy(() => import("./Topbar"));
 const Navbar = React.lazy(() => import("./Navbar"));
 const Footer = React.lazy(() => import("./Footer"));
-const loading = () => <div className="text-center">Loading...</div>;
 
 const toggleRightSidebar = () => {
     document.body.classList.toggle("right-bar-enabled");
 };
 
-// const Layout: React.FC<LayoutProps> = props => {
-export default (props: any) => {
+const Layout: React.FC<LayoutProps> = ({ children, location }) => {
     const { state } = useContext(AppCtx);
 
     useEffect(() => {
-        if (!state.notAuthenticated) {
-            props.history.push("/authentication/401");
+        if (!state.authenticated) {
+            AuthService.authenticateUser(location);
         }
-    }, [state.notAuthenticated]);
+    }, [state.authenticated, location]);
 
     return (
-        <div className="app">
-            <header id="topnav">
-                <Suspense fallback={loading()}>
-                    <Topbar rightSidebarToggle={toggleRightSidebar}></Topbar>
-                    <Navbar />
-                </Suspense>
-            </header>
+        <>
+            {!state.authenticated && <Loader />}
+            {state.authenticated && (
+                <div className="app">
+                    <header id="topnav">
+                        <Suspense fallback={<Loader />}>
+                            <Topbar rightSidebarToggle={toggleRightSidebar}></Topbar>
+                            <Navbar />
+                        </Suspense>
+                    </header>
 
-            <div className="wrapper">
-                <Container fluid>
-                    <Suspense fallback={loading()}>{props.children}</Suspense>
-                </Container>
-            </div>
-            <Footer />
-        </div>
+                    <div className="wrapper">
+                        <Container fluid>
+                            <Suspense fallback={<Loader />}>{children}</Suspense>
+                        </Container>
+                    </div>
+                    <Footer />
+                </div>
+            )}
+        </>
     );
 };
 
-// export default Layout;
+export default Layout;

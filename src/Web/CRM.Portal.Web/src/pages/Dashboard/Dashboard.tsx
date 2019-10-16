@@ -8,7 +8,14 @@ interface DashboardProps {
 }
 
 export default (props: DashboardProps) => {
+
+    React.useEffect(()=>{
+        // debugger;
+        setTimeout(() => {}, 100000);
+       }, []);
+
     return (
+        // setTimeout(() => {}, 100000);
         <>
             <div className="">
             {props.loading && <Loader />}

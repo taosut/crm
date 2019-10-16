@@ -41,13 +41,12 @@ export default () => {
                                 path={route.path}
                                 exact={route.exact}
                                 component={withLayout(props => {
-                                    let Layout = route.useAuthLayout ? AuthLayout : NonAuthLayout;
+                                    const Layout = route.useAuthLayout ? AuthLayout : NonAuthLayout;
                                     return (
                                         <Suspense fallback={loading()}>
                                             <Layout
                                                 {...props}
-                                                // title={route.title ? route.title : ""}
-                                                >
+                                                title={route.title ? route.title : ""}>
                                                 <route.component {...props} />
                                             </Layout>
                                         </Suspense>
