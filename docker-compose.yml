@@ -74,6 +74,34 @@ services:
       - nats
       - jaeger
 
+  identity-migration:
+    image: ${REGISTRY:-crmnow}/identity-migration:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/BuildingBlocks/CRM.Migration/Dockerfile
+      args:
+        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
+    volumes:
+      - ./src/BuildingBlocks/CRM.Migration/Scripts/:/app/Scripts:ro
+    networks:
+      - crm
+    depends_on:
+      - postgresql
+
+  identity-api:
+    image: ${REGISTRY:-crmnow}/identity-api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Identity/CRM.Identity/Dockerfile
+      args:
+        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
+    networks:
+      - crm
+    depends_on:
+      - postgresql
+      - nats
+      - jaeger
+
   communication-api:
     image: ${REGISTRY:-crmnow}/communication-api:${TAG:-latest}
     build:

@@ -10,8 +10,6 @@ jobs:
     displayName: Install helm chart
     variables:
       dockerImageTag: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.dockerImageTag']]
-      # helmVersion: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.helmVersion']]
-      # kubectlVersion: $[dependencies.Prepare_environment.outputs['setGlobalVarStep.kubectlVersion']]
     dependsOn:
     - Prepare_environment
     pool:
@@ -21,13 +19,6 @@ jobs:
       runOnce:
         deploy:
           steps:
-            # - task: HelmInstaller@0
-            #   displayName: Helm installer
-            #   inputs:
-            #     helmVersion: $(helmVersion)
-            #     kubectlVersion: $(kubectlVersion)
-            #     checkLatestKubectl: false
-
             - task: HelmDeploy@0
               displayName: Helm version
               inputs:
