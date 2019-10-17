@@ -54,6 +54,8 @@ affinity: {}
 
 env:
   values:
+    - name: ASPNETCORE_ENVIRONMENT
+      value: Development
     - name: PathBase
       value: /identity
     - name: ConnectionStrings__identity
