@@ -92,6 +92,7 @@ namespace CRM.Identity
                 app.UseDatabaseErrorPage();
             }
 
+            app.UsePathBase(Configuration["PathBase"]);
             app.UseStaticFiles();
             app.UseRouting();
             app.UseIdentityServer();

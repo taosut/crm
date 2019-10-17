@@ -53,6 +53,7 @@ services:
     ports:
       - 5001:80
     environment:
+      - ASPNETCORE_ENVIRONMENT=development
       - NATS__Url=http://nats:4222
       - Jaeger__Enabled=true
       - Jaeger__UdpHost=jaeger
@@ -66,10 +67,29 @@ services:
       - CRM.Migration.dll
       - contact
 
+  identity-api:
+    ports:
+      - 5101:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=development
+      - NATS__Url=http://nats:4222
+      - Jaeger__Enabled=true
+      - Jaeger__UdpHost=jaeger
+      - ConnectionStrings__identity=Server=postgresql;Port=5432;Database=crm-identity;User Id=lab;Password=P@ssw0rd;
+
+  identity-migration:
+    environment:
+      - ConnectionStrings__identity=Server=postgresql;Port=5432;Database=crm-identity;User Id=lab;Password=P@ssw0rd;
+    entrypoint:
+      - dotnet
+      - CRM.Migration.dll
+      - identity
+
   communication-api:
     ports:
       - 5002:80
     environment:
+      - ASPNETCORE_ENVIRONMENT=development
       - NATS__Url=http://nats:4222
       - Jaeger__UdpHost=jaeger
 
@@ -77,5 +97,6 @@ services:
     ports:
       - 5100:80
     environment:
+      - ASPNETCORE_ENVIRONMENT=development
       - Jaeger__UdpHost=jaeger
       - Services__ContactService__Url=http://contact-api
