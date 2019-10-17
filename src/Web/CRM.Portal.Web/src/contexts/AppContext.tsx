@@ -9,9 +9,6 @@ export const TOGGLE_COLLAPSE = "TOGGLE_COLLAPSE";
 export const LOAD_LOGINUSER = "LOAD_LOGINUSER";
 export const UNLOAD_LOGINUSER = "UNLOAD_LOGINUSER";
 
-interface Sidebar {
-  isCollapse: boolean;
-}
 
 interface LoginUser {
   userName: string;
@@ -19,27 +16,23 @@ interface LoginUser {
 }
 
 interface UIState {
-  sidebar: Sidebar;
   notification: any;
   userLogin: LoginUser | null;
-  notAuthenticated: boolean;
+  authenticated: boolean;
 }
 
 const initialState: UIState = {
-  sidebar: {
-    isCollapse: true
-  },
+
   notification: {
     numberOfMsg: 10
   },
   userLogin: null,
-  notAuthenticated: false
+  authenticated: false
 };
 
 const AppCtx = React.createContext({} as IContextProps<UIState>);
 
 const AppActions = {
-  toggleCollapse: createAction<typeof TOGGLE_COLLAPSE>(TOGGLE_COLLAPSE),
   loadUserLogin: createActionPayload<typeof LOAD_LOGINUSER, LoginUser>(
     LOAD_LOGINUSER
   ),
@@ -48,24 +41,17 @@ const AppActions = {
 
 const reducer = (state: UIState, action: ActionsUnion<typeof AppActions>) => {
   switch (action.type) {
-    case TOGGLE_COLLAPSE:
-      return {
-        ...state,
-        sidebar: {
-          isCollapse: !state.sidebar.isCollapse
-        }
-      };
     case LOAD_LOGINUSER:
       return {
         ...state,
         userLogin: action.payload,
-        notAuthenticated: true
+        authenticated: true
       };
     case UNLOAD_LOGINUSER:
       return {
         ...state,
         userLogin: null,
-        notAuthenticated: false
+        authenticated: false
       };
     default:
       return initialState;
@@ -82,10 +68,11 @@ const onUserLoaded = (dispatch: React.Dispatch<any>) => (user: User) => {
   );
 };
 
-const onUserUnloaded = (dispatch: React.Dispatch<any>) => (user: User) => {
-  LoggerService.info("User unloaded");
-  dispatch(AppActions.unloadUserLogin());
-};
+// const onUserUnloaded = (dispatch: React.Dispatch<any>) => () => {
+//     debugger;
+// //   LoggerService.info("User unloaded");
+//   dispatch(AppActions.unloadUserLogin());
+// };
 
 const onAccessTokenExpired = (dispatch: React.Dispatch<any>) => async () => {
   LoggerService.info("Token expired.");
@@ -98,7 +85,7 @@ const addOidcEvents = (dispatch: Dispatch<any>) => {
   const oidcEvents = AuthService.UserManager.events;
 
   oidcEvents.addUserLoaded(onUserLoaded(dispatch));
-  // oidcEvents.addUserUnloaded(onUserUnloaded(dispatch));
+//   oidcEvents.addUserUnloaded(onUserUnloaded(dispatch));
   oidcEvents.addAccessTokenExpired(onAccessTokenExpired(dispatch));
 };
 
@@ -106,7 +93,7 @@ const removeOidcEvents = (dispatch: Dispatch<any>) => {
   const oidcEvents = AuthService.UserManager.events;
 
   oidcEvents.removeUserLoaded(onUserLoaded(dispatch));
-  // oidcEvents.removeUserUnloaded(onUserUnloaded(dispatch));
+//   oidcEvents.removeUserUnloaded(onUserUnloaded(dispatch));
   oidcEvents.removeAccessTokenExpired(onAccessTokenExpired(dispatch));
 };
 

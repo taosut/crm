@@ -1,39 +1,62 @@
-import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import React, { Suspense } from "react";
+import { BrowserRouter, Route } from "react-router-dom";
+import Loadable from "react-loadable";
 
-import "./App.css";
+// Themes
+import "./assets/scss/DefaultTheme.scss";
 
-import { DefaultLayout } from "./containers";
-import { AppCtxProvider } from "./contexts";
-import { ApolloProvider } from '@apollo/react-hooks';
-import ApolloClient from 'apollo-boost';
-import { AuthService, LoggerService } from "services";
+import { routes } from "./Route";
+import withLayout from "hoc/withLayout";
+import { AppCtxProvider } from "contexts";
 
-const client = new ApolloClient({
-  uri: 'http://localhost:58134/graphql',
-  request: async (operation) => {
-    const user = await AuthService.UserManager.getUser();
-    const token = user.access_token;
-
-    operation.setContext({
-      headers: {
-        authorization: token ? `Bearer ${token}` : ''
-      }
-    });
-  }
+// Lazy loading and code splitting -
+// Derieved idea from https://blog.logrocket.com/lazy-loading-components-in-react-16-6-6cea535c0b52
+const loading = () => <div></div>;
+const AuthLayout = Loadable({
+    loader: () => import("components/AuthLayout"),
+    render(loaded, props) {
+        let Component = loaded.default;
+        return <Component {...props} />;
+    },
+    loading
+});
+const NonAuthLayout = Loadable({
+    loader: () => import("components/NonAuthLayout"),
+    render(loaded, props) {
+        let Component = loaded.default;
+        return <Component {...props} />;
+    },
+    loading
 });
 
-
 export default () => {
-  return (
-    <>
-      <ApolloProvider client={client}>
-        <BrowserRouter>
-          <AppCtxProvider>
-            <DefaultLayout />
-          </AppCtxProvider>
-        </BrowserRouter>
-      </ApolloProvider>
-    </>
-  );
+    return (
+        <>
+            <BrowserRouter>
+                <AppCtxProvider>
+                    {routes.map((route, index) => {
+                        return (
+                            <Route
+                                key={index}
+                                path={route.path}
+                                exact={route.exact}
+                                component={withLayout(props => {
+                                    const Layout = route.useAuthLayout ? AuthLayout : NonAuthLayout;
+                                    return (
+                                        <Suspense fallback={loading()}>
+                                            <Layout
+                                                {...props}
+                                                title={route.title ? route.title : ""}>
+                                                <route.component {...props} />
+                                            </Layout>
+                                        </Suspense>
+                                    );
+                                })}
+                            />
+                        );
+                    })}
+                </AppCtxProvider>
+            </BrowserRouter>
+        </>
+    );
 };

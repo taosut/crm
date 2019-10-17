@@ -92,17 +92,18 @@ namespace CRM.Migration
                     RequireConsent = false,
                     AllowAccessTokensViaBrowser = true,
                     PostLogoutRedirectUris = {
-                        "http://localhost:3000"
+                        "http://localhost:5102"
                     },
                     RedirectUris = {
-                        "http://localhost:3000/authentication/callback"
+                        "http://localhost:5102/authentication/callback"
                     },
                     AllowedCorsOrigins = {
-                        "http://localhost:3000"
+                        "http://localhost:5102"
                     },
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
                         "graphQL-gateway",
                         "contact",
                         "communication"
