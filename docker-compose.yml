@@ -114,6 +114,19 @@ services:
     depends_on:
       - nats
 
+  crm-web:
+    image: ${REGISTRY:-crmnow}/crm-web:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Web/CRM.Portal.Web/Dockerfile
+      args:
+        - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
+    networks:
+      - crm
+    depends_on:
+      - graph-gateway
+      - identity-api
+
   graph-gateway:
     image: ${REGISTRY:-crmnow}/graph-gateway:${TAG:-latest}
     build:

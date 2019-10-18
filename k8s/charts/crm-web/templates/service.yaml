@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "contact-api.fullname" . }}
+  name: {{ include "crm-web.fullname" . }}
   labels:
-{{ include "contact-api.labels" . | indent 4 }}
+{{ include "crm-web.labels" . | indent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: grpc
+      targetPort: http
       protocol: TCP
-      name: grpc
+      name: http
   selector:
-    app.kubernetes.io/name: {{ include "contact-api.name" . }}
+    app.kubernetes.io/name: {{ include "crm-web.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

@@ -1,14 +1,14 @@
-ARG NODE_IMAGE=node:10.16
+ARG NODE_IMAGE=node:12.10
 
 FROM ${NODE_IMAGE} as node-build
 WORKDIR /app
 
-COPY src/crm.portal.web/package-lock.json .
-COPY src/crm.portal.web/package.json .
-RUN npm install
+COPY src/Web/CRM.Portal.Web/yarn.lock .
+COPY src/Web/CRM.Portal.Web/package.json .
+RUN yarn install
 
-COPY src/crm.portal.web .
-RUN npm run build
+COPY src/Web/CRM.Portal.Web .
+RUN yarn run build
 
 FROM node-build as publish
 
