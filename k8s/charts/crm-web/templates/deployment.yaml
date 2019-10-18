@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "contact-api.fullname" . }}
+  name: {{ include "crm-web.fullname" . }}
   labels:
-{{ include "contact-api.labels" . | indent 4 }}
+{{ include "crm-web.labels" . | indent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "contact-api.name" . }}
+      app.kubernetes.io/name: {{ include "crm-web.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "contact-api.name" . }}
+        app.kubernetes.io/name: {{ include "crm-web.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
     {{- with .Values.imagePullSecrets }}
@@ -32,7 +32,7 @@ spec:
           {{- end -}}
           {{- end }}
           ports:
-            - name: grpc
+            - name: http
               containerPort: 80
               protocol: TCP
           # livenessProbe:

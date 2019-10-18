@@ -72,6 +72,7 @@ services:
       - 5101:80
     environment:
       - ASPNETCORE_ENVIRONMENT=development
+      - PathBase=/identity
       - NATS__Url=http://nats:4222
       - Jaeger__Enabled=true
       - Jaeger__UdpHost=jaeger
@@ -92,6 +93,12 @@ services:
       - ASPNETCORE_ENVIRONMENT=development
       - NATS__Url=http://nats:4222
       - Jaeger__UdpHost=jaeger
+
+  crm-web:
+    ports:
+      - 5102:80
+    environment:
+      - IDENTITY_WEB_HOST=localhost:5101
 
   graph-gateway:
     ports:
