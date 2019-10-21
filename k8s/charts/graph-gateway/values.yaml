@@ -26,7 +26,7 @@ ingress:
   hosts:
     - host: crmnow.tk
       paths: [
-        /
+        /gateway
       ]
 
   tls: []
@@ -54,5 +54,9 @@ affinity: {}
 
 env:
   values:
+    - name: ASPNETCORE_ENVIRONMENT
+      value: Development
+    - name: PathBase
+      value: /gateway
     - name: Services__ContactService__Url
       value: http://contact-api

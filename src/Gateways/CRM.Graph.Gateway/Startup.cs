@@ -46,6 +46,7 @@ namespace CRM.Graph.Gateway
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UsePathBase(Configuration["PathBase"]);
             app.UseRouting();
             app.UseGraphQL()
                 .UsePlayground(new PlaygroundOptions()
