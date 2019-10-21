@@ -74,12 +74,12 @@ namespace CRM.Contact
                 // Communication with gRPC endpoints must be made through a gRPC client.
                 // To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909
                 endpoints.MapGrpcService<LeadService>();
-                // endpoints.MapGrpcService<ContactService>();
+                endpoints.MapGrpcService<ContactService>();
             });
 
-            // var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            // var appOptions = Configuration.GetOptions<AppOptions>("App");
-            // eventBus.Subscribe<ContactCreatedEvent, ContactCreatedEventHandler>(appOptions.Name);
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            var appOptions = Configuration.GetOptions<AppOptions>("App");
+            eventBus.Subscribe<ContactCreatedEvent, ContactCreatedEventHandler>(appOptions.Name);
         }
 
         private void RegisterRepository(IServiceCollection services)
@@ -94,8 +94,8 @@ namespace CRM.Contact
         {
             services.AddGrpc(options =>
             {
-                //options.Interceptors.Add<ExceptionInterceptor>();
-                //options.Interceptors.Add<ServerTracingInterceptor>();
+                options.Interceptors.Add<ExceptionInterceptor>();
+                options.Interceptors.Add<ServerTracingInterceptor>();
                 options.EnableDetailedErrors = true;
             });
         }

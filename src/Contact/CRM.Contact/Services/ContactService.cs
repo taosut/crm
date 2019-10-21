@@ -16,7 +16,7 @@ namespace CRM.Contact.Services
         {
             _mediator = mediator;
 
-            connection.TryConnect();
+            // connection.TryConnect();
         }
 
         public override async Task<CreateContactResponse> CreateContact(CreateContactRequest contactRequest, Grpc.Core.ServerCallContext context)
