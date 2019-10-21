@@ -1,1 +1,4 @@
 node_modules
+# ignore proxy because we will use nginx config
+setupProxy.js
+.env
