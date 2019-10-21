@@ -24,9 +24,9 @@ ingress:
   }
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: crmnow.tk
+    - host: idp.crmnow.tk
       paths: [
-        /identity
+        /
       ]
 
   tls: []
@@ -57,6 +57,6 @@ env:
     - name: ASPNETCORE_ENVIRONMENT
       value: Development
     - name: PathBase
-      value: /identity
+      value: /
     - name: ConnectionStrings__identity
       value: Server=postgresql;Port=5432;Database=crm-identity;User Id=lab;Password=P@ssw0rd;
