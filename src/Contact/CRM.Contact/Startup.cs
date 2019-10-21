@@ -77,9 +77,9 @@ namespace CRM.Contact
                 endpoints.MapGrpcService<ContactService>();
             });
 
-            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            var appOptions = Configuration.GetOptions<AppOptions>("App");
-            eventBus.Subscribe<ContactCreatedEvent, ContactCreatedEventHandler>(appOptions.Name);
+            // var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            // var appOptions = Configuration.GetOptions<AppOptions>("App");
+            // eventBus.Subscribe<ContactCreatedEvent, ContactCreatedEventHandler>(appOptions.Name);
         }
 
         private void RegisterRepository(IServiceCollection services)
