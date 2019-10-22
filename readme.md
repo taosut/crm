@@ -1,6 +1,6 @@
 # A lightweight Contact management
 | Communication API   | Contact API | GraphQL gateway | Identity API | CRM SPA |
-| ------------------- | ------------------- | ------------------- | 
+| ------------------- | ------------------- | ------------------- | ------------------- | ------------------- | 
 | [![Build Status](https://dev.azure.com/jackyle/crm/_apis/build/status/communication-ci-nightly?branchName=master)](https://dev.azure.com/jackyle/crm/_build/latest?definitionId=23&branchName=master) | [![Build Status](https://dev.azure.com/jackyle/crm/_apis/build/status/contact-ci-nightly?branchName=master)](https://dev.azure.com/jackyle/crm/_build/latest?definitionId=33&branchName=master) | [![Build Status](https://dev.azure.com/jackyle/crm/_apis/build/status/graphql-gateway-nightly?branchName=master)](https://dev.azure.com/jackyle/crm/_build/latest?definitionId=37&branchName=master) | [![Build Status](https://dev.azure.com/jackyle/crm/_apis/build/status/identity-ci-nightly?branchName=master)](https://dev.azure.com/jackyle/crm/_build/latest?definitionId=39&branchName=master) | [![Build Status](https://dev.azure.com/jackyle/crm/_apis/build/status/crm-web-ci-nightly?branchName=master)](https://dev.azure.com/jackyle/crm/_build/latest?definitionId=40&branchName=master) |
 
 This is a simplified contact management system made in a microservice architecture, using:
