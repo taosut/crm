@@ -55,6 +55,6 @@ affinity: {}
 env:
   values:
     - name: IDENTITY_WEB_HOST
-      value: identity.crmnow.tk
+      value: idp.crmnow.tk
     - name: Services__ContactService__Url
       value: http://contact-api

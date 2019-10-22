@@ -92,13 +92,16 @@ namespace CRM.Migration
                     RequireConsent = false,
                     AllowAccessTokensViaBrowser = true,
                     PostLogoutRedirectUris = {
-                        "http://localhost:5102"
+                        "http://localhost:5102",
+                        "http://crmnow.tk"
                     },
                     RedirectUris = {
-                        "http://localhost:5102/authentication/callback"
+                        "http://localhost:5102/authentication/callback",
+                        "http://crmnow.tk/authentication/callback"
                     },
                     AllowedCorsOrigins = {
-                        "http://localhost:5102"
+                        "http://localhost:5102",
+                        "http://crmnow.tk"
                     },
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId,
