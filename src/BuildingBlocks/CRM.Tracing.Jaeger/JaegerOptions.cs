@@ -1,4 +1,4 @@
-namespace CRM.Shared.Jaeger
+namespace CRM.Tracing.Jaeger
 {
     public class JaegerOptions
     {

@@ -8,8 +8,6 @@ using CRM.Contact.Domain;
 using CRM.Shared.Repository;
 using CRM.Contact.Extensions;
 using System;
-using CRM.Shared.EventBus;
-using CRM.IntegrationEvents;
 
 namespace CRM.Contact.Commands.Handlers
 {
@@ -17,14 +15,14 @@ namespace CRM.Contact.Commands.Handlers
     {
         private readonly IValidator<CreateContactRequest> _validator;
         private readonly IUnitOfWork _uow;
-        private readonly IEventBus _eventBus;
 
         public CreateContactHandler(IValidator<CreateContactRequest> vadiator,
-            IUnitOfWork uow, IEventBus eventBus)
+            IUnitOfWork uow)
+            // , IEventBus eventBus)
         {
             _validator = vadiator;
             _uow = uow;
-            _eventBus = eventBus;
+            // _eventBus = eventBus;
         }
 
         public async Task<CreateContactResponse> Handle(CreateContactCommand request, CancellationToken cancellationToken)
@@ -41,10 +39,10 @@ namespace CRM.Contact.Commands.Handlers
 
             var contactId = await _uow.Connection.InsertAsync<Guid, Domain.Contact>(contact);
 
-            _eventBus.Publish(new ContactCreatedEvent()
-            {
-                Id = Guid.NewGuid()
-            });
+            // _eventBus.Publish(new ContactCreatedEvent()
+            // {
+            //     Id = Guid.NewGuid()
+            // });
 
             return new CreateContactResponse
             {

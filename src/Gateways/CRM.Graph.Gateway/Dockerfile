@@ -4,6 +4,7 @@ ARG feed='--source "https://api.nuget.org/v3/index.json"'
 
 WORKDIR /src
 COPY ["src/BuildingBlocks/CRM.Shared/*.csproj", "src/BuildingBlocks/CRM.Shared/"]
+COPY ["src/BuildingBlocks/CRM.Tracing.Jaeger/*.csproj", "src/BuildingBlocks/CRM.Tracing.Jaeger/"]
 COPY ["src/Contact/CRM.Contact.Api/*.csproj", "src/Contact/CRM.Contact.Api/"]
 COPY ["src/Gateways/CRM.Graph.Gateway/*.csproj", "src/Gateways/CRM.Graph.Gateway/"]
 
@@ -11,6 +12,7 @@ RUN dotnet restore src/Gateways/CRM.Graph.Gateway/ /property:Configuration=Relea
 
 COPY ["src/proto/.", "src/proto/"]
 COPY ["src/BuildingBlocks/CRM.Shared/.", "src/BuildingBlocks/CRM.Shared/"]
+COPY ["src/BuildingBlocks/CRM.Tracing.Jaeger/.", "src/BuildingBlocks/CRM.Tracing.Jaeger/"]
 COPY ["src/Contact/CRM.Contact.Api/.", "src/Contact/CRM.Contact.Api/"]
 COPY ["src/Gateways/CRM.Graph.Gateway/.", "src/Gateways/CRM.Graph.Gateway/"]
 

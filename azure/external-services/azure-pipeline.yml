@@ -31,16 +31,27 @@ stages:
             script: |
               helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 
+    # - template: ../install-helm-chart-by-name.yml
+    #   parameters:
+    #     name: Install_Nats
+    #     chartname: stable/nats
+    #     releasename: nats
+    #     kubernetesNamespace: $(kubernetesNamespace)
+    #     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    #     azureResourceGroup: $(azureResourceGroup)
+    #     kubernetesCluster: $(kubernetesCluster)
+    #     valueFile: $(Build.SourcesDirectory)/k8s/charts/nats/values.dev.yaml
+
     - template: ../install-helm-chart-by-name.yml
       parameters:
-        name: Install_Nats
-        chartname: stable/nats
-        releasename: nats
+        name: Install_RabbitMQ
+        chartname: stable/rabbitmq
+        releasename: rabbitmq
         kubernetesNamespace: $(kubernetesNamespace)
         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         azureResourceGroup: $(azureResourceGroup)
         kubernetesCluster: $(kubernetesCluster)
-        valueFile: $(Build.SourcesDirectory)/k8s/charts/nats/values.dev.yaml
+        valueFile: $(Build.SourcesDirectory)/k8s/charts/rabbitmq/values.dev.yaml
 
     - template: ../install-helm-chart-by-name.yml
       parameters:

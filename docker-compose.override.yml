@@ -30,34 +30,41 @@ services:
       - POSTGRES_USER=lab
       - POSTGRES_PASSWORD=P@ssw0rd
 
-  keycloak:
-    ports:
-      - 8080:8080
-    environment:
-      - KEYCLOAK_USER=lab
-      - KEYCLOAK_PASSWORD=P@ssw0rd
-      - DB_ADDR=postgresql
-      - DB_USER=lab
-      - DB_PASSWORD=P@ssw0rd
-      - PROXY_ADDRESS_FORWARDING=true
-      - DB_VENDOR=postgres
-      - DB_DATABASE=keycloak
+  # keycloak:
+  #   ports:
+  #     - 8080:8080
+  #   environment:
+  #     - KEYCLOAK_USER=lab
+  #     - KEYCLOAK_PASSWORD=P@ssw0rd
+  #     - DB_ADDR=postgresql
+  #     - DB_USER=lab
+  #     - DB_PASSWORD=P@ssw0rd
+  #     - PROXY_ADDRESS_FORWARDING=true
+  #     - DB_VENDOR=postgres
+  #     - DB_DATABASE=keycloak
 
-  nats:
+  # nats:
+  #   ports:
+  #     - 4222:4222
+  #     - 6222:6222
+  #     - 8222:8222
+
+  rabbitmq:
+    hostname: rabbitmq
     ports:
-      - 4222:4222
-      - 6222:6222
-      - 8222:8222
+      - "15672:15672"
+      - "5672:5672"
 
   contact-api:
     ports:
       - 5001:80
     environment:
       - ASPNETCORE_ENVIRONMENT=development
-      - NATS__Url=http://nats:4222
+      # - NATS__Url=http://nats:4222
       - Jaeger__Enabled=true
       - Jaeger__UdpHost=jaeger
       - ConnectionStrings__contact=Server=postgresql;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
+      - rabbitMQ__Url=rabbitmq://rabbitmq
 
   contact-migration:
     environment:
@@ -91,8 +98,9 @@ services:
       - 5002:80
     environment:
       - ASPNETCORE_ENVIRONMENT=development
-      - NATS__Url=http://nats:4222
+      # - NATS__Url=http://nats:4222
       - Jaeger__UdpHost=jaeger
+      - rabbitMQ__Url=rabbitmq://rabbitmq
 
   crm-web:
     ports:

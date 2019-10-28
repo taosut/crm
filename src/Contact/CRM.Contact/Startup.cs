@@ -1,10 +1,10 @@
-using CRM.Shared;
-using CRM.Shared.EventBus;
-using CRM.Shared.EventBus.Nats;
+using CRM.Contact.Extensions;
+using CRM.Contact.Services;
 using CRM.Shared.Interceptors;
-using CRM.Shared.Jaeger;
 using CRM.Shared.Repository;
+using CRM.Tracing.Jaeger;
 using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,16 +14,21 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Npgsql;
 using OpenTracing.Contrib.Grpc.Interceptors;
-using CRM.IntegrationEvents;
-using MediatR;
+using MassTransit;
+using System;
+using MassTransit.AspNetCoreIntegration;
+using CRM.Shared.Types;
+using CRM.Shared;
 using CRM.Contact.IntegrationHandlers;
-using CRM.Contact.Services;
-using CRM.Contact.Extensions;
+using MassTransit.Definition;
+using CRM.MassTransit.Tracing;
 
 namespace CRM.Contact
 {
     public class Startup
     {
+        private IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             IdentityModelEventSource.ShowPII = true;
@@ -32,27 +37,29 @@ namespace CRM.Contact
             SimpleCRUD.SetDialect(SimpleCRUD.Dialect.PostgreSQL);
         }
 
-        private IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<NatsOptions>(Configuration.GetSection("NATS"));
             services.AddJaeger();
+
 
             RegisterGrpc(services);
             // RegisterAuth(services);
 
             services.Scan(scan => scan
-                .FromCallingAssembly()
-                .AddClasses(c => c.AssignableTo(typeof(IValidator<>)))
-                .AsImplementedInterfaces()
-                .WithTransientLifetime());
+               .FromCallingAssembly()
+               .AddClasses(c => c.AssignableTo(typeof(IValidator<>)))
+               .AsImplementedInterfaces()
+               .WithTransientLifetime());
 
             RegisterRepository(services);
 
-            RegisterServiceBus(services);
+            services.AddMassTransit(ConfigureBus, (cfg) =>
+            {
+                cfg.AddConsumersFromNamespaceContaining<ConsumerAnchor>();
+            });
+
 
             services.AddMediatR(typeof(Startup));
         }
@@ -76,10 +83,6 @@ namespace CRM.Contact
                 endpoints.MapGrpcService<LeadService>();
                 endpoints.MapGrpcService<ContactService>();
             });
-
-            // var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            // var appOptions = Configuration.GetOptions<AppOptions>("App");
-            // eventBus.Subscribe<ContactCreatedEvent, ContactCreatedEventHandler>(appOptions.Name);
         }
 
         private void RegisterRepository(IServiceCollection services)
@@ -100,14 +103,28 @@ namespace CRM.Contact
             });
         }
 
-        private static void RegisterServiceBus(IServiceCollection services)
+        private static IBusControl ConfigureBus(IServiceProvider provider)
         {
-            services.AddSingleton<INatsConnection, DefaultNatsConnection>();
-            services.AddSingleton<IEventBus, EventBusNats>();
-            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+            return Bus.Factory.CreateUsingRabbitMq(cfg =>
+            {
+                cfg.UseSerilog();
+                var rabbitmqOption = provider.GetService<IConfiguration>().GetOptions<RabbitMqOptions>("rabbitMQ");
+                var host = cfg.Host(new Uri(rabbitmqOption.Url), "/", hc =>
+                {
+                    hc.Username(rabbitmqOption.UserName);
+                    hc.Password(rabbitmqOption.Password);
+                });
 
-            services.AddTransient<ContactCreatedEventHandler>();
+                cfg.ReceiveEndpoint(host, "contact", x =>
+                {
+                    x.Consumer<ContactCreatedConsumer>(provider);
+                });
+
+                cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());
+                cfg.PropagateOpenTracingContext();
+            });
         }
+
 
         private static void RegisterAuth(IServiceCollection services)
         {

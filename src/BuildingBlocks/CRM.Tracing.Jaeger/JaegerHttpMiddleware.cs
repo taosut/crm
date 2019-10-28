@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using OpenTracing;
 using OpenTracing.Tag;
 
-namespace CRM.Shared.Jaeger
+namespace CRM.Tracing.Jaeger
 {
     internal sealed class JaegerHttpMiddleware
     {

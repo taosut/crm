@@ -30,8 +30,8 @@ affinity: {}
 
 env:
   values:
-    - name: NATS__Url
-      value: http://nats-client:4222
+    - name: rabbitMQ__Url
+      value: rabbitmq://rabbitmq
     - name: ConnectionStrings__contact
       value: Server=postgresql;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
     - name: Jaeger__UdpHost

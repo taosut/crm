@@ -1,4 +1,5 @@
 using System.Reflection;
+using CRM.Shared;
 using Jaeger;
 using Jaeger.Reporters;
 using Jaeger.Samplers;
@@ -10,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using OpenTracing;
 using OpenTracing.Util;
 
-namespace CRM.Shared.Jaeger
+namespace CRM.Tracing.Jaeger
 {
     public static class Extensions
     {
@@ -57,6 +58,8 @@ namespace CRM.Shared.Jaeger
                 return tracer;
             });
 
+            services.AddOpenTracing();
+
             return services;
         }
 
@@ -76,10 +79,14 @@ namespace CRM.Shared.Jaeger
         {
             switch (options.Sampler)
             {
-                case "const": return new ConstSampler(true);
-                case "rate": return new RateLimitingSampler(options.MaxTracesPerSecond);
-                case "probabilistic": return new ProbabilisticSampler(options.SamplingRate);
-                default: return new ConstSampler(true);
+                case "const":
+                    return new ConstSampler(true);
+                case "rate":
+                    return new RateLimitingSampler(options.MaxTracesPerSecond);
+                case "probabilistic":
+                    return new ProbabilisticSampler(options.SamplingRate);
+                default:
+                    return new ConstSampler(true);
             }
         }
 

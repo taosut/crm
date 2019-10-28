@@ -11,12 +11,9 @@ namespace CRM.Contact.Services
     {
         private readonly IMediator _mediator;
 
-        public ContactService(Shared.EventBus.Nats.INatsConnection connection,
-            IMediator mediator)
+        public ContactService(IMediator mediator)
         {
             _mediator = mediator;
-
-            // connection.TryConnect();
         }
 
         public override async Task<CreateContactResponse> CreateContact(CreateContactRequest contactRequest, Grpc.Core.ServerCallContext context)

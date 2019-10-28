@@ -1,15 +1,18 @@
-using CRM.IntegrationEvents;
-using CRM.Shared;
-using CRM.Shared.EventBus;
-using CRM.Shared.EventBus.Nats;
-using CRM.Shared.Jaeger;
-using CRM.Communication.IntegrationHandlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
+using CRM.Tracing.Jaeger;
+using MassTransit.AspNetCoreIntegration;
+using MassTransit;
+using CRM.Communication.IntegrationHandlers;
+using System;
+using CRM.Shared.Types;
+using MassTransit.Definition;
+using CRM.MassTransit.Tracing;
+using CRM.Shared;
 
 namespace CRM.Communication
 {
@@ -27,10 +30,12 @@ namespace CRM.Communication
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<NatsOptions>(Configuration.GetSection("NATS"));
             services.AddJaeger();
 
-            RegisterServiceBus(services);
+            services.AddMassTransit(ConfigureBus, (cfg) =>
+           {
+               cfg.AddConsumersFromNamespaceContaining<ConsumerAnchor>();
+           });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,19 +45,29 @@ namespace CRM.Communication
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            var appOptions = Configuration.GetOptions<AppOptions>("App");
-            eventBus.Subscribe<ContactCreatedEvent, ContactCreatedEventHandler>(appOptions.Name);
         }
 
-        private static void RegisterServiceBus(IServiceCollection services)
+        private static IBusControl ConfigureBus(IServiceProvider provider)
         {
-            services.AddSingleton<INatsConnection, DefaultNatsConnection>();
-            services.AddSingleton<IEventBus, EventBusNats>();
-            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+            return Bus.Factory.CreateUsingRabbitMq(cfg =>
+            {
+                cfg.UseSerilog();
+                var rabbitmqOption = provider.GetService<IConfiguration>().GetOptions<RabbitMqOptions>("rabbitMQ");
+                var host = cfg.Host(new Uri(rabbitmqOption.Url), "/", hc =>
+                {
+                    hc.Username(rabbitmqOption.UserName);
+                    hc.Password(rabbitmqOption.Password);
+                });
 
-            services.AddTransient<ContactCreatedEventHandler>();
+                cfg.ReceiveEndpoint(host, "communication", x =>
+                {
+                    x.Consumer<ContactCreatedConsumer>(provider);
+                    x.Consumer<ContactUpdatedConsumer>(provider);
+                });
+
+                cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());
+                cfg.PropagateOpenTracingContext();
+            });
         }
     }
 }

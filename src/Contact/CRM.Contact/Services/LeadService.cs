@@ -1,8 +1,10 @@
 using System.Threading.Tasks;
 using CRM.Contact.Queries;
+using CRM.IntegrationEvents;
 using CRM.Protobuf.Contacts.V1;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -12,21 +14,23 @@ namespace CRM.Contact.Services
     {
         private readonly IMediator _mediator;
         private readonly ILogger<LeadService> _logger;
+        private readonly IBusControl _bus;
 
-        public LeadService(Shared.EventBus.Nats.INatsConnection connection,
-            IMediator mediator,
-            ILogger<LeadService> logger)
+        public LeadService(IMediator mediator, ILogger<LeadService> logger, IBusControl bus)
         {
             _mediator = mediator;
-
             _logger = logger;
-
-            //connection.TryConnect();
+            _bus = bus;
         }
 
         public override async Task<PongReply> Ping(Empty request, ServerCallContext context)
         {
             _logger.LogInformation("Ping handler happens ...");
+
+
+            await _bus.Publish<ContactCreated>(new {
+                FirstName = "sss"
+            });
 
             var result = await _mediator.Send(new PingQuery());
             return result;

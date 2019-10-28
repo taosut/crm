@@ -4,6 +4,8 @@ ARG feed='--source "https://api.nuget.org/v3/index.json"'
 
 WORKDIR /src
 COPY ["src/BuildingBlocks/CRM.Shared/*.csproj", "src/BuildingBlocks/CRM.Shared/"]
+COPY ["src/BuildingBlocks/CRM.Tracing.Jaeger/*.csproj", "src/BuildingBlocks/CRM.Tracing.Jaeger/"]
+COPY ["src/BuildingBlocks/CRM.MassTransit.Tracing/*.csproj", "src/BuildingBlocks/CRM.MassTransit.Tracing/"]
 COPY ["src/Contact/CRM.Contact.Api/*.csproj", "src/Contact/CRM.Contact.Api/"]
 COPY ["src/Contact/CRM.Contact/*.csproj", "src/Contact/CRM.Contact/"]
 COPY ["src/Contact/CRM.Contact.FunctionalTests/*.csproj", "src/Contact/CRM.Contact.FunctionalTests/"]
@@ -13,6 +15,8 @@ RUN dotnet restore src/Contact/CRM.Contact.FunctionalTests/ /property:Configurat
 
 COPY ["src/proto/.", "src/proto/"]
 COPY ["src/BuildingBlocks/CRM.Shared/.", "src/BuildingBlocks/CRM.Shared/"]
+COPY ["src/BuildingBlocks/CRM.Tracing.Jaeger/.", "src/BuildingBlocks/CRM.Tracing.Jaeger/"]
+COPY ["src/BuildingBlocks/CRM.MassTransit.Tracing/.", "src/BuildingBlocks/CRM.MassTransit.Tracing/"]
 COPY ["src/Contact/CRM.Contact.Api/.", "src/Contact/CRM.Contact.Api/"]
 COPY ["src/Contact/CRM.Contact/.", "src/Contact/CRM.Contact/"]
 COPY ["src/Contact/CRM.Contact.FunctionalTests/.", "src/Contact/CRM.Contact.FunctionalTests/"]

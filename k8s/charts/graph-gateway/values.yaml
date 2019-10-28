@@ -62,3 +62,5 @@ env:
       value: /gateway
     - name: Services__ContactService__Url
       value: http://contact-api
+    - name: Jaeger__UdpHost
+      value: jaeger-agent.monitoring.svc.cluster.local

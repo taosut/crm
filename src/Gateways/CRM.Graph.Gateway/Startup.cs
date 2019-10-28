@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using CRM.Shared;
-using CRM.Shared.Jaeger;
 using OpenTracing.Contrib.Grpc.Interceptors;
 using CRM.Shared.Services;
 using HotChocolate;
@@ -15,6 +14,7 @@ using HotChocolate.AspNetCore.Playground;
 using CRM.Graph.Gateway.Types;
 using static CRM.Protobuf.Contacts.V1.ContactApi;
 using static CRM.Protobuf.Contacts.V1.LeadApi;
+using CRM.Tracing.Jaeger;
 
 namespace CRM.Graph.Gateway
 {

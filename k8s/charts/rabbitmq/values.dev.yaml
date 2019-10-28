@@ -1,0 +1,6 @@
+fullnameOverride: rabbitmq
+persistence:
+  enabled: false
+rabbitmq:
+  username: guest
+  password: guest

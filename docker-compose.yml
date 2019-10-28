@@ -32,17 +32,23 @@ services:
     networks:
       - crm
 
-  keycloak:
-    image: jboss/keycloak:6.0.1
-    container_name: keycloak
-    networks:
-      - crm
-    depends_on:
-      - postgresql
+  # keycloak:
+  #   image: jboss/keycloak:6.0.1
+  #   container_name: keycloak
+  #   networks:
+  #     - crm
+  #   depends_on:
+  #     - postgresql
 
-  nats:
-    image: nats
-    container_name: nats
+  # nats:
+  #   image: nats
+  #   container_name: nats
+  #   networks:
+  #     - crm
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
     networks:
       - crm
 
@@ -71,7 +77,7 @@ services:
       - crm
     depends_on:
       - postgresql
-      - nats
+      - rabbitmq
       - jaeger
 
   identity-migration:
@@ -99,7 +105,6 @@ services:
       - crm
     depends_on:
       - postgresql
-      - nats
       - jaeger
 
   communication-api:
@@ -112,7 +117,7 @@ services:
     networks:
       - crm
     depends_on:
-      - nats
+      - rabbitmq
 
   crm-web:
     image: ${REGISTRY:-crmnow}/crm-web:${TAG:-latest}

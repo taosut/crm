@@ -2,10 +2,16 @@ version: "3.7"
 
 services:
 
-  nats:
-    image: nats
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
     networks:
       - crm
+
+  # nats:
+  #   image: nats
+  #   networks:
+  #     - crm
 
   postgresql:
     image: postgres:11-alpine
@@ -23,7 +29,7 @@ services:
     networks:
       - crm
     depends_on:
-      - nats
+      - rabbitmq
     volumes:
       - azp-data:/azp
 
@@ -38,7 +44,7 @@ services:
     networks:
       - crm
     depends_on:
-      - nats
+      - rabbitmq
       - postgresql
     volumes:
       - ${COMMON_TESTRESULTSDIRECTORY:-/tmp}:${COMMON_TESTRESULTSDIRECTORY:-/tmp}

@@ -4,6 +4,8 @@ ARG feed='--source "https://api.nuget.org/v3/index.json"'
 
 WORKDIR /src
 COPY ["src/BuildingBlocks/CRM.Shared/*.csproj", "src/BuildingBlocks/CRM.Shared/"]
+COPY ["src/BuildingBlocks/CRM.Tracing.Jaeger/*.csproj", "src/BuildingBlocks/CRM.Tracing.Jaeger/"]
+COPY ["src/BuildingBlocks/CRM.MassTransit.Tracing/*.csproj", "src/BuildingBlocks/CRM.MassTransit.Tracing/"]
 COPY ["src/Communication/CRM.Communication.Api/*.csproj", "src/Communication/CRM.Communication.Api/"]
 COPY ["src/Communication/CRM.Communication/*.csproj", "src/Communication/CRM.Communication/"]
 COPY ["src/Communication/CRM.Communication.FunctionalTests/*.csproj", "src/Communication/CRM.Communication.FunctionalTests/"]
@@ -12,6 +14,8 @@ RUN dotnet restore src/Communication/CRM.Communication/ /property:Configuration=
 RUN dotnet restore src/Communication/CRM.Communication.FunctionalTests/ /property:Configuration=Release ${feed} -nowarn:msb3202,nu1503
 
 COPY ["src/BuildingBlocks/CRM.Shared/.", "src/BuildingBlocks/CRM.Shared/"]
+COPY ["src/BuildingBlocks/CRM.Tracing.Jaeger/.", "src/BuildingBlocks/CRM.Tracing.Jaeger/"]
+COPY ["src/BuildingBlocks/CRM.MassTransit.Tracing/.", "src/BuildingBlocks/CRM.MassTransit.Tracing/"]
 COPY ["src/Communication/CRM.Communication.Api/.", "src/Communication/CRM.Communication.Api/"]
 COPY ["src/Communication/CRM.Communication/.", "src/Communication/CRM.Communication/"]
 COPY ["src/Communication/CRM.Communication.FunctionalTests/.", "src/Communication/CRM.Communication.FunctionalTests/"]

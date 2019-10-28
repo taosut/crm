@@ -30,5 +30,7 @@ affinity: {}
 
 env:
   values:
-    - name: NATS__Url
-      value: http://nats-client:4222
+    - name: rabbitMQ__Url
+      value: rabbitmq://rabbitmq
+    - name: Jaeger__UdpHost
+      value: jaeger-agent.monitoring.svc.cluster.local
