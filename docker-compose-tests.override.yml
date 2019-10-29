@@ -2,15 +2,9 @@ version: "3.7"
 
 services:
 
-  # nats:
-  #   ports:
-  #     - 4222:4222
-  #     - 6222:6222
-  #     - 8222:8222
-
   communication-api-test:
     environment:
-      - NATS__Url=http://nats:4222
+      - rabbitMQ__Url=rabbitmq://rabbitmq
     entrypoint:
       - dotnet
       - test
@@ -23,7 +17,7 @@ services:
 
   contact-api-test:
     environment:
-      - NATS__Url=http://nats:4222
+      - rabbitMQ__Url=rabbitmq://rabbitmq
       - ConnectionStrings__default=Server=postgresql;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
     entrypoint:
       - dotnet
