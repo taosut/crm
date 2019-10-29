@@ -3,6 +3,7 @@ using CRM.Graph.Gateway.Options;
 using CRM.Graph.Gateway.Types;
 using CRM.Shared;
 using CRM.Shared.Services;
+using CRM.Tracing.Jaeger;
 using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.AspNetCore.Playground;

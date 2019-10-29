@@ -64,3 +64,5 @@ env:
       value: http://contact-api
     - name: Jaeger__UdpHost
       value: jaeger-agent.monitoring.svc.cluster.local
+    - name: Jaeger__Enabled
+      value: false

@@ -115,3 +115,4 @@ services:
       - ASPNETCORE_ENVIRONMENT=development
       - Jaeger__UdpHost=jaeger
       - Services__ContactService__Url=http://contact-api
+      - Jaeger__Enabled=false
