@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CRM.Shared.Vault;
 using VaultSharp;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.Token;
 using VaultSharp.V1.AuthMethods.UserPass;
 
-namespace CRM.Shared.Vault
+namespace CRM.Configuration.Vault
 {
     public class VaultStore : IVaultStore
     {
@@ -16,6 +17,7 @@ namespace CRM.Shared.Vault
             _options = options;
             LoadEnvironmentVariables();
         }
+
         public async Task<IDictionary<string, object>> GetDefaultAsync()
         {
             if (string.IsNullOrWhiteSpace(_options.Key))
@@ -57,8 +59,8 @@ namespace CRM.Shared.Vault
             _options.AuthType = GetEnvVariableValue("VAULT_AUTH_TYPE") ?? _options.AuthType;
             _options.Token = GetEnvVariableValue("VAULT_TOKEN") ?? _options.Token;
             _options.Username = GetEnvVariableValue("VAULT_USER_NAME") ?? _options.Username;
-            _options.Password = GetEnvVariableValue("VAULT_PASSWORD") ?? _options.Password;            
-            _options.MountPoint = GetEnvVariableValue("VAULT_MOUNT_POINT") ?? _options.MountPoint;            
+            _options.Password = GetEnvVariableValue("VAULT_PASSWORD") ?? _options.Password;
+            _options.MountPoint = GetEnvVariableValue("VAULT_MOUNT_POINT") ?? _options.MountPoint;
         }
 
         private string GetEnvVariableValue(string key)

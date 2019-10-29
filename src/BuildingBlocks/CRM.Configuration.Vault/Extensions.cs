@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
+using CRM.Shared;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.Hosting;
 
-namespace CRM.Shared.Vault
+namespace CRM.Configuration.Vault
 {
     public static class Extensions
     {
@@ -22,10 +23,10 @@ namespace CRM.Shared.Vault
                 {
                     var client = new VaultStore(options);
                     var secret = client.GetDefaultAsync().GetAwaiter().GetResult();
-                   
+
                     var source = new MemoryConfigurationSource()
                     {
-                        InitialData = secret.ToDictionary(k => k.Key,  p=>p.Value.ToString())
+                        InitialData = secret.ToDictionary(k => k.Key, p => p.Value.ToString())
                     };
                     cfg.Add(source);
                 }

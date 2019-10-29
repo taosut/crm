@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\CRM.Configuration.Vault\CRM.Configuration.Vault.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\CRM.Tracing.Jaeger\CRM.Tracing.Jaeger.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\CRM.MassTransit.Tracing\CRM.MassTransit.Tracing.csproj" />
     <ProjectReference Include="..\CRM.Communication.Api\CRM.Communication.Api.csproj">

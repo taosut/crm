@@ -1,5 +1,5 @@
+using CRM.Configuration.Vault;
 using CRM.Shared.Logging;
-using CRM.Shared.Vault;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;

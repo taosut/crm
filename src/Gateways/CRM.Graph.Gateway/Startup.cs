@@ -1,20 +1,20 @@
+using System;
 using CRM.Graph.Gateway.Options;
+using CRM.Graph.Gateway.Types;
+using CRM.Shared;
+using CRM.Shared.Services;
+using HotChocolate;
+using HotChocolate.AspNetCore;
+using HotChocolate.AspNetCore.Playground;
+using HotChocolate.Execution.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using CRM.Shared;
 using OpenTracing.Contrib.Grpc.Interceptors;
-using CRM.Shared.Services;
-using HotChocolate;
-using HotChocolate.AspNetCore;
-using HotChocolate.AspNetCore.Playground;
-using CRM.Graph.Gateway.Types;
 using static CRM.Protobuf.Contacts.V1.ContactApi;
 using static CRM.Protobuf.Contacts.V1.LeadApi;
-using CRM.Tracing.Jaeger;
 
 namespace CRM.Graph.Gateway
 {
@@ -31,7 +31,7 @@ namespace CRM.Graph.Gateway
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddJaeger();
+            //services.AddJaeger();           
 
             GraphQLRegister(services);
 
@@ -68,6 +68,7 @@ namespace CRM.Graph.Gateway
         private void GrpcRegister(IServiceCollection services)
         {
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
             services.Scan(scan => scan
                             .FromCallingAssembly()
                             .AddClasses(x => x.AssignableTo(typeof(ServiceBase)))

@@ -7,7 +7,7 @@ This is a simplified contact management system made in a microservice architectu
 * .Net Core 3.0
 * GraphQL implement with [Hot Chocolate](https://github.com/ChilliCream/hotchocolate) using like a gateway
 * Internal communication using [Grpc](https://github.com/grpc/grpc-dotnet)
-* Using [Nats](https://nats.io/) as a message broker
+* Using [RabbitMQ](https://www.rabbitmq.com/) as a message broker based on [Masstransit](http://masstransit-project.com/)
 * SQL database with [Postgresql](https://www.postgresql.org/)
 * Storing secrets with [Vault](https://www.vaultproject.io/)
 * Data migration with [Dbup](https://github.com/DbUp/DbUp/)

@@ -1,8 +1,9 @@
 using System;
+using CRM.Shared.Types;
 
 namespace CRM.Shared.Vault
 {
-    public class VaultException : Exception
+    public class VaultException : CRMException
     {
         public string Key { get; private set; }
 

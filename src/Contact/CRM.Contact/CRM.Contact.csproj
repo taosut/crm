@@ -14,6 +14,7 @@
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\CRM.Configuration.Vault\CRM.Configuration.Vault.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\CRM.MassTransit.Tracing\CRM.MassTransit.Tracing.csproj" />
     <ProjectReference Include="..\CRM.Contact.Api\CRM.Contact.Api.csproj">
       <GlobalPropertiesToRemove />

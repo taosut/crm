@@ -1,8 +1,8 @@
+using CRM.Configuration.Vault;
+using CRM.Shared.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using CRM.Shared.Logging;
-using CRM.Shared.Vault;
 
 namespace CRM.Contact
 {

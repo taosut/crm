@@ -1,8 +1,9 @@
 using System;
+using CRM.Shared.Types;
 
 namespace CRM.Shared.Vault
 {
-    public class VaultAuthTypeNotSupportedException : Exception
+    public class VaultAuthTypeNotSupportedException : CRMException
     {
         public string AuthType { get; private set; }
 

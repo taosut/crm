@@ -1,4 +1,8 @@
-namespace CRM.Shared.Vault
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace CRM.Configuration.Vault
 {
     public class VaultOptions
     {

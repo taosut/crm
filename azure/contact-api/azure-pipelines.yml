@@ -36,9 +36,9 @@ stages:
       parameters:
         services: ["contact-api"]
 
-    # - template: ../run-integration-test.yml
-    #   parameters:
-    #     testService: contact-api-test
+    - template: ../run-integration-test.yml
+      parameters:
+        testService: contact-api-test
 
 - stage: Publish_Docker_Images
   displayName: Docker images

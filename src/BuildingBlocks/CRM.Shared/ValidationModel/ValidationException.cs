@@ -1,8 +1,8 @@
-using System;
+using CRM.Shared.Types;
 
 namespace CRM.Shared.ValidationModel
 {
-    public class ValidationException : Exception
+    public class ValidationException : CRMException
     {
         public ValidationResultModel ValidationResultModel { get; private set; }
         public ValidationException(ValidationResultModel validationResultModel)
