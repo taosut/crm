@@ -4,11 +4,21 @@ namespace CRM.Shared.Guard
 {
     public static class GuardExtensions
     {
-        public static TReturn NotNull<TReturn>(this TReturn value, string message = "")
+        public static TReturn NotNull<TReturn>(this TReturn value)
         {
             if (value == null)
             {
-                throw new NullReferenceException(message);
+                throw new ArgumentNullException(nameof(value));
+            }
+            return value;
+        }
+
+        public static String NotNullOrEmpty(this String value)
+        {
+            value.NotNull();
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentException("String parameter cannot be null or empty and cannot contain only blanks.", nameof(value));
             }
             return value;
         }

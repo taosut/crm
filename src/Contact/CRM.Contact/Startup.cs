@@ -22,6 +22,7 @@ using CRM.Shared;
 using CRM.Contact.IntegrationHandlers;
 using MassTransit.Definition;
 using CRM.MassTransit.Tracing;
+using CRM.Shared.CorrelationId;
 
 namespace CRM.Contact
 {
@@ -41,8 +42,8 @@ namespace CRM.Contact
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCorrelationId();
             services.AddJaeger();
-
 
             RegisterGrpc(services);
             // RegisterAuth(services);
@@ -98,6 +99,7 @@ namespace CRM.Contact
             services.AddGrpc(options =>
             {
                 options.Interceptors.Add<ExceptionInterceptor>();
+                options.Interceptors.Add<CorrelationIdInterceptor>();
                 options.Interceptors.Add<ServerTracingInterceptor>();
                 options.EnableDetailedErrors = true;
             });

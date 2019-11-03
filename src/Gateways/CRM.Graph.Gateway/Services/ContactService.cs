@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CRM.Protobuf.Contacts.V1;
 using CRM.Shared.Services;
 using Google.Protobuf.WellKnownTypes;
@@ -25,10 +26,10 @@ namespace CRM.Graph.Gateway.Services
             return result;
         }
 
-        public ListContactsResponse ListContacts()
+        public async Task<ListContactsResponse> ListContacts()
         {
             var metaData = new Metadata();
-            var result = _contactClient.ListContacts(new Empty(), metaData);
+            var result = await _contactClient.ListContactsAsync(new Empty(), metaData);
             _logger.LogInformation(result.Contacts.ToString());
             return result;
         }

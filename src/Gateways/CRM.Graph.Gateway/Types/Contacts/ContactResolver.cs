@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CRM.Protobuf.Contacts.V1;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
@@ -20,11 +21,10 @@ namespace CRM.Graph.Gateway.Types.Contacts
             _logger = loggerFactory.CreateLogger<ContactResolver>();
         }
 
-        public IList<Contact> ListContacts()
+        public async Task<IList<Contact>> ListContacts()
         {
             var metaData = new Metadata();
-            var result = _contactClient.ListContacts(new Empty(), metaData);
-            _logger.LogInformation(result.Contacts.ToString());
+            var result = await _contactClient.ListContactsAsync(new Empty(), metaData);
             return result.Contacts;
         }
 

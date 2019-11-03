@@ -2,6 +2,8 @@ using System;
 using CRM.Graph.Gateway.Options;
 using CRM.Graph.Gateway.Types;
 using CRM.Shared;
+using CRM.Shared.CorrelationId;
+using CRM.Shared.Interceptors;
 using CRM.Shared.Services;
 using CRM.Tracing.Jaeger;
 using HotChocolate;
@@ -32,6 +34,8 @@ namespace CRM.Graph.Gateway
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCorrelationId();
+
             services.AddJaeger();
 
             GraphQLRegister(services);
@@ -48,6 +52,7 @@ namespace CRM.Graph.Gateway
             }
 
             app.UsePathBase(Configuration["PathBase"]);
+            app.UseCorrelationId();
             app.UseRouting();
             app.UseGraphQL()
                 .UsePlayground(new PlaygroundOptions()
@@ -77,12 +82,14 @@ namespace CRM.Graph.Gateway
                             .WithScopedLifetime());
 
             services.AddTransient<ClientTracingInterceptor>();
+            services.AddTransient<ClientLoggerInterceptor>();
             var serviceOptions = Configuration.GetOptions<ServiceOptions>("Services");
 
             services.AddGrpcClient<ContactApiClient>(o =>
             {
                 o.Address = new Uri(serviceOptions.ContactService.Url);
             })
+            .AddInterceptor<ClientLoggerInterceptor>()
             .AddInterceptor<ClientTracingInterceptor>();
 
             services.AddGrpcClient<LeadApiClient>(o =>
