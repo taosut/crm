@@ -1,13 +1,14 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CRM.MassTransit.Tracing;
 using GreenPipes;
 using MassTransit;
 using OpenTracing;
 using OpenTracing.Propagation;
 using OpenTracing.Util;
 
-namespace CRM.MassTransit.Tracing
+namespace CRM.MassTransit.Middleware.Tracing
 {
     class OpenTracingConsumeFilter : IFilter<ConsumeContext>
     {
@@ -45,6 +46,7 @@ namespace CRM.MassTransit.Tracing
                .WithTag("destination-address", context.DestinationAddress?.ToString())
                .WithTag("source-address", context.SourceAddress?.ToString())
                .WithTag("initiator-id", context.InitiatorId?.ToString())
+               .WithTag("correlation-id", context.CorrelationId?.ToString())
                .WithTag("message-id", context.MessageId?.ToString());
 
             using (var scope = spanBuilder.StartActive(true))

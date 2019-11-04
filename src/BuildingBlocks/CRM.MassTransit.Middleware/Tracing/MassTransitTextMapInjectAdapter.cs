@@ -5,7 +5,7 @@ using MassTransit;
 using OpenTracing;
 using OpenTracing.Propagation;
 
-namespace CRM.MassTransit.Tracing
+namespace CRM.MassTransit.Middleware.Tracing
 {
     class MassTransitTextMapInjectAdapter : ITextMap
     {

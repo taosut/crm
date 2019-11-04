@@ -22,15 +22,19 @@ namespace CRM.Shared.Logging
                     .Enrich.WithProperty("ApplicationName", applicationName)
                     .Enrich.With<OpenTracingContextLogEventEnricher>();
 
-                Configure(loggerConfiguration, loggingOptions);
+                Configure(loggerConfiguration, loggingOptions.Seq, loggingOptions);
             });
 
             return hostBuilder;
         }
 
-        private static void Configure(LoggerConfiguration loggerConfiguration,
-            LoggingOptions loggingOptions)
+        private static void Configure(LoggerConfiguration loggerConfiguration, SeqOptions seq, LoggingOptions loggingOptions)
         {
+            if (seq.Enabled)
+            {
+                loggerConfiguration.WriteTo.Seq(seq.Url, apiKey: seq.ApiKey);
+            }
+
             if (loggingOptions.ConsoleEnabled)
             {
                 loggerConfiguration.WriteTo

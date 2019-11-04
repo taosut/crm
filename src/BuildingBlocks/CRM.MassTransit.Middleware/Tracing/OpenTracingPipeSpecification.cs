@@ -3,7 +3,7 @@ using System.Linq;
 using GreenPipes;
 using MassTransit;
 
-namespace CRM.MassTransit.Tracing
+namespace CRM.MassTransit.Middleware.Tracing
 {
     public class OpenTracingPipeSpecification : IPipeSpecification<ConsumeContext>, IPipeSpecification<PublishContext>
     {

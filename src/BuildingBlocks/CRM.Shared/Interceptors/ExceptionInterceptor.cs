@@ -13,7 +13,7 @@ namespace CRM.Shared.Interceptors
 
         public ExceptionInterceptor(ILoggerFactory loggerFactory)
         {
-            _logger = loggerFactory.CreateLogger<ExceptionInterceptor>();    
+            _logger = loggerFactory.CreateLogger<ExceptionInterceptor>();
         }
         public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(TRequest request, ServerCallContext context, UnaryServerMethod<TRequest, TResponse> continuation)
         {

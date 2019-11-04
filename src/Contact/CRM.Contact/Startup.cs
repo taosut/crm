@@ -21,8 +21,9 @@ using CRM.Shared.Types;
 using CRM.Shared;
 using CRM.Contact.IntegrationHandlers;
 using MassTransit.Definition;
-using CRM.MassTransit.Tracing;
 using CRM.Shared.CorrelationId;
+using CRM.MassTransit.Tracing;
+using MassTransit.Context;
 
 namespace CRM.Contact
 {
@@ -98,6 +99,7 @@ namespace CRM.Contact
         {
             services.AddGrpc(options =>
             {
+                options.Interceptors.Add<CorrelationIdInterceptor>();
                 options.Interceptors.Add<ExceptionInterceptor>();
                 options.Interceptors.Add<CorrelationIdInterceptor>();
                 options.Interceptors.Add<ServerTracingInterceptor>();
@@ -107,6 +109,8 @@ namespace CRM.Contact
 
         private static IBusControl ConfigureBus(IServiceProvider provider)
         {
+            MessageCorrelation.UseCorrelationId<IMessage>(x=>x.CorrelationId);
+
             return Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
                 cfg.UseSerilog();
@@ -117,12 +121,8 @@ namespace CRM.Contact
                     hc.Password(rabbitmqOption.Password);
                 });
 
-                cfg.ReceiveEndpoint(host, "contact", x =>
-                {
-                    x.Consumer<ContactCreatedConsumer>(provider);
-                });
-
                 cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());
+                cfg.PropagateCorrelationIdContext();
                 cfg.PropagateOpenTracingContext();
             });
         }

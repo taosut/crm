@@ -22,10 +22,10 @@ namespace CRM.Shared.CorrelationId
         {
             var correlationId = SetCorrelationId(context);
 
-            if (_options.UpdateTraceIdentifier)
-            {
-                context.TraceIdentifier = correlationId;
-            }
+            // if (_options.UpdateTraceIdentifier)
+            // {
+            //     context.TraceIdentifier = correlationId.ToString();
+            // }
 
             correlationContextFactory.Create(correlationId, _options.Header);
 
@@ -36,7 +36,7 @@ namespace CRM.Shared.CorrelationId
                 {
                     if (!context.Response.Headers.ContainsKey(_options.Header))
                     {
-                        context.Response.Headers.Add(_options.Header, correlationId);
+                        context.Response.Headers.Add(_options.Header, correlationId.ToString());
                     }
 
                     return Task.CompletedTask;
@@ -51,24 +51,27 @@ namespace CRM.Shared.CorrelationId
             correlationContextFactory.Dispose();
         }
 
-        private StringValues SetCorrelationId(HttpContext context)
+        private Guid SetCorrelationId(HttpContext context)
         {
             var correlationIdFoundInRequestHeader = context.Request.Headers.TryGetValue(_options.Header, out var correlationId);
 
             if (RequiresGenerationOfCorrelationId(correlationIdFoundInRequestHeader, correlationId))
             {
-                correlationId = GenerateCorrelationId(context.TraceIdentifier);
+                return Guid.NewGuid();
             }
-
-            return correlationId;
+            else
+            {
+                return Guid.Parse(correlationId);
+            }
         }
 
-        private static bool RequiresGenerationOfCorrelationId(bool idInHeader, StringValues idFromHeader) =>
-            !idInHeader || StringValues.IsNullOrEmpty(idFromHeader);
-
-        private StringValues GenerateCorrelationId(string traceIdentifier) =>
-            _options.UseGuidForCorrelationId || string.IsNullOrEmpty(traceIdentifier)
-            ? Guid.NewGuid().ToString()
-            : traceIdentifier;
+        private static bool RequiresGenerationOfCorrelationId(bool idInHeader, String idFromHeader)
+        {
+            if (!idInHeader || StringValues.IsNullOrEmpty(idFromHeader) || !Guid.TryParse(idFromHeader, out var correlationId))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

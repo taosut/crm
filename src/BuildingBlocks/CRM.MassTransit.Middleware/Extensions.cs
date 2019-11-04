@@ -1,4 +1,6 @@
 using System;
+using CRM.MassTransit.Middleware.CorrelationId;
+using CRM.MassTransit.Middleware.Tracing;
 using MassTransit;
 
 // Ref from https://github.com/yesmarket/MassTransit.OpenTracing
@@ -10,6 +12,12 @@ namespace CRM.MassTransit.Tracing
         {
             value.ConfigurePublish(c => c.AddPipeSpecification(new OpenTracingPipeSpecification()));
             value.AddPipeSpecification(new OpenTracingPipeSpecification());
+        }
+
+        public static void PropagateCorrelationIdContext(this IBusFactoryConfigurator value)
+        {
+            // value.Confi(c => c.AddPipeSpecification(new CorrelationLoggerSpecification()));
+            value.AddPipeSpecification(new CorrelationLoggerSpecification());
         }
 
         public static string GetExchangeName(this Uri value)

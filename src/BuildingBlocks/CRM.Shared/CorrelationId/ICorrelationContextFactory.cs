@@ -1,8 +1,10 @@
+using System;
+
 namespace CRM.Shared.CorrelationId
 {
     public interface ICorrelationContextFactory
     {
-        CorrelationContext Create(string correlationId, string header);
+        CorrelationContext Create(Guid correlationId, String header);
         void Dispose();
     }
 }

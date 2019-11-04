@@ -1,10 +1,11 @@
+using System;
 using CRM.Shared.Guard;
 
 namespace CRM.Shared.CorrelationId
 {
     public class CorrelationContext
     {
-        internal CorrelationContext(string correlationId, string header)
+        internal CorrelationContext(Guid correlationId, String header)
         {
             correlationId.NotNullOrEmpty();
             header.NotNullOrEmpty();
@@ -12,8 +13,8 @@ namespace CRM.Shared.CorrelationId
             CorrelationId = correlationId;
             Header = header;
         }
-        public string CorrelationId { get; }
+        public Guid CorrelationId { get; }
 
-        public string Header { get; }
+        public String Header { get; }
     }
 }

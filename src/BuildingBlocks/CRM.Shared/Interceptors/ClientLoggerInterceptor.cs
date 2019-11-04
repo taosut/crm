@@ -17,15 +17,6 @@ namespace CRM.Shared.Interceptors
             _logger = logger;
         }
 
-        // public override void BlockingUnaryCall<TRequest, TResponse>(TRequest request,
-        //     ClientInterceptorContext<TRequest, TResponse> context,
-        //     BlockingUnaryCallContinuation<TRequest, TResponse> continuation)
-        // {
-        //     AddCallerMetadata(ref context);
-
-        //     return continuation(request, context);
-        // }
-
         public override AsyncUnaryCall<TResponse> AsyncUnaryCall<TRequest, TResponse>(
             TRequest request,
             ClientInterceptorContext<TRequest, TResponse> context,
@@ -50,7 +41,7 @@ namespace CRM.Shared.Interceptors
                 context = new ClientInterceptorContext<TRequest, TResponse>(context.Method, context.Host, options);
             }
 
-            headers.Add(_correlationContextAccessor.CorrelationContext.Header, _correlationContextAccessor.CorrelationContext.CorrelationId);
+            headers.Add(_correlationContextAccessor.CorrelationContext.Header, _correlationContextAccessor.CorrelationContext.CorrelationId.ToString());
         }
     }
 }

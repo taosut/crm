@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
+using CRM.MassTransit.Tracing;
 using GreenPipes;
 using MassTransit;
 using OpenTracing.Propagation;
 using OpenTracing.Util;
 
-namespace CRM.MassTransit.Tracing
+namespace CRM.MassTransit.Middleware.Tracing
 {
     public class OpenTracingPublishFilter : IFilter<PublishContext>
     {

@@ -11,8 +11,8 @@ using CRM.Communication.IntegrationHandlers;
 using System;
 using CRM.Shared.Types;
 using MassTransit.Definition;
-using CRM.MassTransit.Tracing;
 using CRM.Shared;
+using CRM.MassTransit.Tracing;
 
 namespace CRM.Communication
 {

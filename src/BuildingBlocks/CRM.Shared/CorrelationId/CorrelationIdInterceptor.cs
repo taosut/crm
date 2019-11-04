@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
-using Microsoft.Extensions.Primitives;
 using System.Linq;
 using Microsoft.Extensions.Options;
 using System;
@@ -44,11 +43,14 @@ namespace CRM.Shared.CorrelationId
             }
         }
 
-        private StringValues SetCorrelationId(ServerCallContext context)
+        private Guid SetCorrelationId(ServerCallContext context)
         {
-            return context.RequestHeaders.Any(h => h.Key == _options.Header.ToLower())
-                ? context.RequestHeaders.First(h => h.Key == _options.Header.ToLower()).Value
-                : Guid.NewGuid().ToString(); //todo: check how can to get traceIdentifier ....
+            if (context.RequestHeaders.Any(h => h.Key == _options.Header.ToLower()) &&
+                Guid.TryParse(context.RequestHeaders.First(h => h.Key == _options.Header.ToLower()).Value, out var correlationId))
+            {
+                return correlationId;
+            }
+            return Guid.NewGuid();
         }
     }
 }

@@ -22,5 +22,15 @@ namespace CRM.Shared.Guard
             }
             return value;
         }
+
+        public static Guid NotNullOrEmpty(this Guid value)
+        {
+            value.NotNull();
+            if (value == Guid.Empty)
+            {
+                throw new ArgumentException("Guid parameter cannot be null or empty and cannot contain only blanks.", nameof(value));
+            }
+            return value;
+        }
     }
 }

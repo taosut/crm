@@ -1,3 +1,5 @@
+using System;
+
 namespace CRM.Shared.CorrelationId
 {
     public class CorrelationContextFactory : ICorrelationContextFactory
@@ -14,7 +16,7 @@ namespace CRM.Shared.CorrelationId
             _correlationContextAccessor = correlationContextAccessor;
         }
 
-        public CorrelationContext Create(string correlationId, string header)
+        public CorrelationContext Create(Guid correlationId, string header)
         {
             var correlationContext = new CorrelationContext(correlationId, header);
 

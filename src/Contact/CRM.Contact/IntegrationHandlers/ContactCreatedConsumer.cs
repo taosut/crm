@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using CRM.IntegrationEvents;
 using MassTransit;
-using MassTransit.Definition;
 using Microsoft.Extensions.Logging;
 
 namespace CRM.Contact.IntegrationHandlers
@@ -17,13 +16,9 @@ namespace CRM.Contact.IntegrationHandlers
 
         public async Task Consume(ConsumeContext<ContactCreated> context)
         {
-            _logger.LogInformation("ContactCreatedConsumer - happened");
+            _logger.LogInformation("ContactCreatedConsumer - happened with correlation Id {0}", context.Message.CorrelationId);
             await Task.Delay(10);
             await Task.FromResult(0);
         }
-    }
-
-    public class ContactCreatedConsumerDefinition : ConsumerDefinition<ContactCreatedConsumer>
-    {
     }
 }

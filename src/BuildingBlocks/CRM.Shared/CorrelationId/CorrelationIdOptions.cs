@@ -6,6 +6,5 @@ namespace CRM.Shared.CorrelationId
         public string Header { get; set; } = DefaultHeader;
         public bool IncludeInResponse { get; set; } = true;
         public bool UpdateTraceIdentifier { get; set; } = true;
-        public bool UseGuidForCorrelationId { get; set; } = false;
     }
 }
