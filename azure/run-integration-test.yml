@@ -37,7 +37,7 @@ jobs:
         inputs:
           reports: '$(Common.TestResultsDirectory)/${{ parameters.testservice }}/coverage/coverage.opencover.xml'
           targetdir: '$(Common.TestResultsDirectory)/${{ parameters.testservice }}/coverage'
-          reporttypes: 'HtmlInline_AzurePipelines;Cobertura;Badges'
+          reporttypes: 'HtmlInline_AzurePipelines;Cobertura'
           assemblyfilters: '+CRM.*'
           classfilters: '-CRM.Protobuf.*'
 
