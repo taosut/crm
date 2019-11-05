@@ -2,6 +2,7 @@ fullnameOverride: seq
 image:
   tag: 5.1.3200
 persistence:
-  enabled: false
+  enabled: true
+  existingClaim: seq-pv-claim
 auth:
   enabled: false

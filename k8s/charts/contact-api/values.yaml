@@ -38,3 +38,5 @@ env:
       value: jaeger-agent.monitoring.svc.cluster.local
     - name: Logging__Seq__Url
       value: http://seq.monitoring.svc.cluster.local
+    - name: Logging__Seq__ApiKey
+      value: 11zWlcFxJYXUFqKXoKGK
