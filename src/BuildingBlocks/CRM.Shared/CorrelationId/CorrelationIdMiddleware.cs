@@ -22,10 +22,10 @@ namespace CRM.Shared.CorrelationId
         {
             var correlationId = SetCorrelationId(context);
 
-            // if (_options.UpdateTraceIdentifier)
-            // {
-            //     context.TraceIdentifier = correlationId.ToString();
-            // }
+            if (_options.UpdateTraceIdentifier)
+            {
+                context.TraceIdentifier = correlationId.ToString();
+            }
 
             correlationContextFactory.Create(correlationId, _options.Header);
 

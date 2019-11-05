@@ -22,6 +22,12 @@ services:
       - 14268:14268
       - 16686:16686
 
+  # grafana:
+  #   ports:
+  #     - 3003:3003
+  #     - 3004:8083
+  #     - 8086:8086
+
   postgresql:
     ports:
       - "5432:5432"
@@ -29,25 +35,6 @@ services:
       - POSTGRES_DB=keycloak
       - POSTGRES_USER=lab
       - POSTGRES_PASSWORD=P@ssw0rd
-
-  # keycloak:
-  #   ports:
-  #     - 8080:8080
-  #   environment:
-  #     - KEYCLOAK_USER=lab
-  #     - KEYCLOAK_PASSWORD=P@ssw0rd
-  #     - DB_ADDR=postgresql
-  #     - DB_USER=lab
-  #     - DB_PASSWORD=P@ssw0rd
-  #     - PROXY_ADDRESS_FORWARDING=true
-  #     - DB_VENDOR=postgres
-  #     - DB_DATABASE=keycloak
-
-  # nats:
-  #   ports:
-  #     - 4222:4222
-  #     - 6222:6222
-  #     - 8222:8222
 
   rabbitmq:
     hostname: rabbitmq
@@ -60,11 +47,11 @@ services:
       - 5001:80
     environment:
       - ASPNETCORE_ENVIRONMENT=development
-      # - NATS__Url=http://nats:4222
       - Jaeger__Enabled=true
       - Jaeger__UdpHost=jaeger
       - ConnectionStrings__contact=Server=postgresql;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
       - rabbitMQ__Url=rabbitmq://rabbitmq
+      - Logging__Seq__Url=http://seq/
 
   contact-migration:
     environment:
@@ -80,10 +67,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=development
       - PathBase=/identity
-      - NATS__Url=http://nats:4222
       - Jaeger__Enabled=true
       - Jaeger__UdpHost=jaeger
       - ConnectionStrings__identity=Server=postgresql;Port=5432;Database=crm-identity;User Id=lab;Password=P@ssw0rd;
+      - Logging__Seq__Url=http://seq/
 
   identity-migration:
     environment:
@@ -98,9 +85,10 @@ services:
       - 5002:80
     environment:
       - ASPNETCORE_ENVIRONMENT=development
-      # - NATS__Url=http://nats:4222
       - Jaeger__UdpHost=jaeger
+      - Jaeger__Enabled=true
       - rabbitMQ__Url=rabbitmq://rabbitmq
+      - Logging__Seq__Url=http://seq/
 
   crm-web:
     ports:
@@ -115,4 +103,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=development
       - Jaeger__UdpHost=jaeger
       - Services__ContactService__Url=http://contact-api
-      - Jaeger__Enabled=false
+      - Jaeger__Enabled=true
+      - Cors__Origins=http://localhost:5102
+      - Logging__Seq__Url=http://seq/

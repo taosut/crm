@@ -9,7 +9,6 @@ using CRM.Tracing.Jaeger;
 using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.AspNetCore.Playground;
-using HotChocolate.Execution.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -34,12 +33,25 @@ namespace CRM.Graph.Gateway
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                var cors = Configuration.GetValue<string>("Cors:Origins").Split(',');
+                options.AddPolicy("CorsPolicy",
+                          policy =>
+                          {
+                              var builder = policy
+                                .AllowAnyMethod()
+                                .AllowAnyHeader()
+                                .AllowCredentials()
+                                .WithOrigins(cors)
+                                /* https://github.com/aspnet/AspNetCore/issues/4457 */
+                                .SetIsOriginAllowed(host => true);
+                          });
+            });
+
             services.AddCorrelationId();
-
             services.AddJaeger();
-
             GraphQLRegister(services);
-
             GrpcRegister(services);
         }
 
@@ -53,10 +65,12 @@ namespace CRM.Graph.Gateway
 
             app.UsePathBase(Configuration["PathBase"]);
             app.UseCorrelationId();
+            app.UseCors("CorsPolicy");
             app.UseRouting();
-            app.UseGraphQL()
+            app.UseGraphQL("/graphql")
                 .UsePlayground(new PlaygroundOptions()
                 {
+                    QueryPath = "/graphql",
                     Path = "/ui/playground"
                 });
         }

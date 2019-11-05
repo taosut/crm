@@ -18,7 +18,7 @@ namespace CRM.Communication.IntegrationHandlers
 
         public async Task Consume(ConsumeContext<ContactCreated> context)
         {
-            _logger.LogInformation("ContactCreatedConsumer - happens");
+            _logger.LogInformation("ContactCreatedConsumer - happened with correlation Id {0}", context.Message.CorrelationId);
 
             await Task.Delay(10);
             await Task.FromResult(0);

@@ -44,15 +44,11 @@ export interface ActionsWithPayload<TypeAction, TypePayload> {
  * A very general type that means to be "an object with a many field created with createActionPayload and createAction
  */
 interface ActionCreatorsMapObject {
-  [key: string]: (
-    ...args: any[]
-  ) => ActionsWithPayload<any, any> | ActionsWithoutPayload<any>;
+  [key: string]: (...args: any[]) => ActionsWithPayload<any, any> | ActionsWithoutPayload<any>;
 }
 
 /**
  * Use this Type to merge several action object that has field created with createActionPayload or createAction
  * E.g. type ReducerWithActionFromTwoObjects = ActionsUnion<typeof ActionsObject1 & typeof ActionsObject2>;
  */
-export type ActionsUnion<A extends ActionCreatorsMapObject> = ReturnType<
-  A[keyof A]
->;
+export type ActionsUnion<A extends ActionCreatorsMapObject> = ReturnType<A[keyof A]>;

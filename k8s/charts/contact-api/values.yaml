@@ -36,3 +36,5 @@ env:
       value: Server=postgresql;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
     - name: Jaeger__UdpHost
       value: jaeger-agent.monitoring.svc.cluster.local
+    - name: Logging__Seq__Url
+      value: http://seq.monitoring.svc.cluster.local

@@ -11,9 +11,7 @@ export default (props: React.Component & RouteChildrenProps) => {
 
         LoggerService.info("Successfull token silent callback");
       } catch (error) {
-        LoggerService.error(
-          `There was an error while handling the token callback: ${error}`
-        );
+        LoggerService.error(`There was an error while handling the token callback: ${error}`);
       }
     };
 

@@ -8,6 +8,10 @@ using CRM.Contact.Domain;
 using CRM.Shared.Repository;
 using CRM.Contact.Extensions;
 using System;
+using Microsoft.Extensions.Logging;
+using MassTransit;
+using CRM.IntegrationEvents;
+using CRM.Shared.CorrelationId;
 
 namespace CRM.Contact.Commands.Handlers
 {
@@ -15,18 +19,24 @@ namespace CRM.Contact.Commands.Handlers
     {
         private readonly IValidator<CreateContactRequest> _validator;
         private readonly IUnitOfWork _uow;
+        private readonly ILogger<CreateContactHandler> _logger;
+        private readonly IBusControl _bus;
+        private readonly ICorrelationContextAccessor _correlationContextAccessor;
 
-        public CreateContactHandler(IValidator<CreateContactRequest> vadiator,
-            IUnitOfWork uow)
-            // , IEventBus eventBus)
+        public CreateContactHandler(IValidator<CreateContactRequest> vadiator, IUnitOfWork uow,
+            ILogger<CreateContactHandler> logger, IBusControl bus, ICorrelationContextAccessor correlationContextAccessor)
         {
             _validator = vadiator;
             _uow = uow;
-            // _eventBus = eventBus;
+            _logger = logger;
+            _bus = bus;
+            _correlationContextAccessor = correlationContextAccessor;
         }
 
         public async Task<CreateContactResponse> Handle(CreateContactCommand request, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("CreateContactHandler - handle");
+
             await _validator.HandleValidation(request.ContactRequest);
             var requestedContact = request.ContactRequest;
             var contact = new Domain.Contact(ContactType.Contact,
@@ -39,10 +49,11 @@ namespace CRM.Contact.Commands.Handlers
 
             var contactId = await _uow.Connection.InsertAsync<Guid, Domain.Contact>(contact);
 
-            // _eventBus.Publish(new ContactCreatedEvent()
-            // {
-            //     Id = Guid.NewGuid()
-            // });
+            await _bus.Publish<ContactCreated>(new
+            {
+                FirstName = "sss",
+                CorrelationId = _correlationContextAccessor?.CorrelationContext?.CorrelationId
+            });
 
             return new CreateContactResponse
             {

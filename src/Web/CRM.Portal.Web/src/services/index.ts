@@ -1,4 +1,4 @@
 import AuthService from "./AuthenticationService";
 import LoggerService from "./LoggerService";
 
-export {AuthService, LoggerService};
+export { AuthService, LoggerService };

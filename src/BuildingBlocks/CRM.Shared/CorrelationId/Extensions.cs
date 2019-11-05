@@ -20,14 +20,12 @@ namespace CRM.Shared.CorrelationId
         public static IApplicationBuilder UseCorrelationId(this IApplicationBuilder app)
         {
             app.NotNull();
-
             return app.UseCorrelationId(new CorrelationIdOptions());
         }
 
         public static IApplicationBuilder UseCorrelationId(this IApplicationBuilder app, string header)
         {
             app.NotNull();
-
             return app.UseCorrelationId(new CorrelationIdOptions
             {
                 Header = header

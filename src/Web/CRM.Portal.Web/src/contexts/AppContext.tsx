@@ -6,37 +6,47 @@ import { LoggerService, AuthService } from "services";
 import { User } from "oidc-client";
 
 export const TOGGLE_COLLAPSE = "TOGGLE_COLLAPSE";
+
 export const LOAD_LOGINUSER = "LOAD_LOGINUSER";
 export const UNLOAD_LOGINUSER = "UNLOAD_LOGINUSER";
 
+export const LOAD_CONTACTS = "LOAD_CONTACTS";
+export const LOAD_CONTACTS_SUCCEED = "LOAD_CONTACTS_SUCCEED";
+export const LOAD_CONTACTS_FAILED = "LOAD_CONTACTS_FAILED";
 
 interface LoginUser {
   userName: string;
   email: string;
 }
 
+interface Contact {
+  id: string;
+  firstName: string;
+  lastName: string;
+}
+
 interface UIState {
   notification: any;
   userLogin: LoginUser | null;
   authenticated: boolean;
+  contacts: Contact[];
 }
 
 const initialState: UIState = {
-
   notification: {
     numberOfMsg: 10
   },
   userLogin: null,
-  authenticated: false
+  authenticated: false,
+  contacts: []
 };
 
 const AppCtx = React.createContext({} as IContextProps<UIState>);
 
 const AppActions = {
-  loadUserLogin: createActionPayload<typeof LOAD_LOGINUSER, LoginUser>(
-    LOAD_LOGINUSER
-  ),
-  unloadUserLogin: createAction<typeof UNLOAD_LOGINUSER>(UNLOAD_LOGINUSER)
+  loadUserLogin: createActionPayload<typeof LOAD_LOGINUSER, LoginUser>(LOAD_LOGINUSER),
+  unloadUserLogin: createAction<typeof UNLOAD_LOGINUSER>(UNLOAD_LOGINUSER),
+  loadContacts: createActionPayload<typeof LOAD_CONTACTS, Contact[]>(LOAD_CONTACTS)
 };
 
 const reducer = (state: UIState, action: ActionsUnion<typeof AppActions>) => {
@@ -47,12 +57,20 @@ const reducer = (state: UIState, action: ActionsUnion<typeof AppActions>) => {
         userLogin: action.payload,
         authenticated: true
       };
+
     case UNLOAD_LOGINUSER:
       return {
         ...state,
         userLogin: null,
         authenticated: false
       };
+
+    case LOAD_CONTACTS:
+      return {
+        ...state,
+        contacts: action.payload
+      };
+
     default:
       return initialState;
   }
@@ -85,7 +103,7 @@ const addOidcEvents = (dispatch: Dispatch<any>) => {
   const oidcEvents = AuthService.UserManager.events;
 
   oidcEvents.addUserLoaded(onUserLoaded(dispatch));
-//   oidcEvents.addUserUnloaded(onUserUnloaded(dispatch));
+  //   oidcEvents.addUserUnloaded(onUserUnloaded(dispatch));
   oidcEvents.addAccessTokenExpired(onAccessTokenExpired(dispatch));
 };
 
@@ -93,15 +111,12 @@ const removeOidcEvents = (dispatch: Dispatch<any>) => {
   const oidcEvents = AuthService.UserManager.events;
 
   oidcEvents.removeUserLoaded(onUserLoaded(dispatch));
-//   oidcEvents.removeUserUnloaded(onUserUnloaded(dispatch));
+  //   oidcEvents.removeUserUnloaded(onUserUnloaded(dispatch));
   oidcEvents.removeAccessTokenExpired(onAccessTokenExpired(dispatch));
 };
 
 const AppCtxProvider = (props: any) => {
-  let [state, dispatch] = useReducer<Reducer<UIState, any>>(
-    reducer,
-    initialState
-  );
+  let [state, dispatch] = useReducer<Reducer<UIState, any>>(reducer, initialState);
   let value = { state, dispatch };
 
   useEffect(() => {

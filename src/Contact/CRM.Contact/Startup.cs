@@ -69,10 +69,10 @@ namespace CRM.Contact
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            // if (env.IsDevelopment())
+            // {
+            //     app.UseDeveloperExceptionPage();
+            // }
 
             app.UseRouting();
             // app.UseAuthentication();
@@ -98,10 +98,8 @@ namespace CRM.Contact
         private static void RegisterGrpc(IServiceCollection services)
         {
             services.AddGrpc(options =>
-            {
-                options.Interceptors.Add<CorrelationIdInterceptor>();
-                options.Interceptors.Add<ExceptionInterceptor>();
-                options.Interceptors.Add<CorrelationIdInterceptor>();
+            {                
+                options.Interceptors.Add<ExceptionInterceptor>();                
                 options.Interceptors.Add<ServerTracingInterceptor>();
                 options.EnableDetailedErrors = true;
             });
@@ -119,6 +117,11 @@ namespace CRM.Contact
                 {
                     hc.Username(rabbitmqOption.UserName);
                     hc.Password(rabbitmqOption.Password);
+                });
+
+                cfg.ReceiveEndpoint(host, "contact", x =>
+                {
+                    x.Consumer<ContactCreatedConsumer>(provider);                    
                 });
 
                 cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());

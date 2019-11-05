@@ -34,3 +34,7 @@ env:
       value: rabbitmq://rabbitmq
     - name: Jaeger__UdpHost
       value: jaeger-agent.monitoring.svc.cluster.local
+    - name: Logging__Seq__ApiKey
+      value: t49Qq9hx0JrfnKXwK5UZ
+    - name: Logging__Seq__Url
+      value: http://seq.monitoring.svc.cluster.local

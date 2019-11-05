@@ -2,6 +2,11 @@ using CRM.Shared.CorrelationId;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using System;
 
 namespace CRM.Shared.Interceptors
 {
@@ -11,6 +16,7 @@ namespace CRM.Shared.Interceptors
         private readonly ILogger<ClientLoggerInterceptor> _logger;
 
         public ClientLoggerInterceptor(ICorrelationContextAccessor correlationContextAccessor,
+            IServiceProvider serviceProvider,
             ILogger<ClientLoggerInterceptor> logger)
         {
             _correlationContextAccessor = correlationContextAccessor;
@@ -41,7 +47,8 @@ namespace CRM.Shared.Interceptors
                 context = new ClientInterceptorContext<TRequest, TResponse>(context.Method, context.Host, options);
             }
 
-            headers.Add(_correlationContextAccessor.CorrelationContext.Header, _correlationContextAccessor.CorrelationContext.CorrelationId.ToString());
+            headers.Add(_correlationContextAccessor.CorrelationContext.Header,
+                _correlationContextAccessor.CorrelationContext.CorrelationId.ToString());
         }
     }
 }

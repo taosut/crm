@@ -66,6 +66,7 @@ namespace CRM.Communication
                 });
 
                 cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());
+                cfg.PropagateCorrelationIdContext();
                 cfg.PropagateOpenTracingContext();
             });
         }

@@ -65,4 +65,6 @@ env:
     - name: Jaeger__UdpHost
       value: jaeger-agent.monitoring.svc.cluster.local
     - name: Jaeger__Enabled
-      value: false
+      value: true
+    - name: Logging__Seq__Url
+      value: http://seq.monitoring.svc.cluster.local

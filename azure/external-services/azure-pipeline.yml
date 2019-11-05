@@ -63,3 +63,14 @@ stages:
         azureResourceGroup: $(azureResourceGroup)
         kubernetesCluster: $(kubernetesCluster)
         valueFile: $(Build.SourcesDirectory)/k8s/charts/postgresql/values.dev.yaml
+
+    - template: ../install-helm-chart-by-name.yml
+      parameters:
+        name: Install_Postgresql
+        chartname: stable/seq
+        releasename: seq
+        kubernetesNamespace: $(kubernetesNamespace)
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureResourceGroup: $(azureResourceGroup)
+        kubernetesCluster: $(kubernetesCluster)
+        valueFile: $(Build.SourcesDirectory)/k8s/charts/seq/values.dev.yaml

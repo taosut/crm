@@ -35,10 +35,11 @@ namespace CRM.Graph.Gateway.Types.Contacts
             return result;
         }
 
-        public Contact CreateNewContact(CreateContactRequest contact)
+        public async Task<Contact> CreateNewContact(CreateContactRequest contact)
         {
+            _logger.LogInformation("ContactResolver - CreateNewContact");
             var metaData = new Metadata();
-            var result = _contactClient.CreateContact(contact);
+            var result = await _contactClient.CreateContactAsync(contact, metaData);
             return result.Contact;
         }
     }

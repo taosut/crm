@@ -25,26 +25,21 @@ services:
     networks:
       - crm
 
+  # grafana:
+  #   image: philhawthorne/docker-influxdb-grafana:latest
+  #   container_name: grafana
+  #   networks:
+  #     - crm
+  #   volumes:
+  #     - grafana:/var/lib/grafana
+  #     - influxdb:/var/lib/influxdb
+
   postgresql:
     image: postgres:11-alpine
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - crm
-
-  # keycloak:
-  #   image: jboss/keycloak:6.0.1
-  #   container_name: keycloak
-  #   networks:
-  #     - crm
-  #   depends_on:
-  #     - postgresql
-
-  # nats:
-  #   image: nats
-  #   container_name: nats
-  #   networks:
-  #     - crm
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -144,11 +139,14 @@ services:
     depends_on:
       - contact-api
       - communication-api
+      - identity-api
 
 volumes:
   postgres-data:
   nexus-data:
   seq-data:
+  grafana:
+  influxdb:
 
 networks:
   crm:
