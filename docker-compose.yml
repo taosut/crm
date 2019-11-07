@@ -25,14 +25,32 @@ services:
     networks:
       - crm
 
-  # grafana:
-  #   image: philhawthorne/docker-influxdb-grafana:latest
-  #   container_name: grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    networks:
+      - crm
+    volumes:
+      - grafana:/var/lib/grafana
+    depends_on:
+      - influxdb
+
+  # prometheus:
+  #   image: prom/prometheus
+  #   container_name: prometheus
   #   networks:
   #     - crm
   #   volumes:
-  #     - grafana:/var/lib/grafana
-  #     - influxdb:/var/lib/influxdb
+  #     - prometheus:/prometheus
+  #     - ${PWD}/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  influxdb:
+    image: influxdb
+    container_name: influxdb
+    networks:
+      - crm
+    volumes:
+      - influxdb:/var/lib/influxdb
 
   postgresql:
     image: postgres:11-alpine
@@ -146,6 +164,7 @@ volumes:
   nexus-data:
   seq-data:
   grafana:
+  prometheus:
   influxdb:
 
 networks:

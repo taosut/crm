@@ -42,5 +42,13 @@ namespace CRM.Graph.Gateway.Types.Contacts
             var result = await _contactClient.CreateContactAsync(contact, metaData);
             return result.Contact;
         }
+
+        public async Task<Boolean> UploadPhoto(UploadPhotoRequest photo)
+        {
+            _logger.LogInformation("ContactResolver - UploadPhoto");
+            var metaData = new Metadata();
+            var result = await _contactClient.UploadPhotoAsync(photo, metaData);
+            return result.Status;
+        }
     }
 }

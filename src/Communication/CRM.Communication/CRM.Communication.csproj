@@ -9,6 +9,7 @@
     <ProjectReference Include="..\..\BuildingBlocks\CRM.Configuration.Vault\CRM.Configuration.Vault.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\CRM.MassTransit.Middleware\CRM.MassTransit.Middleware.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\CRM.Tracing.Jaeger\CRM.Tracing.Jaeger.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\CRM.Metrics\CRM.Metrics.csproj" />
     <ProjectReference Include="..\CRM.Communication.Api\CRM.Communication.Api.csproj">
       <GlobalPropertiesToRemove />
     </ProjectReference>

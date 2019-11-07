@@ -33,7 +33,11 @@ namespace CRM.Identity
                 .UseLogging()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+                        .UseKestrel(o =>
+                        {
+                            o.AllowSynchronousIO = true;
+                        });
                 });
     }
 }

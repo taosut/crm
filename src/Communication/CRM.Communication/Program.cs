@@ -1,3 +1,6 @@
+using System;
+using App.Metrics;
+using App.Metrics.AspNetCore;
 using CRM.Configuration.Vault;
 using CRM.Shared.Logging;
 using Microsoft.AspNetCore.Hosting;
@@ -23,6 +26,10 @@ namespace CRM.Communication
                 })
                 .UseLogging()
                 .UseVault()
+                // .ConfigureMetricsWithDefaults(buildder => {
+                //     buildder.Report.ToInfluxDb("http://localhost:8086", "crm2", TimeSpan.FromSeconds(1));
+                // })
+                // .UseMetrics()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

@@ -16,7 +16,7 @@ This is a simplified contact management system made in a microservice architectu
 * Polly
 * A modern web application with [React](https://reactjs.org/)
 * Logging with [Serilog](https://github.com/serilog/serilog), [Seq](https://datalust.co/seq)
-* Monitoring with [Jaeger](https://www.jaegertracing.io/), [Octant](https://github.com/vmware-tanzu/octant)
+* Monitoring with [Jaeger](https://www.jaegertracing.io/), [Octant](https://github.com/vmware-tanzu/octant), [Grafana](https://grafana.com/)
 * Identity and access management with [Identity server 4](http://docs.identityserver.io/en/latest/#)
 * Building [Docker](https://www.docker.com/) images, managing containers and [registry](https://cloud.docker.com/u/crmnow/repository/list)
 * [Docker compose](https://docs.docker.com/compose/)
@@ -71,6 +71,12 @@ With this **playgroud**, you can do query or mutation commands to services behin
 
 ## Distributed tracing
 ![](assets/images/jaeger-screenshot.PNG)
+
+## Monitoring
+![](assets/images/grafana-screenshot.PNG)
+
+## Logging with Seq
+![](assets/images/seq-screenshot.PNG)
 
 # Testing
 TBD

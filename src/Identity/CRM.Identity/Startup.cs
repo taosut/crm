@@ -6,6 +6,7 @@ using CRM.Identity.Data;
 using CRM.Identity.Models;
 using CRM.Shared.CorrelationId;
 using CRM.Tracing.Jaeger;
+using CRM.Metrics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -39,6 +40,7 @@ namespace CRM.Identity
         {
             services.AddCorrelationId();
             services.AddJaeger();
+            services.AddAppMetrics();
 
             services.AddControllersWithViews();
 
@@ -99,6 +101,7 @@ namespace CRM.Identity
 
             app.UsePathBase(Configuration["PathBase"]);
             app.UseCorrelationId();
+            app.UseAppMetrics();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseIdentityServer();

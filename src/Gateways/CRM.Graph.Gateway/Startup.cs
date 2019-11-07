@@ -1,6 +1,7 @@
 using System;
 using CRM.Graph.Gateway.Options;
 using CRM.Graph.Gateway.Types;
+using CRM.Metrics;
 using CRM.Shared;
 using CRM.Shared.CorrelationId;
 using CRM.Shared.Interceptors;
@@ -51,6 +52,8 @@ namespace CRM.Graph.Gateway
 
             services.AddCorrelationId();
             services.AddJaeger();
+            services.AddAppMetrics();
+
             GraphQLRegister(services);
             GrpcRegister(services);
         }
@@ -65,6 +68,7 @@ namespace CRM.Graph.Gateway
 
             app.UsePathBase(Configuration["PathBase"]);
             app.UseCorrelationId();
+            app.UseAppMetrics();
             app.UseCors("CorsPolicy");
             app.UseRouting();
             app.UseGraphQL("/graphql")

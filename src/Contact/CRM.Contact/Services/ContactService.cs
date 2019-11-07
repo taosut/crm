@@ -31,5 +31,10 @@ namespace CRM.Contact.Services
         {
             return await _mediator.Send(new FindContactByIdQuery(new System.Guid(request.ContactId)));
         }
+
+        public override Task<BooleanResponse> UploadPhoto(UploadPhotoRequest request, Grpc.Core.ServerCallContext context)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

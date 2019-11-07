@@ -7,6 +7,7 @@ COPY ["src/BuildingBlocks/CRM.Shared/*.csproj", "src/BuildingBlocks/CRM.Shared/"
 COPY ["src/BuildingBlocks/CRM.Tracing.Jaeger/*.csproj", "src/BuildingBlocks/CRM.Tracing.Jaeger/"]
 COPY ["src/BuildingBlocks/CRM.MassTransit.Middleware/*.csproj", "src/BuildingBlocks/CRM.MassTransit.Middleware/"]
 COPY ["src/BuildingBlocks/CRM.Configuration.Vault/*.csproj", "src/BuildingBlocks/CRM.Configuration.Vault/"]
+COPY ["src/BuildingBlocks/CRM.Metrics/*.csproj", "src/BuildingBlocks/CRM.Metrics/"]
 COPY ["src/Contact/CRM.Contact.Api/*.csproj", "src/Contact/CRM.Contact.Api/"]
 COPY ["src/Gateways/CRM.Graph.Gateway/*.csproj", "src/Gateways/CRM.Graph.Gateway/"]
 
@@ -17,6 +18,7 @@ COPY ["src/BuildingBlocks/CRM.Shared/.", "src/BuildingBlocks/CRM.Shared/"]
 COPY ["src/BuildingBlocks/CRM.Tracing.Jaeger/.", "src/BuildingBlocks/CRM.Tracing.Jaeger/"]
 COPY ["src/BuildingBlocks/CRM.MassTransit.Middleware/", "src/BuildingBlocks/CRM.MassTransit.Middleware/"]
 COPY ["src/BuildingBlocks/CRM.Configuration.Vault/", "src/BuildingBlocks/CRM.Configuration.Vault/"]
+COPY ["src/BuildingBlocks/CRM.Metrics/.", "src/BuildingBlocks/CRM.Metrics/"]
 COPY ["src/Contact/CRM.Contact.Api/.", "src/Contact/CRM.Contact.Api/"]
 COPY ["src/Gateways/CRM.Graph.Gateway/.", "src/Gateways/CRM.Graph.Gateway/"]
 

@@ -15,6 +15,10 @@ namespace CRM.Graph.Gateway.Types
             descriptor.Field<ContactResolver>(t => t.CreateNewContact(default))
                 .Type<NonNullType<ContactType>>()
                 .Argument("contact", a => a.Type<NonNullType<ContactInputType>>());
+
+            descriptor.Field<ContactResolver>(t => t.UploadPhoto(default))
+                .Type<NonNullType<BooleanType>>()
+                .Argument("photo", a => a.Type<NonNullType<UploadPhotoInputType>>());
         }
     }
 }

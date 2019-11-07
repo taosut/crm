@@ -13,6 +13,7 @@ using CRM.Shared.Types;
 using MassTransit.Definition;
 using CRM.Shared;
 using CRM.MassTransit.Tracing;
+using CRM.Metrics;
 
 namespace CRM.Communication
 {
@@ -31,6 +32,7 @@ namespace CRM.Communication
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddJaeger();
+            services.AddAppMetrics();
 
             services.AddMassTransit(ConfigureBus, (cfg) =>
            {
@@ -45,6 +47,8 @@ namespace CRM.Communication
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseAppMetrics();
         }
 
         private static IBusControl ConfigureBus(IServiceProvider provider)

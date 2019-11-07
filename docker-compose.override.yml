@@ -22,11 +22,21 @@ services:
       - 14268:14268
       - 16686:16686
 
-  # grafana:
+  grafana:
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=P@ssw0rd
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel
+    ports:
+      - 3000:3000
+
+  influxdb:
+    ports:
+      - 8086:8086
+      - 8083:8083
+
+  # prometheus:
   #   ports:
-  #     - 3003:3003
-  #     - 3004:8083
-  #     - 8086:8086
+  #     - 9090:9090
 
   postgresql:
     ports:
@@ -52,6 +62,7 @@ services:
       - ConnectionStrings__contact=Server=postgresql;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
       - rabbitMQ__Url=rabbitmq://rabbitmq
       - Logging__Seq__Url=http://seq/
+      - metrics__influxUrl=http://influxdb:8086
 
   contact-migration:
     environment:
@@ -71,6 +82,8 @@ services:
       - Jaeger__UdpHost=jaeger
       - ConnectionStrings__identity=Server=postgresql;Port=5432;Database=crm-identity;User Id=lab;Password=P@ssw0rd;
       - Logging__Seq__Url=http://seq/
+      - metrics__enabled=true
+      - metrics__influxUrl=http://influxdb:8086
 
   identity-migration:
     environment:
@@ -89,6 +102,7 @@ services:
       - Jaeger__Enabled=true
       - rabbitMQ__Url=rabbitmq://rabbitmq
       - Logging__Seq__Url=http://seq/
+      - metrics__influxUrl=http://influxdb:8086
 
   crm-web:
     ports:
@@ -106,3 +120,4 @@ services:
       - Jaeger__Enabled=true
       - Cors__Origins=http://localhost:5102
       - Logging__Seq__Url=http://seq/
+      - metrics__influxUrl=http://influxdb:8086

@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\BuildingBlocks\CRM.MassTransit.Middleware\CRM.MassTransit.Middleware.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\CRM.Shared\CRM.Shared.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\CRM.Tracing.Jaeger\CRM.Tracing.Jaeger.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\CRM.Metrics\CRM.Metrics.csproj"/>
   </ItemGroup>
    <ItemGroup>
     <ProjectReference Include="..\..\Contact\CRM.Contact.Api\CRM.Contact.Api.csproj" />
