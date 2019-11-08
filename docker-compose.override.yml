@@ -29,14 +29,14 @@ services:
     ports:
       - 3000:3000
 
-  influxdb:
-    ports:
-      - 8086:8086
-      - 8083:8083
-
-  # prometheus:
+  # influxdb:
   #   ports:
-  #     - 9090:9090
+  #     - 8086:8086
+  #     - 8083:8083
+
+  prometheus:
+    ports:
+      - 9090:9090
 
   postgresql:
     ports:
@@ -62,7 +62,9 @@ services:
       - ConnectionStrings__contact=Server=postgresql;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
       - rabbitMQ__Url=rabbitmq://rabbitmq
       - Logging__Seq__Url=http://seq/
-      - metrics__influxUrl=http://influxdb:8086
+      - metrics__enabled=true
+      - metrics__prometheusEnabled=true
+      - metrics__influxEnabled=false
 
   contact-migration:
     environment:
@@ -83,7 +85,8 @@ services:
       - ConnectionStrings__identity=Server=postgresql;Port=5432;Database=crm-identity;User Id=lab;Password=P@ssw0rd;
       - Logging__Seq__Url=http://seq/
       - metrics__enabled=true
-      - metrics__influxUrl=http://influxdb:8086
+      - metrics__prometheusEnabled=true
+      - metrics__influxEnabled=false
 
   identity-migration:
     environment:
@@ -102,7 +105,9 @@ services:
       - Jaeger__Enabled=true
       - rabbitMQ__Url=rabbitmq://rabbitmq
       - Logging__Seq__Url=http://seq/
-      - metrics__influxUrl=http://influxdb:8086
+      - metrics__enabled=true
+      - metrics__prometheusEnabled=true
+      - metrics__influxEnabled=false
 
   crm-web:
     ports:
@@ -120,4 +125,6 @@ services:
       - Jaeger__Enabled=true
       - Cors__Origins=http://localhost:5102
       - Logging__Seq__Url=http://seq/
-      - metrics__influxUrl=http://influxdb:8086
+      - metrics__enabled=true
+      - metrics__prometheusEnabled=true
+      - metrics__influxEnabled=false

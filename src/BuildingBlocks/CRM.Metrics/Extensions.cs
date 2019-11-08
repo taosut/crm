@@ -7,6 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using System;
 using App.Metrics.Formatters.InfluxDB;
+using Microsoft.AspNetCore.Hosting;
+using App.Metrics.AspNetCore.Endpoints;
+using App.Metrics.AspNetCore.Health.Endpoints;
+using App.Metrics.AspNetCore.Tracking;
 
 namespace CRM.Metrics
 {
@@ -65,9 +69,11 @@ namespace CRM.Metrics
             var configuration = seriveProvider.GetService<IConfiguration>();
             services.AddMetricsTrackingMiddleware(configuration);
             services.AddMetricsEndpoints(configuration);
+            services.AddSingleton<IStartupFilter>(new DefaultMetricsEndpointsStartupFilter());
+            services.AddSingleton<IStartupFilter>(new DefaultMetricsTrackingStartupFilter());
             services.AddMetricsReportingHostedService(metricsWebHostOptions.UnobservedTaskExceptionHandler);
-            services.AddMetricsTrackingMiddleware(configuration);
-            services.AddMetricsEndpoints(configuration);
+            services.AddMetricsTrackingMiddleware(metricsWebHostOptions.TrackingMiddlewareOptions, configuration);
+            services.AddMetricsEndpoints(metricsWebHostOptions.EndpointOptions, configuration);
             services.AddMetrics(metrics);
 
             return services;
@@ -84,7 +90,6 @@ namespace CRM.Metrics
             return !options.Enabled
                 ? app
                 : app
-                    // .UseHealthAllEndpoints()
                     .UseMetricsAllEndpoints()
                     .UseMetricsAllMiddleware();
         }
