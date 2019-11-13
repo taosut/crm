@@ -15,7 +15,7 @@ using CRM.Shared;
 using CRM.MassTransit.Tracing;
 using CRM.Metrics;
 
-namespace CRM.Communication
+namespace CRM.Communication.Api
 {
     public class Startup
     {

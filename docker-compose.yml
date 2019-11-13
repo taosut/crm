@@ -33,24 +33,24 @@ services:
     volumes:
       - grafana:/var/lib/grafana
     depends_on:
-      - influxdb
+      - prometheus
 
-  # prometheus:
-  #   image: prom/prometheus
-  #   container_name: prometheus
-  #   networks:
-  #     - crm
-  #   volumes:
-  #     - prometheus:/prometheus
-  #     - ${PWD}/prometheus.yml:/etc/prometheus/prometheus.yml
-
-  influxdb:
-    image: influxdb
-    container_name: influxdb
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
     networks:
       - crm
     volumes:
-      - influxdb:/var/lib/influxdb
+      - prometheus:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  # influxdb:
+  #   image: influxdb
+  #   container_name: influxdb
+  #   networks:
+  #     - crm
+  #   volumes:
+  #     - influxdb:/var/lib/influxdb
 
   postgresql:
     image: postgres:11-alpine
@@ -83,7 +83,7 @@ services:
     image: ${REGISTRY:-crmnow}/contact-api:${TAG:-latest}
     build:
       context: .
-      dockerfile: src/Contact/CRM.Contact/Dockerfile
+      dockerfile: src/Contact/CRM.Contact.Api/Dockerfile
       args:
         - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
     networks:
@@ -124,7 +124,7 @@ services:
     image: ${REGISTRY:-crmnow}/communication-api:${TAG:-latest}
     build:
       context: .
-      dockerfile: src/Communication/CRM.Communication/Dockerfile
+      dockerfile: src/Communication/CRM.Communication.Api/Dockerfile
       args:
         - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
     networks:

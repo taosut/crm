@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 
-namespace CRM.Contact.Extensions
+namespace CRM.Dapper
 {
     /// <summary>
     /// Main class for Dapper.SimpleCRUD extensions
