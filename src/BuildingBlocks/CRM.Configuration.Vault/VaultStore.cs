@@ -41,15 +41,12 @@ namespace CRM.Configuration.Vault
 
         private IAuthMethodInfo GetAuthMethod()
         {
-            switch (_options.AuthType?.ToLowerInvariant())
+            return (_options.AuthType?.ToLowerInvariant()) switch
             {
-                case "token":
-                    return new TokenAuthMethodInfo(_options.Token);
-                case "userpass":
-                    return new UserPassAuthMethodInfo(_options.Username, _options.Password);
-                default:
-                    throw new VaultAuthTypeNotSupportedException($"Vault auth type: '{_options.AuthType}' is not supported", _options.AuthType);
-            }
+                "token" => new TokenAuthMethodInfo(_options.Token),
+                "userpass" => new UserPassAuthMethodInfo(_options.Username, _options.Password),
+                _ => throw new VaultAuthTypeNotSupportedException($"Vault auth type: '{_options.AuthType}' is not supported", _options.AuthType),
+            };
         }
 
         private void LoadEnvironmentVariables()

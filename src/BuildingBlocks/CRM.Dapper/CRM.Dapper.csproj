@@ -3,6 +3,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>CRM.Dapper</AssemblyName>
     <RootNamespace>CRM.Dapper</RootNamespace>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.30"/>

@@ -6,7 +6,7 @@ namespace CRM.Shared.CorrelationId
     {
         private readonly ICorrelationContextAccessor _correlationContextAccessor;
 
-        public CorrelationContextFactory() : this(null)
+        public CorrelationContextFactory()
         {
 
         }

@@ -11,7 +11,7 @@ namespace CRM.Shared.Repository
 
         public UnitOfWork(Func<IDbConnection> connFactory)
         {
-            _connFactory = connFactory;
+            _connFactory = connFactory ?? throw new ArgumentNullException(nameof(connFactory));
         }
 
         public IDbConnection Connection
