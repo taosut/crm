@@ -24,8 +24,10 @@ using MassTransit.Definition;
 using CRM.Shared.CorrelationId;
 using CRM.MassTransit.Tracing;
 using MassTransit.Context;
+using CRM.Dapper;
+using CRM.Contact.Validators;
 
-namespace CRM.Contact
+namespace CRM.Contact.Api
 {
     public class Startup
     {
@@ -33,9 +35,7 @@ namespace CRM.Contact
 
         public Startup(IConfiguration configuration)
         {
-            IdentityModelEventSource.ShowPII = true;
             Configuration = configuration;
-
             SimpleCRUD.SetDialect(SimpleCRUD.Dialect.PostgreSQL);
         }
 
@@ -45,17 +45,15 @@ namespace CRM.Contact
         {
             services.AddCorrelationId();
             services.AddJaeger();
-
             RegisterGrpc(services);
             // RegisterAuth(services);
+            RegisterRepository(services);
 
             services.Scan(scan => scan
-               .FromCallingAssembly()
+               .FromAssemblyOf<CreateContactRequestValidator>()
                .AddClasses(c => c.AssignableTo(typeof(IValidator<>)))
                .AsImplementedInterfaces()
                .WithTransientLifetime());
-
-            RegisterRepository(services);
 
             services.AddMassTransit(ConfigureBus, (cfg) =>
             {
@@ -69,10 +67,10 @@ namespace CRM.Contact
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // if (env.IsDevelopment())
-            // {
-            //     app.UseDeveloperExceptionPage();
-            // }
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
             app.UseRouting();
             // app.UseAuthentication();
@@ -129,8 +127,7 @@ namespace CRM.Contact
                 cfg.PropagateOpenTracingContext();
             });
         }
-
-
+        
         private static void RegisterAuth(IServiceCollection services)
         {
             services.AddAuthorization();

@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CRM.Contact.Extensions;
-using CRM.Protobuf.Contacts.V1;
+using CRM.Dapper;
 using CRM.Shared.Repository;
 using Grpc.Core;
 using MediatR;

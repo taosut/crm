@@ -54,7 +54,8 @@ services:
 
   contact-api:
     ports:
-      - 5001:80
+      - 5001:5001
+      - 15001:15001
     environment:
       - ASPNETCORE_ENVIRONMENT=development
       - Jaeger__Enabled=true
@@ -98,7 +99,8 @@ services:
 
   communication-api:
     ports:
-      - 5002:80
+      - 5002:5002
+      - 15002:15002
     environment:
       - ASPNETCORE_ENVIRONMENT=development
       - Jaeger__UdpHost=jaeger

@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using CRM.Protobuf.Contacts.V1;
+using CRM.Contact.Api;
 
 namespace CRM.Contact.FunctionalTests
 {
-    public class ContactScenario : IClassFixture<WebApplicationFactory<CRM.Contact.Startup>>
+    public class ContactScenario : IClassFixture<WebApplicationFactory<Startup>>
     {
         protected readonly WebApplicationFactory<Startup> _factory;
 

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using MassTransit;
 using CRM.IntegrationEvents;
 using CRM.Shared.CorrelationId;
+using CRM.Dapper;
 
 namespace CRM.Contact.Commands.Handlers
 {

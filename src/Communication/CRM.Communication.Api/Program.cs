@@ -1,13 +1,13 @@
-using System;
-using App.Metrics;
-using App.Metrics.AspNetCore;
+using System.Net;
 using CRM.Configuration.Vault;
 using CRM.Shared.Logging;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 
-namespace CRM.Communication
+namespace CRM.Communication.Api
 {
     public class Program
     {
@@ -26,12 +26,21 @@ namespace CRM.Communication
                 })
                 .UseLogging()
                 .UseVault()
-                // .ConfigureMetricsWithDefaults(buildder => {
-                //     buildder.Report.ToInfluxDb("http://localhost:8086", "crm2", TimeSpan.FromSeconds(1));
-                // })
-                // .UseMetrics()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureKestrel((ctx, options) =>
+                    {
+                        if (ctx.HostingEnvironment.IsDevelopment())
+                        {
+                            IdentityModelEventSource.ShowPII = true;
+                        }
+                        options.Limits.MinRequestBodyDataRate = null;
+                        options.Listen(IPAddress.Any, 5002);
+                        options.Listen(IPAddress.Any, 15002, listenOptions =>
+                        {
+                            listenOptions.Protocols = HttpProtocols.Http2;
+                        });
+                    });
                     webBuilder.UseStartup<Startup>();
                 });
     }

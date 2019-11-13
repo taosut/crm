@@ -12,7 +12,7 @@ using Microsoft.CSharp.RuntimeBinder;
 /// <summary>
 /// Ref https://github.com/ericdc1/Dapper.SimpleCRUD
 /// </summary>
-namespace CRM.Contact.Extensions
+namespace CRM.Dapper
 {
     /// <summary>
     /// Main class for Dapper.SimpleCRUD extensions

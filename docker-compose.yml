@@ -83,7 +83,7 @@ services:
     image: ${REGISTRY:-crmnow}/contact-api:${TAG:-latest}
     build:
       context: .
-      dockerfile: src/Contact/CRM.Contact/Dockerfile
+      dockerfile: src/Contact/CRM.Contact.Api/Dockerfile
       args:
         - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
     networks:
@@ -124,7 +124,7 @@ services:
     image: ${REGISTRY:-crmnow}/communication-api:${TAG:-latest}
     build:
       context: .
-      dockerfile: src/Communication/CRM.Communication/Dockerfile
+      dockerfile: src/Communication/CRM.Communication.Api/Dockerfile
       args:
         - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
     networks:
