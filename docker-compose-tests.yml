@@ -8,11 +8,6 @@ services:
     networks:
       - crm
 
-  # nats:
-  #   image: nats
-  #   networks:
-  #     - crm
-
   postgresql:
     image: postgres:11-alpine
     networks:
@@ -22,7 +17,7 @@ services:
     image: crmnow/communication-api-test:latest
     build:
       context: .
-      dockerfile: src/Communication/CRM.Communication/Dockerfile
+      dockerfile: src/Communication/CRM.Communication.Api/Dockerfile
       target: functionaltest
       args:
         - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
@@ -31,13 +26,15 @@ services:
     depends_on:
       - rabbitmq
     volumes:
-      - azp-data:/azp
+      - ${COMMON_TESTRESULTSDIRECTORY:-/tmp}:${COMMON_TESTRESULTSDIRECTORY:-/tmp}
+    # volumes:
+    #   - azp-data:/azp
 
   contact-api-test:
     image: crmnow/contact-api-test:latest
     build:
       context: .
-      dockerfile: src/Contact/CRM.Contact/Dockerfile
+      dockerfile: src/Contact/CRM.Contact.Api/Dockerfile
       target: functionaltest
       args:
         - feed=${NUGET_FEED:- --source "https://api.nuget.org/v3/index.json"}
@@ -48,14 +45,14 @@ services:
       - postgresql
     volumes:
       - ${COMMON_TESTRESULTSDIRECTORY:-/tmp}:${COMMON_TESTRESULTSDIRECTORY:-/tmp}
-    volumes:
-      - azp-data:/azp
+    # volumes:
+    #   - azp-data:/azp
 
 
-volumes:
-  azp-data:
-    name: azp-data
-    external: true
+# volumes:
+#   azp-data:
+#     name: azp-data
+#     external: true
 
 networks:
   crm:
