@@ -27,4 +27,6 @@ services:
       - /p:CollectCoverage=true
       - /p:CoverletOutputFormat=opencover
       - /p:CoverletOutput=${COMMON_TESTRESULTSDIRECTORY}/contact-api-test/coverage/
+      - --settings
+      - runsettings
       - --no-restore

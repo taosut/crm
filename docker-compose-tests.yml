@@ -25,10 +25,10 @@ services:
       - crm
     depends_on:
       - rabbitmq
-    volumes:
-      - ${COMMON_TESTRESULTSDIRECTORY:-/tmp}:${COMMON_TESTRESULTSDIRECTORY:-/tmp}
     # volumes:
-    #   - azp-data:/azp
+    #   - ${COMMON_TESTRESULTSDIRECTORY:-/tmp}:${COMMON_TESTRESULTSDIRECTORY:-/tmp}
+    volumes:
+      - azp-data:/azp
 
   contact-api-test:
     image: crmnow/contact-api-test:latest
@@ -43,16 +43,16 @@ services:
     depends_on:
       - rabbitmq
       - postgresql
-    volumes:
-      - ${COMMON_TESTRESULTSDIRECTORY:-/tmp}:${COMMON_TESTRESULTSDIRECTORY:-/tmp}
     # volumes:
-    #   - azp-data:/azp
+    #   - ${COMMON_TESTRESULTSDIRECTORY:-/tmp}:${COMMON_TESTRESULTSDIRECTORY:-/tmp}
+    volumes:
+      - azp-data:/azp
 
 
-# volumes:
-#   azp-data:
-#     name: azp-data
-#     external: true
+volumes:
+  azp-data:
+    name: azp-data
+    external: true
 
 networks:
   crm:
