@@ -5,7 +5,7 @@ using MassTransit;
 using OpenTracing.Propagation;
 using OpenTracing.Util;
 
-namespace CRM.MassTransit.Middleware.Tracing
+namespace CRM.MassTransit.Tracing
 {
     public class OpenTracingPublishFilter : IFilter<PublishContext>
     {

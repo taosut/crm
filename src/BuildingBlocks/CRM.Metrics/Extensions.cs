@@ -17,7 +17,7 @@ namespace CRM.Metrics
     public static class Extensions
     {
         private static bool _initialized;
-        private const string SectionName = "metrics";
+        private const string SectionName = "Metrics";
 
         public static IServiceCollection AddAppMetrics(this IServiceCollection services, string sectionName = SectionName)
         {
@@ -49,18 +49,6 @@ namespace CRM.Metrics
                     }
                 }
             });
-
-            if (options.InfluxEnabled)
-            {
-                metricsBuilder.Report.ToInfluxDb(o =>
-                {
-                    o.InfluxDb.Database = options.Database;
-                    o.InfluxDb.BaseUri = new Uri(options.InfluxUrl);
-                    o.InfluxDb.CreateDataBaseIfNotExists = true;
-                    o.FlushInterval = TimeSpan.FromSeconds(options.Interval);
-                    o.MetricsOutputFormatter = new MetricsInfluxDbLineProtocolOutputFormatter();
-                });
-            }
 
             var metrics = metricsBuilder.Build();
             var metricsWebHostOptions = GetMetricsWebHostOptions(options);

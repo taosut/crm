@@ -5,7 +5,7 @@ ARG feed='--source "https://api.nuget.org/v3/index.json"'
 WORKDIR /src
 COPY ["src/BuildingBlocks/CRM.Shared/*.csproj", "src/BuildingBlocks/CRM.Shared/"]
 COPY ["src/BuildingBlocks/CRM.Tracing.Jaeger/*.csproj", "src/BuildingBlocks/CRM.Tracing.Jaeger/"]
-COPY ["src/BuildingBlocks/CRM.MassTransit.Middleware/*.csproj", "src/BuildingBlocks/CRM.MassTransit.Middleware/"]
+COPY ["src/BuildingBlocks/CRM.MassTransit/*.csproj", "src/BuildingBlocks/CRM.MassTransit/"]
 COPY ["src/BuildingBlocks/CRM.Configuration.Vault/*.csproj", "src/BuildingBlocks/CRM.Configuration.Vault/"]
 COPY ["src/BuildingBlocks/CRM.Metrics/*.csproj", "src/BuildingBlocks/CRM.Metrics/"]
 COPY ["src/BuildingBlocks/CRM.Dapper/*.csproj", "src/BuildingBlocks/CRM.Dapper/"]
@@ -19,7 +19,7 @@ RUN dotnet restore src/Contact/CRM.Contact.FunctionalTests/ /property:Configurat
 COPY ["src/proto/.", "src/proto/"]
 COPY ["src/BuildingBlocks/CRM.Shared/.", "src/BuildingBlocks/CRM.Shared/"]
 COPY ["src/BuildingBlocks/CRM.Tracing.Jaeger/.", "src/BuildingBlocks/CRM.Tracing.Jaeger/"]
-COPY ["src/BuildingBlocks/CRM.MassTransit.Middleware/.", "src/BuildingBlocks/CRM.MassTransit.Middleware/"]
+COPY ["src/BuildingBlocks/CRM.MassTransit/.", "src/BuildingBlocks/CRM.MassTransit/"]
 COPY ["src/BuildingBlocks/CRM.Configuration.Vault/.", "src/BuildingBlocks/CRM.Configuration.Vault/"]
 COPY ["src/BuildingBlocks/CRM.Metrics/.", "src/BuildingBlocks/CRM.Metrics/"]
 COPY ["src/BuildingBlocks/CRM.Dapper/.", "src/BuildingBlocks/CRM.Dapper/"]

@@ -3,7 +3,7 @@ using GreenPipes;
 using MassTransit;
 using Serilog.Context;
 
-namespace CRM.MassTransit.Middleware.CorrelationId
+namespace CRM.MassTransit.CorrelationId
 {
     public class CorrelationIdLoggerFilter : IFilter<ConsumeContext>
     {

@@ -18,7 +18,7 @@ services:
   contact-api-test:
     environment:
       - rabbitMQ__Url=rabbitmq://rabbitmq
-      - ConnectionStrings__default=Server=postgresql;Port=5432;Database=crm-contact;User Id=lab;Password=P@ssw0rd;
+      - ConnectionStrings__default=Server=postgresql;Port=5432;Database=crm-contact-test;User Id=lab;Password=P@ssw0rd;
     entrypoint:
       - dotnet
       - test

@@ -20,7 +20,6 @@ namespace CRM.Contact.Api
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, config) =>
                 {
-                    // config.AddJsonFile("hosting.json");
                     config.AddJsonFile("appsettings.json", optional: true);
                     config.AddEnvironmentVariables();
                     config.AddCommandLine(args);
@@ -42,7 +41,11 @@ namespace CRM.Contact.Api
                             listenOptions.Protocols = HttpProtocols.Http2;
                         });
                     });
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+                        .UseKestrel(o =>
+                        {
+                            o.AllowSynchronousIO = true;
+                        });
                 });
     }
 }

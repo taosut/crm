@@ -18,7 +18,6 @@
     <PackageReference Include="HotChocolate.AspNetCore.Playground" Version="10.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BuildingBlocks\CRM.MassTransit.Middleware\CRM.MassTransit.Middleware.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\CRM.Shared\CRM.Shared.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\CRM.Tracing.Jaeger\CRM.Tracing.Jaeger.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\CRM.Metrics\CRM.Metrics.csproj"/>

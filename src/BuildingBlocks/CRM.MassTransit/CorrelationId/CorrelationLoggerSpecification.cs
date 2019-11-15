@@ -3,7 +3,7 @@ using System.Linq;
 using GreenPipes;
 using MassTransit;
 
-namespace CRM.MassTransit.Middleware.CorrelationId
+namespace CRM.MassTransit.CorrelationId
 {
     public class CorrelationLoggerSpecification : IPipeSpecification<ConsumeContext>
     {

@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
 using System.Linq;
+using System.Net;
 
 namespace CRM.Identity
 {
@@ -33,6 +35,16 @@ namespace CRM.Identity
                 .UseLogging()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureKestrel((ctx, options) =>
+                    {
+                        if (ctx.HostingEnvironment.IsDevelopment())
+                        {
+                            IdentityModelEventSource.ShowPII = true;
+                        }
+                        options.Limits.MinRequestBodyDataRate = null;
+                        options.Listen(IPAddress.Any, 5101);
+                    });
+                    
                     webBuilder.UseStartup<Startup>()
                         .UseKestrel(o =>
                         {

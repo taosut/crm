@@ -39,9 +39,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM.Tracing.Jaeger", "src\B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM.Configuration.Vault", "src\BuildingBlocks\CRM.Configuration.Vault\CRM.Configuration.Vault.csproj", "{17818EAD-77EA-4DB7-A554-38D5F83A1EA5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM.MassTransit.Middleware", "src\BuildingBlocks\CRM.MassTransit.Middleware\CRM.MassTransit.Middleware.csproj", "{7E7AF361-0FF1-4631-A631-4C627AEA7DE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM.MassTransit.Middleware", "src\BuildingBlocks\CRM.MassTransit\CRM.MassTransit.csproj", "{7E7AF361-0FF1-4631-A631-4C627AEA7DE3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM.Metrics", "src\BuildingBlocks\CRM.Metrics\CRM.Metrics.csproj", "{98BF0B04-88B2-420E-8A18-B0884C1FF4A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM.Dapper", "src\BuildingBlocks\CRM.Dapper\CRM.Dapper.csproj", "{19816069-0B25-4A39-AAE2-C147ED794D55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,10 @@ Global
 		{98BF0B04-88B2-420E-8A18-B0884C1FF4A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98BF0B04-88B2-420E-8A18-B0884C1FF4A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98BF0B04-88B2-420E-8A18-B0884C1FF4A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19816069-0B25-4A39-AAE2-C147ED794D55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19816069-0B25-4A39-AAE2-C147ED794D55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19816069-0B25-4A39-AAE2-C147ED794D55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19816069-0B25-4A39-AAE2-C147ED794D55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -129,6 +135,7 @@ Global
 		{17818EAD-77EA-4DB7-A554-38D5F83A1EA5} = {D7B2C2A5-C5CB-4359-A4CC-1EA15A1C7F19}
 		{7E7AF361-0FF1-4631-A631-4C627AEA7DE3} = {D7B2C2A5-C5CB-4359-A4CC-1EA15A1C7F19}
 		{98BF0B04-88B2-420E-8A18-B0884C1FF4A5} = {D7B2C2A5-C5CB-4359-A4CC-1EA15A1C7F19}
+		{19816069-0B25-4A39-AAE2-C147ED794D55} = {D7B2C2A5-C5CB-4359-A4CC-1EA15A1C7F19}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {69F3C4B9-8457-466C-B0CB-B5ABB01E6A78}
