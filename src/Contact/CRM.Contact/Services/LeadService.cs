@@ -30,11 +30,11 @@ namespace CRM.Contact.Services
         public override async Task<PongReply> Ping(Empty request, ServerCallContext context)
         {
             _logger.LogInformation("Ping handler happens ...");
-            await _bus.Publish<ContactCreated>(new
-            {
-                FirstName = "sss",
-                CorrelationId = _correlationContextAccessor?.CorrelationContext?.CorrelationId
-            });
+            // await _bus.Publish<ContactCreated>(new
+            // {
+            //     FirstName = "sss",
+            //     CorrelationId = _correlationContextAccessor?.CorrelationContext?.CorrelationId
+            // });
             var result = await _mediator.Send(new PingQuery());
             return result;
         }

@@ -1,6 +1,5 @@
 using System;
-using CRM.MassTransit.Middleware.CorrelationId;
-using CRM.MassTransit.Middleware.Tracing;
+using CRM.MassTransit.CorrelationId;
 using MassTransit;
 
 // Ref from https://github.com/yesmarket/MassTransit.OpenTracing

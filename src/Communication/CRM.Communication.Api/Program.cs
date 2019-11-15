@@ -41,7 +41,11 @@ namespace CRM.Communication.Api
                             listenOptions.Protocols = HttpProtocols.Http2;
                         });
                     });
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+                        .UseKestrel(o =>
+                        {
+                            o.AllowSynchronousIO = true;
+                        });
                 });
     }
 }

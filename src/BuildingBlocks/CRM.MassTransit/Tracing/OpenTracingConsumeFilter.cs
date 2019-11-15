@@ -8,7 +8,7 @@ using OpenTracing;
 using OpenTracing.Propagation;
 using OpenTracing.Util;
 
-namespace CRM.MassTransit.Middleware.Tracing
+namespace CRM.MassTransit.Tracing
 {
     class OpenTracingConsumeFilter : IFilter<ConsumeContext>
     {

@@ -44,14 +44,6 @@ services:
       - prometheus:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
 
-  # influxdb:
-  #   image: influxdb
-  #   container_name: influxdb
-  #   networks:
-  #     - crm
-  #   volumes:
-  #     - influxdb:/var/lib/influxdb
-
   postgresql:
     image: postgres:11-alpine
     volumes:
@@ -131,6 +123,7 @@ services:
       - crm
     depends_on:
       - rabbitmq
+      - jaeger
 
   crm-web:
     image: ${REGISTRY:-crmnow}/crm-web:${TAG:-latest}
@@ -161,11 +154,9 @@ services:
 
 volumes:
   postgres-data:
-  nexus-data:
   seq-data:
   grafana:
   prometheus:
-  influxdb:
 
 networks:
   crm:

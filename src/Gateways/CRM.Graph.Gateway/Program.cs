@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using CRM.Shared.Logging;
+using Microsoft.IdentityModel.Logging;
+using System.Net;
 
 namespace CRM.Graph.Gateway
 {
@@ -22,6 +24,16 @@ namespace CRM.Graph.Gateway
                 .UseLogging()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureKestrel((ctx, options) =>
+                    {
+                        if (ctx.HostingEnvironment.IsDevelopment())
+                        {
+                            IdentityModelEventSource.ShowPII = true;
+                        }
+                        options.Limits.MinRequestBodyDataRate = null;
+                        options.Listen(IPAddress.Any, 5100);
+                    });
+                    
                     webBuilder.UseStartup<Startup>()
                         .UseKestrel(o =>
                         {

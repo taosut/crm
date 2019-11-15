@@ -1,4 +1,3 @@
-using CRM.Contact.Extensions;
 using CRM.Contact.Services;
 using CRM.Shared.Interceptors;
 using CRM.Shared.Repository;
@@ -11,7 +10,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
 using Npgsql;
 using OpenTracing.Contrib.Grpc.Interceptors;
 using MassTransit;
@@ -26,6 +24,7 @@ using CRM.MassTransit.Tracing;
 using MassTransit.Context;
 using CRM.Dapper;
 using CRM.Contact.Validators;
+using CRM.Metrics;
 
 namespace CRM.Contact.Api
 {
@@ -45,6 +44,8 @@ namespace CRM.Contact.Api
         {
             services.AddCorrelationId();
             services.AddJaeger();
+            services.AddMediatR(typeof(ContactService));
+            services.AddAppMetrics();
             RegisterGrpc(services);
             // RegisterAuth(services);
             RegisterRepository(services);
@@ -59,9 +60,6 @@ namespace CRM.Contact.Api
             {
                 cfg.AddConsumersFromNamespaceContaining<ConsumerAnchor>();
             });
-
-
-            services.AddMediatR(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,6 +70,8 @@ namespace CRM.Contact.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCorrelationId();
+            app.UseAppMetrics();
             app.UseRouting();
             // app.UseAuthentication();
             // app.UseAuthorization();

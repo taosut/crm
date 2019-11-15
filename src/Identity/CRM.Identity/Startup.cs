@@ -31,8 +31,6 @@ namespace CRM.Identity
         {
             Environment = environment;
             Configuration = configuration;
-            IdentityModelEventSource.ShowPII = true;
-
             _connString = configuration.GetConnectionString("identity");
         }
 
@@ -41,7 +39,6 @@ namespace CRM.Identity
             services.AddCorrelationId();
             services.AddJaeger();
             services.AddAppMetrics();
-
             services.AddControllersWithViews();
 
             services.Configure<IISOptions>(iis =>
