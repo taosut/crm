@@ -4,5 +4,6 @@ namespace CRM.Shared.Logging
     {
         public bool ConsoleEnabled { get; set; }
         public SeqOptions Seq { get; set; } = default;
+        public LokiOptions Loki { get; set; } = default;
     }
 }

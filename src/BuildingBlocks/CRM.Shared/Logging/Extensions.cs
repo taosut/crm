@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using CRM.Shared.Logging.Enrichers;
+using Serilog.Sinks.Loki;
 
 namespace CRM.Shared.Logging
 {
@@ -22,24 +23,23 @@ namespace CRM.Shared.Logging
                     .Enrich.WithProperty("ApplicationName", applicationName)
                     .Enrich.With<OpenTracingContextLogEventEnricher>();
 
-                Configure(loggerConfiguration, loggingOptions.Seq, loggingOptions);
+                if (loggingOptions.ConsoleEnabled)
+                {
+                    loggerConfiguration.WriteTo
+                        .Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3} {Properties:j}] {Message:lj}{NewLine}{Exception}");
+                }
+                if (loggingOptions.Seq.Enabled)
+                {
+                    loggerConfiguration.WriteTo.Seq(loggingOptions.Seq.Url, apiKey: loggingOptions.Seq.ApiKey);
+                }
+                if (loggingOptions.Loki.Enabled)
+                {
+                    var credentials = new NoAuthCredentials(loggingOptions.Loki.Url);
+                    loggerConfiguration.WriteTo.LokiHttp(credentials, new LokiLogLabelProvider(context.HostingEnvironment.EnvironmentName, applicationName));
+                }
             });
 
             return hostBuilder;
-        }
-
-        private static void Configure(LoggerConfiguration loggerConfiguration, SeqOptions seq, LoggingOptions loggingOptions)
-        {
-            if (seq.Enabled)
-            {
-                loggerConfiguration.WriteTo.Seq(seq.Url, apiKey: seq.ApiKey);
-            }
-
-            if (loggingOptions.ConsoleEnabled)
-            {
-                loggerConfiguration.WriteTo
-                    .Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3} {Properties:j}] {Message:lj}{NewLine}{Exception}");
-            }
         }
     }
 }

@@ -40,6 +40,8 @@ namespace CRM.Identity
             services.AddJaeger();
             services.AddAppMetrics();
             services.AddControllersWithViews();
+            services.AddHealthChecks()
+                .AddIdentityServer(new Uri("http://localhost:5101"), name: "idsvr-check", tags: new string[] { "idsvr" });
 
             services.Configure<IISOptions>(iis =>
             {
@@ -85,6 +87,7 @@ namespace CRM.Identity
             }
 
             services.AddAuthentication()
+                .AddCookie()
                 .AddLocalApi(o => o.ExpectedScope = "contact");
         }
 
@@ -104,7 +107,11 @@ namespace CRM.Identity
             app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/health");
+                endpoints.MapDefaultControllerRoute();
+            });
         }
     }
 }

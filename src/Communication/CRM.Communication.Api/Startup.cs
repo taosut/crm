@@ -3,29 +3,45 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
 using CRM.Tracing.Jaeger;
 using MassTransit.AspNetCoreIntegration;
 using MassTransit;
 using CRM.Communication.IntegrationHandlers;
 using System;
 using CRM.Shared.Types;
-using MassTransit.Definition;
 using CRM.Shared;
 using CRM.MassTransit.Tracing;
 using CRM.Metrics;
-using CRM.Shared.CorrelationId;
+using Microsoft.AspNetCore.Http;
+using MassTransit.Context;
 
 namespace CRM.Communication.Api
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
+        private RabbitMqOptions RabbitMqOption
+        {
+            get
+            {
+                return _configuration.GetOptions<RabbitMqOptions>("rabbitMQ");
+            }
+        }
+
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddJaeger();
             services.AddAppMetrics();
+            services.AddHealthChecks()
+                .AddRabbitMQ(RabbitMqOption.Url, name: "comnunication-rabbitmqbus-check", tags: new string[] { "rabbitmqbus" });
 
             services.AddMassTransit(ConfigureBus, (cfg) =>
            {
@@ -42,18 +58,28 @@ namespace CRM.Communication.Api
             }
 
             app.UseAppMetrics();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/health");
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client");
+                });
+            });
         }
 
-        private static IBusControl ConfigureBus(IServiceProvider provider)
+        private IBusControl ConfigureBus(IServiceProvider provider)
         {
+            MessageCorrelation.UseCorrelationId<IMessage>(x=>x.CorrelationId);
+            
             return Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
                 cfg.UseSerilog();
-                var rabbitmqOption = provider.GetService<IConfiguration>().GetOptions<RabbitMqOptions>("rabbitMQ");
-                var host = cfg.Host(new Uri(rabbitmqOption.Url), "/", hc =>
+                var host = cfg.Host(new Uri(RabbitMqOption.Url), "/", hc =>
                 {
-                    hc.Username(rabbitmqOption.UserName);
-                    hc.Password(rabbitmqOption.Password);
+                    hc.Username(RabbitMqOption.UserName);
+                    hc.Password(RabbitMqOption.Password);
                 });
 
                 cfg.ReceiveEndpoint(host, "communication", x =>
@@ -62,9 +88,8 @@ namespace CRM.Communication.Api
                     x.Consumer<ContactUpdatedConsumer>(provider);
                 });
 
-                cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());
-                cfg.PropagateCorrelationIdContext();
                 cfg.PropagateOpenTracingContext();
+                cfg.PropagateCorrelationIdContext();
             });
         }
     }

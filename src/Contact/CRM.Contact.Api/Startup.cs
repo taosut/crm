@@ -25,16 +25,32 @@ using MassTransit.Context;
 using CRM.Dapper;
 using CRM.Contact.Validators;
 using CRM.Metrics;
+using Microsoft.AspNetCore.Http;
 
 namespace CRM.Contact.Api
 {
     public class Startup
     {
-        private IConfiguration Configuration { get; }
+        private readonly IConfiguration _configuration;
+
+        private string ConnString
+        {
+            get
+            {
+                return _configuration.GetConnectionString("contact");
+            }
+        }
+        private RabbitMqOptions RabbitMqOption
+        {
+            get
+            {
+                return _configuration.GetOptions<RabbitMqOptions>("rabbitMQ");
+            }
+        }
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
             SimpleCRUD.SetDialect(SimpleCRUD.Dialect.PostgreSQL);
         }
 
@@ -46,6 +62,10 @@ namespace CRM.Contact.Api
             services.AddJaeger();
             services.AddMediatR(typeof(ContactService));
             services.AddAppMetrics();
+            services.AddHealthChecks()
+                .AddNpgSql(ConnString, name: "contactdb-check", tags: new string[] { "contactdb" })
+                .AddRabbitMQ(RabbitMqOption.Url, name: "contact-rabbitmqbus-check", tags: new string[] { "rabbitmqbus" });
+
             RegisterGrpc(services);
             // RegisterAuth(services);
             RegisterRepository(services);
@@ -82,6 +102,13 @@ namespace CRM.Contact.Api
                 // To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909
                 endpoints.MapGrpcService<LeadService>();
                 endpoints.MapGrpcService<ContactService>();
+
+                endpoints.MapHealthChecks("/health");
+
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client");
+                });
             });
         }
 
@@ -89,7 +116,7 @@ namespace CRM.Contact.Api
         {
             services.AddScoped<IUnitOfWork>(sp =>
             {
-                return new UnitOfWork(() => new NpgsqlConnection(Configuration.GetConnectionString("contact")));
+                return new UnitOfWork(() => new NpgsqlConnection(ConnString));
             });
         }
 
@@ -103,30 +130,29 @@ namespace CRM.Contact.Api
             });
         }
 
-        private static IBusControl ConfigureBus(IServiceProvider provider)
+        private IBusControl ConfigureBus(IServiceProvider provider)
         {
-            MessageCorrelation.UseCorrelationId<IMessage>(x=>x.CorrelationId);
+            MessageCorrelation.UseCorrelationId<IMessage>(x => x.CorrelationId);
 
             return Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
                 cfg.UseSerilog();
-                var rabbitmqOption = provider.GetService<IConfiguration>().GetOptions<RabbitMqOptions>("rabbitMQ");
-                var host = cfg.Host(new Uri(rabbitmqOption.Url), "/", hc =>
+                var host = cfg.Host(new Uri(RabbitMqOption.Url), "/", hc =>
                 {
-                    hc.Username(rabbitmqOption.UserName);
-                    hc.Password(rabbitmqOption.Password);
+                    hc.Username(RabbitMqOption.UserName);
+                    hc.Password(RabbitMqOption.Password);
                 });
 
                 cfg.ReceiveEndpoint(host, "contact", x =>
                 {
-                    x.Consumer<ContactCreatedConsumer>(provider);                    
+                    x.ConfigureConsumer<ContactCreatedConsumer>(provider);
                 });
 
-                cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());
-                cfg.PropagateCorrelationIdContext();
                 cfg.PropagateOpenTracingContext();
+                cfg.PropagateCorrelationIdContext();
             });
         }
+
         
         private static void RegisterAuth(IServiceCollection services)
         {
