@@ -11,6 +11,8 @@
     <PackageReference Include="Grpc.AspNetCore.Server" Version="2.23.2" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="5.5.6"/>
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="3.0.0"/>
+    <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="3.0.1"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\CRM.Configuration.Vault\CRM.Configuration.Vault.csproj" />

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using CRM.Graph.Gateway.Options;
 using CRM.Graph.Gateway.Types;
 using CRM.Metrics;
@@ -10,10 +11,12 @@ using CRM.Tracing.Jaeger;
 using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.AspNetCore.Playground;
+using HotChocolate.Execution.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using OpenTracing.Contrib.Grpc.Interceptors;
 using static CRM.Protobuf.Contacts.V1.ContactApi;
@@ -24,10 +27,20 @@ namespace CRM.Graph.Gateway
     public class Startup
     {
         private IConfiguration Configuration { get; }
+        private IHostEnvironment Environment { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
+        }
+
+        private ServiceOptions ServiceOptions
+        {
+            get
+            {
+                return Configuration.GetOptions<ServiceOptions>("Services");
+            }
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -54,6 +67,12 @@ namespace CRM.Graph.Gateway
             services.AddJaeger();
             services.AddAppMetrics();
 
+            services.AddHealthChecks()
+                    .AddCheck("self", () => HealthCheckResult.Healthy())
+                    .AddUrlGroup(new Uri(System.IO.Path.Combine(ServiceOptions.CommunicationService.Url, "health")), name: "communicationapi-check", tags: new string[] { "communicationapi" })
+                    .AddUrlGroup(new Uri(System.IO.Path.Combine(ServiceOptions.ContactService.Url, "health")), name: "contactapi-check", tags: new string[] { "contactapi" })
+                    .AddUrlGroup(new Uri(System.IO.Path.Combine(ServiceOptions.IdentityService.Url, "health")), name: "identityapi-check", tags: new string[] { "idsvrapi" });
+
             GraphQLRegister(services);
             GrpcRegister(services);
         }
@@ -77,6 +96,19 @@ namespace CRM.Graph.Gateway
                     QueryPath = "/graphql",
                     Path = "/ui/playground"
                 });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/health");
+
+                if (Environment.IsDevelopment())
+                {
+                    endpoints.MapGet(Configuration["PathBase"], context =>
+                    {
+                        context.Response.Redirect($"{Configuration["PathBase"]}ui/playground");
+                        return Task.CompletedTask;
+                    });
+                }
+            });
         }
 
         private void GraphQLRegister(IServiceCollection services)
@@ -86,7 +118,11 @@ namespace CRM.Graph.Gateway
                 c.RegisterServiceProvider(sp);
                 c.RegisterQueryType<QueryType>();
                 c.RegisterMutationType<MutationType>();
-            }));
+            }), new QueryExecutionOptions
+            {
+                IncludeExceptionDetails = true,
+                TracingPreference = TracingPreference.Never
+            });
         }
 
         private void GrpcRegister(IServiceCollection services)
