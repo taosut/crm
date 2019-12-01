@@ -27,7 +27,7 @@ jobs:
       - task: PublishTestResults@2
         displayName: Publish test results
         inputs:
-          testResultsFormat: xUnit
+          testResultsFormat: VSTest
           testResultsFiles: '$(Common.TestResultsDirectory)/${{ parameters.testservice }}/*.trx'
           mergeTestResults: true
           failTaskOnFailedTests: true
