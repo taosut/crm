@@ -28,8 +28,7 @@ jobs:
         displayName: Publish test results
         inputs:
           testResultsFormat: xUnit
-          # testResultsFiles: '$(Common.TestResultsDirectory)/${{ parameters.testservice }}/*.trx'
-          testResultsFiles: '**/*.trx'
+          testResultsFiles: '$(Common.TestResultsDirectory)/${{ parameters.testservice }}/*.trx'
           mergeTestResults: true
           failTaskOnFailedTests: true
 
